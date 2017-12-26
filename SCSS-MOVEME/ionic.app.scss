@@ -120,7 +120,6 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 	width: 95%;
 	margin-top: 7%;
 	margin-bottom: 7%;
-	border: 0.5px solid gray;
 }
 
 .input-ahorcado {
@@ -133,9 +132,9 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 }
 
 .vectorAhorcado {
-	border: none;
-	border-bottom: 1.5px solid black;
-	border-spacing: 3px 3px;
+	//border: none;
+	//border-bottom: 1.5px solid black;
+	//border-spacing: 3px 3px;
 }
 
 .clickable {
@@ -189,8 +188,8 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 }
 
 .jeroglifico {
-	//border-color: #000000;
-	//border: 1px solid;
+	border-color: #000000;
+	border: 1px solid;
 	margin-bottom: 6%;
 }
 
@@ -224,11 +223,9 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 	height: 10%;
 }
 
-.text-box-p {
-	padding: 3.5%;
-	//border: 0.5px solid gray;
-	background-color: #E9F3E9;
-	border-radius: 3%;
-	font-size: small;
+.text-box {
+	font-size: 13px;
+	white-space: normal;
+	overflow: visible;
 }
 

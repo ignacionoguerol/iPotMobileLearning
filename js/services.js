@@ -20,6 +20,9 @@ function Pregunta(){
     this.correcta = p.correcta;
     
     this.id = p.$id;
+    
+    //console.log("id: " + this.id);
+    //console.log(p);
     }
     
     this.getPregunta = function(){
@@ -36,67 +39,6 @@ function Pregunta(){
     
     this.getId = function(){
         return this.id;
-    }
-}
-
-function Ahorcado(){
-    
-    this.pista;
-    
-    this.palabra;
-    
-    this.id;
-    
-    this.init = function(p){
-
-    this.pista = p.Pista;
-    
-    this.palabra = p.Palabra;
-    
-    this.id = p.$id;
-    }
-    
-    this.getPalabra = function(){
-        return this.palabra;
-    };
-    
-    this.getPista = function(){
-        return this.pista;
-    };
-    
-    this.getId = function(){
-        return this.id;
-    }
-}
-
-function Jeroglifico(){
-    
-    this.pista;
-    this.respuesta;
-    this.id;
-    this.url;
-    
-    this.init = function(p){
-    this.pista = p.tema;
-    this.respuesta = p.respuesta;
-    this.id = p.$id;
-    this.url = p.url;
-    }
-    
-    this.getRespuesta = function(){
-        return this.respuesta;
-    };
-    
-    this.getPista = function(){
-        return this.pista;
-    };
-    
-    this.getId = function(){
-        return this.id;
-    };
-    
-    this.getUrl = function(){
-        return this.url;
     }
 }
 
@@ -182,7 +124,7 @@ function Imagen(){
     };
 }
 
-function DBArray($firebaseArray, $timeout, $ionicPopup){
+function DBArray($firebaseArray, $timeout){
     
     var cuenta = [];
     var array;
@@ -212,6 +154,7 @@ function DBArray($firebaseArray, $timeout, $ionicPopup){
     }
     
     this.loadArrayUsuarios = function(campo){
+        console.log("Cargando Usuarios")
         var cuenta = [];
         array = $firebaseArray(ref[campo])
         array.$loaded().then(function(){
@@ -219,6 +162,8 @@ function DBArray($firebaseArray, $timeout, $ionicPopup){
                     cuenta.push(pregunta);
                 })
         });
+        console.log("Cargado Usuarios")
+        console.log(cuenta);
         return cuenta;
     }
     
@@ -242,13 +187,9 @@ function DBArray($firebaseArray, $timeout, $ionicPopup){
     
     this.savePoints = function(puntos, email){
         
-        $ionicPopup.alert({
-            title: 'Has sumado ' + puntos + ' puntos'
-         });
-         
         var init = this.init("usuarios");
         var usuarios = this.loadArrayUsuarios("usuarios");
-        var waitTime;
+        var waitTime = 0;
         
         if (init === 0){
             waitTime = 2000;
@@ -262,19 +203,22 @@ function DBArray($firebaseArray, $timeout, $ionicPopup){
                 if(usuario.Email === email){
                    
                     var p = usuario.puntos;
+                    console.log('1: ' + p);
                     
                     if(p === "zero"){
                         p = puntos;
                     }else{
                         p = parseInt(p, 10) + puntos;
                     } 
+                    console.log('2: ' + p);
+                    console.log('3: ' + p);
                     ref["usuarios"].child(usuario.$id).update({"puntos" : p});
+                    console.log("Puntos añadidos: " + p);
                 }
             })
         
         }, waitTime);
     }
-    
 }
 
 
@@ -283,9 +227,7 @@ angular.module('app.services', [])
 .service('pregunta', Pregunta)
 .service('video', Video)
 .service('imagen', Imagen)
-.service('dbarray', DBArray)
-.service('ahorcado', Ahorcado)
-.service('jeroglifico', Jeroglifico);
+.service('dbarray', DBArray);
 
 
 

@@ -11,9 +11,6 @@ angular.module('app.routes', [])
 
       .state('menu.home', {
     url: '/page1',
-	params: {
-		user: ""		
-},
     views: {
       'side-menu21': {
         templateUrl: 'templates/home.html',
@@ -87,8 +84,7 @@ angular.module('app.routes', [])
 		modalidadSeleccionada: "",
 		aleatorio: "",
 		por: "",
-		contador: "",
-		puntos: ""		
+		contador: ""		
 },
     templateUrl: 'templates/jeroglifico.html',
     controller: 'jeroglificoCtrl'
@@ -101,8 +97,7 @@ angular.module('app.routes', [])
 		modalidadSeleccionada: "",
 		aleatorio: "",
 		por: "",
-		contador: "",
-		puntos: ""		
+		contador: ""		
 },
     templateUrl: 'templates/ahorcado.html',
     controller: 'ahorcadoCtrl'
@@ -162,7 +157,7 @@ angular.module('app.routes', [])
     controller: 'sopaDeLetrasCtrl'
   })
 
-$urlRouterProvider.otherwise('/page4')
+$urlRouterProvider.otherwise('/side-menu21/page1')
 
 
 });
