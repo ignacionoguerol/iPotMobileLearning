@@ -1,11 +1,33 @@
 <ion-view title="Ranking" id="page2" style="background-color:#E9F3E9;">
-  <ion-content padding="true" scroll="false" class="has-header">
-    <h3 id="ranking-heading23" style="color:#000000;text-align:center;">General</h3>
+  <ion-content padding="true" class="has-header">
+    <h3 id="ranking-heading23" ng-show="show" style="color:#6FB544;text-align:center;">General</h3>
+    <div ng-show="show !== true" class="spinner-div">
+      <ion-spinner class="spinner"></ion-spinner>
+    </div>
     <ion-list id="ranking-list6">
-      <ion-item class="item-avatar" id="ranking-list-item15" ng-repeat="user in usuarios | orderBy:'-puntos'">
+      <ion-item class="item-avatar positive" id="ranking-list-item15" ng-repeat="user in usuarios | orderBy:'-puntos' | limitTo:5" ng-show="show">
+        <img src="img/n2DRFRhcTWu1j1I4hZIO_avatar-1606916_1280.png">
+        <h2positive>{{$index+1}} - {{user.Nombre}}
+          <p style="white-space:normal;"> {{user.puntos}} puntos</p>
+        </h2positive>
+      </ion-item>
+    </ion-list>
+    <h3 id="ranking-heading43" ng-show="show === true" style="color:#6FB544;text-align:center;">Fisioterapia</h3>
+    <ion-list id="ranking-list7">
+      <ion-item class="item-avatar positive" id="ranking-list-item9" ng-repeat="user in usuariosFisio | orderBy:'-puntos' | limitTo:5">
         <img src="img/wNU2ufN5Qvq7YiMSVsRW_avatar-1606916_960_720.png">
-        <h2>{{$index+1}} - {{user.Nombre}}</h2>
-        <p style="white-space:normal;"> {{user.puntos}} puntos</p>
+        <h2positive>{{$index+1}} - {{user.Nombre}}
+          <p style="white-space:normal;"> {{user.puntos}} puntos</p>
+        </h2positive>
+      </ion-item>
+    </ion-list>
+    <h3 id="ranking-heading44" ng-show="show === true" style="color:#6FB544;text-align:center;">Terapia Ocupacional</h3>
+    <ion-list id="ranking-list8">
+      <ion-item class="item-avatar positive" id="ranking-list-item10" ng-repeat="user in usuariosTerapia | orderBy:'-puntos' | limitTo:5">
+        <img src="img/wNU2ufN5Qvq7YiMSVsRW_avatar-1606916_960_720.png">
+        <h2positive>{{$index+1}} - {{user.Nombre}}
+          <p style="white-space:normal;"> {{user.puntos}} puntos</p>
+        </h2positive>
       </ion-item>
     </ion-list>
   </ion-content>

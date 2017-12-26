@@ -61,15 +61,36 @@ function ($scope, $stateParams, $state) {
     
     }])
    
-.controller('rankingCtrl', ['$scope', '$stateParams', '$firebaseArray', '$ionicUser', 'dbarray', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('rankingCtrl', ['$scope', '$stateParams', '$firebaseArray', '$ionicUser', 'dbarray', '$timeout', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $firebaseArray, $ionicUser, dbarray) {
+function ($scope, $stateParams, $firebaseArray, $ionicUser, dbarray, $timeout) {
     
      var init = dbarray.init("usuarios");
      $scope.usuarios = dbarray.loadArrayUsuarios("usuarios");
-      
-
+     
+     $scope.usuariosFisio = [];
+     $scope.usuariosTerapia = [];
+     
+    if (init === 0){
+        waitTime = 2000;
+    }else if (init === 1){
+        waitTime = 0;
+    }
+    
+    $scope.show = false;
+     
+     $timeout(function() {
+     angular.forEach($scope.usuarios, function(usuario){
+         if(usuario.Grado === 1){
+             $scope.usuariosFisio.push(usuario);
+         }else{
+             $scope.usuariosTerapia.push(usuario);
+         }
+     });
+     
+     $scope.show = true;
+     }, waitTime);
 }])
    
 .controller('profileCtrl', ['$scope', '$stateParams', '$ionicPopup', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
@@ -104,7 +125,7 @@ $scope.resetPassword = function(){
 function ($scope, $stateParams, $state) {
     
     
-    $scope.url = "https://cdn.pixabay.com/photo/2016/08/20/05/38/avatar-1606916_1280.png";
+    $scope.url = "https://firebasestorage.googleapis.com/v0/b/ipot-mobile-learning.appspot.com/o/avatar-1606916_1280.png?alt=media&token=58ea0305-bd65-4ac3-8093-96f384fd993f";
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
             $scope.email = user.email;
