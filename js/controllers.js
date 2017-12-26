@@ -29,11 +29,14 @@ function ($scope, $stateParams, $state) {
     ];
     
     $scope.modalidades = [
-        { 'id':'sopaDeLetras', 'label':'Preguntas'},
+        { 'id':'sopaDeLetras2', 'label':'Preguntas'},
         { 'id':'video', 'label':'Video'},
         { 'id':'imagen', 'label':'Imagen'},
         { 'id':'sopaDeLetras', 'label':'Sopa de Letras'},
-        { 'id':'ahorcado', 'label':'Ahorcado'}
+        { 'id':'ahorcado', 'label':'Ahorcado'},
+        { 'id':'jeroglifico', 'label':'Jeroglífico'},
+        { 'id':'puzzle', 'label':'Puzzle'}
+        
     ];
     
     
@@ -53,7 +56,7 @@ function ($scope, $stateParams, $state) {
         por: 'Random',
         contador:1
         }
-        $state.go('sopaDeLetras', $scope.aleatorio);
+        $state.go('sopaDeLetras2', $scope.aleatorio);
     };
     
     }])
@@ -176,9 +179,9 @@ function ($scope, $stateParams, $state, $timeout, video){
     $scope.siguiente = function(){
             $scope.stopTimer();
         if($scope.modo === 'Mode'){
-            $state.go('ahorcado', $scope.modeParams);
+            $state.go('video', $scope.modeParams);
         }else{
-            $state.go('sopaDeLetras',  $scope.unitParams);
+            $state.go('jeroglifico',  $scope.unitParams);
         }
     }
     
@@ -201,7 +204,7 @@ function ($scope, $stateParams, $state, $timeout, video){
       /////////////////////////////////////////////////////////  
       /////////////////////////////////////////////////////////  
     
-    $scope.counter = 10;
+    $scope.counter = 30;
     
     $scope.onTimeout = function() {
         if($scope.counter ===  0) {
@@ -290,9 +293,9 @@ function ($scope, $stateParams, $state, $timeout, imagen){
     $scope.siguiente = function(){
             $scope.stopTimer();
         if($scope.modo === 'Mode'){
-            $state.go('ahorcado', $scope.modeParams);
+            $state.go('imagen', $scope.modeParams);
         }else{
-            $state.go('sopaDeLetras',  $scope.unitParams);
+            $state.go('ahorcado',  $scope.unitParams);
         }
     }
     
@@ -315,7 +318,7 @@ function ($scope, $stateParams, $state, $timeout, imagen){
       /////////////////////////////////////////////////////////  
       /////////////////////////////////////////////////////////  
     
-    $scope.counter = 10;
+    $scope.counter = 30;
     
     $scope.onTimeout = function() {
         if($scope.counter ===  0) {
@@ -344,6 +347,118 @@ function ($scope, $stateParams, $state, $timeout, imagen){
        
         
 }
+
+
+
+
+])
+   
+.controller('jeroglificoCtrl', ['$scope', '$stateParams', '$state', '$timeout', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+// You can include any angular dependencies as parameters for this function
+// TIP: Access Route Parameters for your page via $stateParams.parameterName
+function ($scope, $stateParams, $state, $timeout){
+
+     //Comprobacion de parametros
+    
+    if($stateParams.temaSeleccionado !== ''){
+        $scope.tipo = $stateParams.temaSeleccionado;
+    }else if ($stateParams.modalidadSeleccionada !==''){
+         $scope.tipo =$stateParams.modalidadSeleccionada;
+    }else if ($stateParams.aleatorio !== ''){
+        $scope.tipo = $stateParams.aleatorio;
+    }
+    
+    $scope.contador = $stateParams.contador;
+    $scope.modo = $stateParams.por;
+
+    
+    //variables scope
+    
+    $scope.objeto = {
+        pista : 'Palabra clave',
+        respuestas: 'Keywords',
+        inputText: '',
+        url: 'https://image.ibb.co/dg77ca/Ejemplo_2.png'
+    };
+    
+    $scope.resultado = '';
+    
+    $scope.resuelto = false;
+    //Parametros a enviar 
+     $scope.modeParams = {
+        modalidadSeleccionada:'Video',
+        por: $scope.modo,
+        contador: $scope.contador+1
+    };
+    
+    $scope.unitParams = {
+        modalidadSeleccionada:'Preguntas',
+        por: $scope.modo,
+        contador: $scope.contador+1
+    };
+    
+    
+    //funciones
+    
+    $scope.siguiente = function(){
+            $scope.stopTimer();
+        if($scope.modo === 'Mode'){
+            $state.go('jeroglifico', $scope.modeParams);
+        }else{
+            $state.go('imagen',  $scope.unitParams);
+        }
+    }
+    
+    $scope.exit = function(){
+         $state.go('menu.home');
+     } 
+     
+     $scope.comprobar = function(){
+        $scope.stopTimer();
+        $scope.resuelto = true;
+        
+         if ($scope.objeto.inputText === $scope.objeto.respuestas){
+             $scope.resultado = 'Correcto!';
+         }else{
+             $scope.resultado = 'Has fallado!';
+         }
+            
+    };
+      
+      
+      /////////////////////////////////////////////////////////  
+      /////////////////////////////////////////////////////////  
+    
+    $scope.counter = 30;
+    
+    $scope.onTimeout = function() {
+        if($scope.counter ===  0) {
+            $timeout.cancel(mytimeout);
+            if($scope.contador<10){
+                $scope.siguiente();
+            }else{
+                $scope.exit();
+            }
+            return;
+        }
+        $scope.counter--;
+        mytimeout = $timeout($scope.onTimeout, 1000);
+    };
+    $scope.startTimer = function() {
+        mytimeout = $timeout($scope.onTimeout, 1000);
+    };
+    // stops and resets the current timer
+    $scope.stopTimer = function() {
+        $timeout.cancel(mytimeout);
+    };
+    
+    /////////////////////////////////////////////////////////  
+      ///////////////////////////////////////////////////////// 
+        
+       
+        
+}
+
 
 
 
@@ -379,9 +494,11 @@ function ($scope, $stateParams, $state, $timeout){
     
     $scope.letraSeleccionada = '';
     $scope.letrasFalladas = '';
-    $scope.letrasAcertadas = 0;
+    $scope.letrasAcertadas = '';
     $scope.fallos = 0;
     $scope.intentos = 7;
+    $scope.aciertos = 0;
+    
     
     
     //Parametros a enviar 
@@ -404,9 +521,9 @@ function ($scope, $stateParams, $state, $timeout){
     $scope.siguiente = function(){
             $scope.stopTimer();
         if($scope.modo === 'Mode'){
-            $state.go('imagen', $scope.modeParams);
+            $state.go('ahorcado', $scope.modeParams);
         }else{
-            $state.go('sopaDeLetras',  $scope.unitParams);
+            $state.go('jeroglifico',  $scope.unitParams);
         }
     };
     
@@ -416,33 +533,56 @@ function ($scope, $stateParams, $state, $timeout){
      
      $scope.comprobar = function(letra){
          
+        this.letraSeleccionada = '';
+         
         var encontrada = false;
+        var repetida = false;
+        var repetidaF = false;
+        
+        
+        for(var c = 0; c < $scope.letrasAcertadas.length; c++){
+            
+                if($scope.letrasAcertadas[c] === letra.toUpperCase()){
+                    repetida = true;
+                }
+        }
+                
          
         for (var i = 0, len = $scope.objeto.palabra.length; i < len; i++) {
             
             L = $scope.objeto.palabra[i].toUpperCase(); //mayúscula
             l = $scope.objeto.palabra[i].toLowerCase(); //minúscula
 
-            if((l === letra.toLowerCase() || L === letra.toUpperCase()) & !encontrada){
-             
+            if((l === letra.toLowerCase() || L === letra.toUpperCase()) & !encontrada & !repetida){
+                
                 $scope.elements = document.getElementsByClassName("letra-"+L);
                 for (var e = 0; e < $scope.elements.length; e++){
                     $scope.elements[e].style.color = 'black';
-                    $scope.letrasAcertadas++;
+                    $scope.aciertos++;
                 }
                 $scope.letraSeleccionada = null;
                 encontrada = true;
+                $scope.letrasAcertadas += L;
+                return;
             }
             
         }
         
-        if(encontrada === false){
-            $scope.fallos++;
+        for(var cc = 0; cc < $scope.letrasFalladas.length; cc++){
+            
+                if($scope.letrasFalladas[cc] === letra.toUpperCase()){
+                    repetidaF = true;
+                }
         }
+        
+        if(!encontrada && !repetida && !repetidaF){
+            $scope.fallos++;
+            $scope.letrasFalladas += letra.toUpperCase();
+        }
+        
+        
     };
             
-    
-    
 
     $scope.generarVectorAhorcado = function(){
     
@@ -456,7 +596,7 @@ function ($scope, $stateParams, $state, $timeout){
       /////////////////////////////////////////////////////////  
       /////////////////////////////////////////////////////////  
     
-    $scope.counter = 10;
+    $scope.counter = 30;
     
     $scope.onTimeout = function() {
         if($scope.counter ===  0) {
@@ -542,7 +682,7 @@ function ($scope, $stateParams, $state, $timeout, pregunta) {
     $scope.siguiente = function(){
         $scope.stopTimer();
         if($scope.modo === 'Mode'){
-            $state.go('sopaDeLetras', $scope.modeParams);
+            $state.go('preguntas', $scope.modeParams);
         }else{
             $state.go('ahorcado', $scope.unitParams);
         }
@@ -567,7 +707,125 @@ function ($scope, $stateParams, $state, $timeout, pregunta) {
     /////////////////////////////////////////////////////////  
     /////////////////////////Temporizador/////////////////////// 
       
-      $scope.counter = 10;
+      $scope.counter = 30;
+    
+    $scope.onTimeout = function() {
+        if($scope.counter ===  0) {
+            $scope.stopTimer();
+            if($scope.contador<10){
+            $scope.siguiente();
+            }else{
+                $scope.exit();
+            }
+            return;
+        }
+        $scope.counter--;
+        mytimeout = $timeout($scope.onTimeout, 1000);
+    };
+    $scope.startTimer = function() {
+        mytimeout = $timeout($scope.onTimeout, 1000);
+    };
+    // stops and resets the current timer
+    $scope.stopTimer = function() {
+        $timeout.cancel(mytimeout);
+    };
+    
+    /////////////////////////////////////////////////////////  
+    ///////////////////////////////////////////////////////// 
+        
+        
+}])
+   
+.controller('puzzleCtrl', ['$scope', '$stateParams', '$state', '$timeout', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+// You can include any angular dependencies as parameters for this function
+// TIP: Access Route Parameters for your page via $stateParams.parameterName
+function ($scope, $stateParams, $state, $timeout) {
+    
+    //Se comprueba el tema o la modalidad especifica que se ha elegido.
+    if($stateParams.temaSeleccionado !== ''){
+        $scope.tipo = $stateParams.temaSeleccionado;
+    }else if ($stateParams.modalidadSeleccionada !==''){
+         $scope.tipo =$stateParams.modalidadSeleccionada;
+    }else if ($stateParams.aleatorio !== ''){
+        $scope.tipo = $stateParams.aleatorio;
+    }
+  
+    //Parametro que guarda el modo desde el que se ha iniciado el juego.
+    $scope.modo = $stateParams.por;
+    
+    //Contador de ejercicios completados.
+    $scope.contador = $stateParams.contador;
+
+    
+    //Variables propias de cada pregunta
+    $scope.objeto = {
+        pista : 'Institutionalization of physiotherapy',
+        
+        desordenadas: [
+            {'id': 'Practitioner', 'orden': '', 'real': 3},
+            {'id': 'Medical Technician Assistant', 'orden': '', 'real':1},
+            {'id': 'Physical Therapy', 'orden': '', 'real':2}
+        ]
+    };
+    
+    $scope.resultado = '';
+        
+    //Parametros a enviar 
+    $scope.modeParams = {
+        modalidadSeleccionada:'Preguntas',
+        por: $scope.modo,
+        contador: $scope.contador+1
+    };
+    $scope.unitParams = {
+        modalidadSeleccionada:'Video',
+        por: $scope.modo,
+        contador: $scope.contador+1
+    };
+    
+    $scope.orden = 1;
+    
+    //Funciones
+        
+    $scope.siguiente = function(){
+        $scope.stopTimer();
+        if($scope.modo === 'Mode'){
+            $state.go('puzzle', $scope.modeParams);
+        }else{
+            $state.go('ahorcado', $scope.unitParams);
+        }
+    };
+    
+    $scope.exit = function(){
+         $state.go('menu.home');
+        };  
+        
+    $scope.comprobar = function(palabra){
+        $scope.stopTimer();
+        
+        for (var i in $scope.objeto.desordenadas){
+            if($scope.objeto.desordenadas[i].id === palabra && $scope.objeto.desordenadas[i].orden === ''){
+                $scope.objeto.desordenadas[i].orden = $scope.orden;
+                $scope.orden++;
+            }
+        }
+        
+        if($scope.orden>$scope.objeto.desordenadas.length){
+            for (var e in $scope.objeto.desordenadas){
+                if($scope.objeto.desordenadas[e].orden !== $scope.objeto.desordenadas[e].real){
+                    $scope.resultado = 'Has fallado!';
+                    return;
+                }
+            }
+            $scope.resultado = 'Correcto!';
+        }
+        
+       
+    };
+    
+    /////////////////////////////////////////////////////////  
+    /////////////////////////Temporizador/////////////////////// 
+      
+      $scope.counter = 30;
     
     $scope.onTimeout = function() {
         if($scope.counter ===  0) {
@@ -600,7 +858,6 @@ function ($scope, $stateParams, $state, $timeout, pregunta) {
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams, $state, $timeout, pregunta) {
-    
     //Se comprueba el tema o la modalidad especifica que se ha elegido.
     if($stateParams.temaSeleccionado !== ''){
         $scope.tipo = $stateParams.temaSeleccionado;
@@ -609,13 +866,12 @@ function ($scope, $stateParams, $state, $timeout, pregunta) {
     }else if ($stateParams.aleatorio !== ''){
         $scope.tipo = $stateParams.aleatorio;
     }
-  
+    
     //Parametro que guarda el modo desde el que se ha iniciado el juego.
     $scope.modo = $stateParams.por;
     
     //Contador de ejercicios completados.
     $scope.contador = $stateParams.contador;
-    
     
     //Inicializar objecto pregunta
     pregunta.init('Fisioterapia Asiática');
@@ -628,15 +884,20 @@ function ($scope, $stateParams, $state, $timeout, pregunta) {
         correcta: pregunta.getCorrecta()
     };
     
-    $scope.L = new Array(12);
+    $scope.tabla = '';
+    var A = 0;
     
-    for (var i = 0; i < $scope.L.length; i++) {
-        $scope.L[i] = new Array(8);
+    for (var i = 0; i < 12; i++) {
+        $scope.tabla += '<div class="divTableRow" >';
+        
         for (var j = 0; j < 8; j++) {
-            $scope.L[i][j] = 'A';
+            $scope.tabla += '<div class="divTableCell"><a href=#/"alert()">A</a></div>';
         }
+        $scope.tabla += '</div>';
     }
     
+    //Se añade la tabla generada al elemento HTML
+    document.getElementById("sopaLetras").innerHTML = $scope.tabla;
     $scope.resultado = '';
         
     //Parametros a enviar 
@@ -678,10 +939,12 @@ function ($scope, $stateParams, $state, $timeout, pregunta) {
         
     };
     
+
+    
     /////////////////////////////////////////////////////////  
     /////////////////////////Temporizador/////////////////////// 
       
-      $scope.counter = 10;
+      $scope.counter = 30;
     
     $scope.onTimeout = function() {
         if($scope.counter ===  0) {
@@ -706,6 +969,7 @@ function ($scope, $stateParams, $state, $timeout, pregunta) {
     
     /////////////////////////////////////////////////////////  
     ///////////////////////////////////////////////////////// 
+        
         
         
 }])

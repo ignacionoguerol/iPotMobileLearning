@@ -77,6 +77,19 @@ angular.module('app.routes', [])
     controller: 'imagenCtrl'
   })
 
+  .state('jeroglifico', {
+    url: '/page11',
+	params: {
+		temaSeleccionado: "",
+		modalidadSeleccionada: "",
+		aleatorio: "",
+		por: "",
+		contador: ""		
+},
+    templateUrl: 'templates/jeroglifico.html',
+    controller: 'jeroglificoCtrl'
+  })
+
   .state('ahorcado', {
     url: '/page10',
 	params: {
@@ -101,6 +114,19 @@ angular.module('app.routes', [])
 },
     templateUrl: 'templates/preguntas.html',
     controller: 'preguntasCtrl'
+  })
+
+  .state('puzzle', {
+    url: '/page12',
+	params: {
+		temaSeleccionado: "",
+		modalidadSeleccionada: "",
+		aleatorio: "",
+		por: "",
+		contador: ""		
+},
+    templateUrl: 'templates/puzzle.html',
+    controller: 'puzzleCtrl'
   })
 
   .state('sopaDeLetras', {

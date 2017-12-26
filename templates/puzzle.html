@@ -1,0 +1,17 @@
+<ion-view title="Puzzle" hide-back-button="true" cache-view="false" id="page12" style="background-color:#E9F3E9;" ng-init="startTimer()">
+  <ion-content padding="true" class="has-header">
+    <div id="puzzle-container14" class="container">
+      <form id="puzzle-form38" class="list">
+        <h5 id="puzzle-heading35" style="color:#000000;font-weight:lighter;text-align:center;">Ejercicio: {{contador}}/10</h5>
+        <h3 id="puzzle-heading36" style="color:#000000;font-weight:400;text-align:center;">{{objeto.pista}}</h3>
+        <ion-list id="puzzle-list2">
+          <ion-item id="puzzle-list-item7" ng-repeat="palabra in objeto.desordenadas" ng-value="palabra.id" ng-click="comprobar(palabra.id)">{{palabra.orden}} {{palabra.id}}</ion-item>
+        </ion-list>
+      </form>
+      <h4 id="puzzle-heading37" style="color:#000000;font-weight:300;text-align:center;">{{resultado}}</h4>
+      <button id="puzzle-button23" ng-if="contador>9" ng-click="exit()" class="button button-positive button-block">Exit!</button>
+      <button id="puzzle-button24" ng-click="siguiente()" ng-if="contador<10" ng-disabled="objeto.selected === ''" class="button button-positive button-block">Siguiente</button>
+      <h5 id="puzzle-heading38" ng-if="resultado === ''" style="color:#000000;font-weight:lighter;text-align:center;">Tiempo restante: {{counter}} segundos</h5>
+    </div>
+  </ion-content>
+</ion-view>
