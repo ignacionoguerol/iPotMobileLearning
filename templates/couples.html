@@ -9,13 +9,13 @@
         <h4 style="color:#439B90;font-weight:400;text-align:center;">{{objeto.pista}}</h4>
       </form>
       <ion-scroll direction="y">
-        <h4 id="top-{{$index}}" ng-value="" ng-repeat="palabra in objeto.i" ng-click="seleccionar(palabra.palabra, $index)" ng-if="resultado == ''" style="color:#000000;font-weight:300;text-align:center; width:95%; margin-left: 2.5%;" class="text-box-p">{{palabra.palabra}}</h4>
+        <h4 id="top-{{$index}}" ng-value="" ng-repeat="palabra in objeto.i" ng-click="seleccionar(palabra.orden, $index)" ng-if="resultado == ''" style="color:#000000;font-weight:300;text-align:center; width:95%; margin-left: 2.5%;" class="text-box-p">{{palabra.palabra}}</h4>
 
         <br>
 
 
         <div style="margin-top:3%;">
-          <h4 id="bot-{{$index}}" ng-value="" ng-click="comprobar(palabra.palabra, $index)" ng-repeat="palabra in objeto.r" style="color:#000000;font-weight:300;text-align:center; width:95%; margin-left: 2.5%;" class="text-box-p">{{palabra.palabra}}</h4>
+          <h4 id="bot-{{$index}}" ng-value="" ng-click="comprobar(palabra.orden, $index)" ng-repeat="palabra in objeto.r" style="color:#000000;font-weight:300;text-align:center; width:95%; margin-left: 2.5%;" class="text-box-p">{{palabra.palabra}}</h4>
         </div>
         <h4 style="color:#000000;font-weight:300;text-align:center;">{{resultado}}</h4>
       </ion-scroll>
@@ -25,8 +25,8 @@
       <ion-spinner class="spinner"></ion-spinner>
     </div>
     <div id="couples-container14" ng-show="show === false" class="container-boton">
-      <button id="couples-button26" ng-click="siguiente()" ng-if="contador<10" ng-disabled="click < 3" class="button button-positive button-block">Siguiente</button>
-      <button id="couples-button25" ng-if="contador>9" ng-click="exit()" ng-disabled="click < 3" class="button button-positive button-block">Exit!</button>
+      <button id="couples-button26" ng-click="siguiente()" ng-if="contador<10" ng-disabled="click < 3" class="button button-positive button-block">Next</button>
+      <button id="couples-button25" ng-if="contador>9" ng-click="exit()" ng-disabled="click < 3" class="button button-positive button-block">Exit</button>
     </div>
   </ion-content>
 </ion-view>

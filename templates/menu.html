@@ -14,7 +14,8 @@
       <div class="profile-image">
         <img src="img/vvZqCR2kQdK8qqoOEl2q_LOGOcabesa.png" style="display: block; width: 40%; height: auto; margin-left: auto; margin-right: auto;">
       </div>
-      <h4 id="menu-heading1" style="color:#439B90;font-weight:300;text-align:center;">{{email}}</h4>
+      <h4 id="menu-heading1" ng-show="nick == ''" style="color:#439B90;font-weight:300;text-align:center;">{{email}}</h4>
+      <h4 id="menu-heading26" style="color:#439B90;font-weight:300;text-align:center;">{{nick}}</h4>
       <div class="spacer" style="width: 268px; height: 32px;"></div>
       <ion-list id="menu-list1">
         <ion-item class="item-icon-left positive side-menu-item" id="menu-list-item11" ui-sref="menu.home({})" menu-close="" active-page-highlight="">
@@ -22,9 +23,9 @@
         <ion-item class="item-icon-left positive side-menu-item" id="menu-list-item13" ui-sref="menu.ranking()" menu-close="" active-page-highlight="">
           <i class="icon ion-trophy"></i>Ranking</ion-item>
         <ion-item class="item-icon-left positive side-menu-item" id="menu-list-item12" ui-sref="menu.help()" menu-close="" active-page-highlight="">
-          <i class="icon ion-trophy"></i>Help</ion-item>
+          <i class="icon ion-help"></i>Help</ion-item>
       </ion-list>
-      <button id="menu-button5" ng-click="logout()" class="button button-positive button-block">Log Out</button>
+      <button id="menu-button5" ng-click="logout()" class="button button-positive button-block button-clear">Log Out</button>
     </ion-content>
   </ion-side-menu>
 </ion-side-menus>

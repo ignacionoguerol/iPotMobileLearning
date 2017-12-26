@@ -10,10 +10,10 @@ angular.module('connection', ['ionic'])
                     .then(function(result) {
                         if(!result) {
                             //ionic.Platform.exitApp();
-                            navigator.app.exitApp();
+                            //avigator.app.exitApp();
                         }else{
                             //ionic.Platform.exitApp();
-                            navigator.app.exitApp();
+                            //navigator.app.exitApp();
                         }
                     });
                 }

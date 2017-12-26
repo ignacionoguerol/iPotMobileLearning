@@ -1,4 +1,4 @@
-<ion-view title="Questions" hide-back-button="true" cache-view="false" id="page7">
+<ion-view title="Questions" hide-back-button="true" cache-view="false" id="page7" can-swipe-back="false">
   <ion-nav-buttons side="left" scroll="false" class="has-header">
     <button class="button button-icon icon ion-android-home" ng-click="guardar()"></button>
   </ion-nav-buttons>
@@ -16,8 +16,8 @@
       </ion-scroll>
     </div>
     <div id="questions-container10" ng-show="show === false" class="container-boton">
-      <button id="questions-button12" ng-if="contador>9" ng-click="exit()" class="button button-positive button-block">Exit!</button>
-      <button id="questions-button10" ng-click="siguiente()" ng-if="contador<10" ng-disabled="objeto.selected === ''" style="border-radius:0px 0px 0px 0px;" class="button button-positive button-block">Siguiente</button>
+      <button id="questions-button12" ng-if="contador>9" ng-click="exit()" class="button button-positive button-block">Exit</button>
+      <button id="questions-button10" ng-click="siguiente()" ng-if="contador<10" ng-disabled="objeto.selected === ''" style="border-radius:0px 0px 0px 0px;" class="button button-positive button-block">Next</button>
     </div>
   </ion-content>
 </ion-view>

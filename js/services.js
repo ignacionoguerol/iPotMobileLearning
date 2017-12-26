@@ -6,8 +6,10 @@ function Pregunta(){
         
     this.correcta = '';
     
-    this.id;
+    this.num = '';
     
+    this.numTema = '';
+
     this.init = function(p){
     
     respuestas = [];
@@ -18,8 +20,9 @@ function Pregunta(){
                     respuestas.push(opcion); 
                 })
     this.correcta = p.correcta;
+    this.num = p.num;
+    this.numTema = p.numTema;
     
-    this.id = p.$id;
     }
     
     this.getPregunta = function(){
@@ -34,8 +37,12 @@ function Pregunta(){
         return this.correcta;
     };
     
-    this.getId = function(){
-        return this.id;
+    this.getNum = function(){
+        return this.num;
+    }
+    
+    this.getNumTema = function(){
+        return this.numTema;
     }
 }
 
@@ -45,16 +52,20 @@ function Sopa(){
     this.letras = '';
     var palabras = [];
     this.id;
+    this.num = '';
+    this.numTema = '';
     
     this.init = function(p){
-    palabras = [];
-    this.pregunta = p.pregunta;
-    
-    angular.forEach(p.palabras, function(opcion) {
-                    palabras.push(opcion); 
-                })
-    this.letras = p.letras;
-    this.id = p.$id;
+        palabras = [];
+        this.pregunta = p.pregunta;
+        
+        angular.forEach(p.palabras, function(opcion) {
+                        palabras.push(opcion); 
+                    })
+        this.letras = p.letras;
+        this.id = p.$id;
+        this.num = p.num;
+        this.numTema = p.numTema;
     }
     
     this.getPregunta = function(){
@@ -76,23 +87,29 @@ function Sopa(){
     this.getId = function(){
         return this.id;
     }
+    
+    this.getNum = function(){
+        return this.num;
+    }
+    
+    this.getNumTema = function(){
+        return this.numTema;
+    }
 }
 
 function Ahorcado(){
     
     this.pista;
-    
     this.palabra;
-    
-    this.id;
+    this.num = '';
+    this.numTema = '';
     
     this.init = function(p){
 
-    this.pista = p.Pista;
-    
-    this.palabra = p.Palabra;
-    
-    this.id = p.$id;
+        this.pista = p.Pista;
+        this.palabra = p.Palabra;
+        this.num = p.num;
+        this.numTema = p.numTema; 
     }
     
     this.getPalabra = function(){
@@ -103,8 +120,12 @@ function Ahorcado(){
         return this.pista;
     };
     
-    this.getId = function(){
-        return this.id;
+    this.getNum = function(){
+        return this.num;
+    }
+    
+    this.getNumTema = function(){
+        return this.numTema;
     }
 }
 
@@ -114,12 +135,16 @@ function Jeroglifico(){
     this.respuesta;
     this.id;
     this.url;
+    this.num = '';
+    this.numTema = '';
     
     this.init = function(p){
-    this.pista = p.tema;
-    this.respuesta = p.respuesta;
-    this.id = p.$id;
-    this.url = p.url;
+        this.pista = p.tema;
+        this.respuesta = p.respuesta;
+        this.id = p.$id;
+        this.url = p.url;
+        this.num = p.num;
+        this.numTema = p.numTema;
     }
     
     this.getRespuesta = function(){
@@ -136,6 +161,14 @@ function Jeroglifico(){
     
     this.getUrl = function(){
         return this.url;
+    }
+    
+    this.getNum = function(){
+        return this.num;
+    }
+    
+    this.getNumTema = function(){
+        return this.numTema;
     }
     
 }
@@ -199,11 +232,15 @@ function Puzzle(){
     
     this.palabras = '';
     this.tema = '';
+    this.num = '';
+    this.numTema = '';
     
     this.init = function(p){
     
         this.palabras = p.palabras;
         this.tema = p.tema;
+        this.num = p.num;
+        this.numTema = p.numTema; 
     }
     
     this.getPalabras = function(){
@@ -214,6 +251,14 @@ function Puzzle(){
         return this.tema;
     };
     
+    this.getNum = function(){
+        return this.num;
+    }
+    
+    this.getNumTema = function(){
+        return this.numTema;
+    }
+    
 }
 
 function Couples(){
@@ -221,21 +266,25 @@ function Couples(){
     this.pista = '';
     var i = [];
     var r = [];
+    this.num = '';
+    this.numTema = '';
     
     this.init = function(p){
     
-    i = [];
-    r = [];
-    
-    this.pista = p.pista;
-    
-    angular.forEach(p.i, function(opcion) {
-                    i.push(opcion); 
-                })
-                
-    angular.forEach(p.r, function(opcion) {
-                    r.push(opcion); 
-                })
+        i = [];
+        r = [];
+        
+        this.pista = p.pista;
+        this.num = p.num;
+        this.numTema = p.numTema; 
+        
+        angular.forEach(p.i, function(opcion) {
+                        i.push(opcion); 
+                    })
+                    
+        angular.forEach(p.r, function(opcion) {
+                        r.push(opcion); 
+                    })
     }
     
     this.getPista = function(){
@@ -250,6 +299,14 @@ function Couples(){
         return r;
     };
     
+    this.getNum = function(){
+        return this.num;
+    }
+    
+    this.getNumTema = function(){
+        return this.numTema;
+    }
+    
 }
 
 
@@ -262,9 +319,10 @@ function DBArray($firebaseArray, $timeout, $ionicPopup, $q){
     var nombre = "";
     
     this.init = function(campo){
+        console.log(ref[campo])
         if(ref[campo] === undefined){
-        ref[campo] = firebase.database().ref().child(campo);
-        return 0;
+            ref[campo] = firebase.database().ref().child(campo);
+            return 0;
         }else{
             return 1;
         }
@@ -303,21 +361,22 @@ function DBArray($firebaseArray, $timeout, $ionicPopup, $q){
         return ref;
     }
     
-    this.submitJugada = function(idPreg, res, user, mod){
-        this.init("jugadas");
+    this.submitJugada = function(numTema, num, res, user, mod){
+        /*this.init("jugadas");
         $firebaseArray(ref["jugadas"]).$add({
             fecha: Date(),
             usuario: user,
-            idPregunta: idPreg,
+            num: num,
+            numTema: numTema,
             resultado: res,
             modalidad: mod
-        });
+        });*/
     }
     
     this.savePoints = function(puntos, email){
         
         $ionicPopup.alert({
-            title: 'Has sumado ' + puntos + ' puntos'
+            title: 'You have got ' + puntos + ' points'
          });
          
         var init = this.init("usuarios");
@@ -352,7 +411,7 @@ function DBArray($firebaseArray, $timeout, $ionicPopup, $q){
     this.changeNick = function(email, nick){
         
         $ionicPopup.alert({
-            title: 'Tu nuevo nick es ' + nick
+            title: 'Your nick has been updated to ' + nick
          });
          
         var init = this.init("usuarios");
