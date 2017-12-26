@@ -9934,3 +9934,16 @@ a.button {
 .img-parejas {
   width: 47%;
   border: black solid; }
+
+.top-container {
+  height: calc(100% - 96px);
+  overflow: scroll; }
+
+.bottom-form {
+  position: absolute;
+  bottom: 0px;
+  display: block;
+  width: 100%;
+  background-color: white; }
+  .bottom-form button {
+    margin: 0px; }

@@ -1,93 +1,21 @@
 <ion-view title="Ranking" id="page2" style="background-color:#E9F3E9;">
-  <ion-content padding="true" class="has-header">
-    <div id="ranking-container10" class="container">
-      <h3 id="ranking-heading20" style="color:#000000;text-align:center;">Ranking Fisioterapia</h3>
-      <table class="sopaletras">
-        <tbody>
-          <tr>
-            <td>Position</td>
-            <td>Nick</td>
-            <td>Points</td>
-
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Pepe</td>
-            <td>100</td>
-
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Maria</td>
-            <td>90</td>
-
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Javi</td>
-            <td>76</td>
-
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>Roni</td>
-            <td>56</td>
-
-          </tr>
-          <tr>
-            <td>5</td>
-            <td>Valle</td>
-            <td>55</td>
-          </tr>
-
-        </tbody>
-      </table>
-      <h3 id="ranking-heading23" style="color:#000000;text-align:center;">Ranking T. Ocupacional</h3>
-      <table class="sopaletras">
-        <tbody>
-          <tr>
-            <td>Position</td>
-            <td>Nick</td>
-            <td>Points</td>
-
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Pepe</td>
-            <td>100</td>
-
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Maria</td>
-            <td>90</td>
-
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Javi</td>
-            <td>76</td>
-
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>Roni</td>
-            <td>56</td>
-
-          </tr>
-          <tr>
-            <td>5</td>
-            <td>Valle</td>
-            <td>55</td>
-          </tr>
-
-        </tbody>
-      </table>
-      <div id="ranking-button-bar2" class="button-bar">
-        <button id="ranking-button27" class="button button-positive button-block">Grado</button>
-        <button id="ranking-button28" ng-disabled="true" class="button button-positive button-block">Unit</button>
-        <button id="ranking-button29" ng-disabled="true" class="button button-positive button-block">Mode</button>
+  <ion-content padding="true" scroll="false" class="has-header">
+    <ion-scroll id="ranking-container16" class="top-container">
+      <ion-list id="ranking-list7">
+        <ion-item class="item-avatar" id="ranking-list-item9" ng-repeat="message in messages">
+          <h2>{{message.email}}</h2>
+          <p>{{message.text}}</p>
+        </ion-item>
+      </ion-list>
+    </ion-scroll>
+    <form id="ranking-form44" class="list bottom-form" ng-submit="addMessage()">
+      <label class="item item-input" id="ranking-input12">
+        <span class="input-label">Message</span>
+        <input type="text" placeholder="" ng-model="data.message">
+      </label>
+      <div style="margin-right:-20px;">
+        <button id="ranking-button28" style="left:-10px;" class="button button-positive button-full">Submit</button>
       </div>
-    </div>
+    </form>
   </ion-content>
 </ion-view>
