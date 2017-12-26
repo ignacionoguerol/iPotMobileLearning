@@ -732,6 +732,11 @@ function ($scope, $stateParams, $state, $timeout, dbarray, ahorcado, $ionicPlatf
         //}
     };
     
+    $scope.guardar = function(){
+        $scope.stopTimer();
+         dbarray.savePoints($scope.puntos, $scope.email);
+         $state.go('menu.home');
+    }
     $scope.exit = function(){
         $scope.stopTimer();
         if($scope.intentos !== $scope.fallos){
@@ -966,25 +971,33 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
     $scope.exit = function(){
         dbarray.savePoints($scope.puntos, $scope.email);
          $state.go('menu.home');
-        };  
+        }; 
+        
+     $scope.guardar = function(){
+        $scope.stopTimer(); 
+        dbarray.savePoints($scope.puntos, $scope.email);
+        $state.go('menu.home');
+        };
         
     $scope.comprobar = function(p, id){
-        $scope.objeto.selected = p;
-        $scope.stopTimer();
         
-         if ($scope.objeto.selected === $scope.objeto.correcta){
-             //$scope.resultado = 'Correcto!';
-             document.getElementById(id).style.backgroundColor = '#33CD5F';
-             $scope.puntos++;
-             //dbarray.submitJugada(pregunta.getId(), 1, $ionicUser.details.email, 1);
-             dbarray.submitJugada(pregunta.getPregunta(), 1, $scope.email, 1);
-         }else{
-             //$scope.resultado = 'Has fallado!';
-            document.getElementById(id).style.backgroundColor = '#EF473A';             
-            //dbarray.submitJugada(pregunta.getId(), 0, $ionicUser.details.email, 1);
-             dbarray.submitJugada(pregunta.getPregunta(), 0, $scope.email, 1);
-         }
-            
+        if($scope.resultado === ''){
+            $scope.objeto.selected = p;
+            $scope.stopTimer();
+            $scope.resultado = p;
+             if ($scope.objeto.selected === $scope.objeto.correcta){
+                 //$scope.resultado = 'Correcto!';
+                 document.getElementById(id).style.backgroundColor = '#33CD5F';
+                 $scope.puntos++;
+                 //dbarray.submitJugada(pregunta.getId(), 1, $ionicUser.details.email, 1);
+                 dbarray.submitJugada(pregunta.getPregunta(), 1, $scope.email, 1);
+             }else{
+                 //$scope.resultado = 'Has fallado!';
+                document.getElementById(id).style.backgroundColor = '#EF473A';             
+                //dbarray.submitJugada(pregunta.getId(), 0, $ionicUser.details.email, 1);
+                 dbarray.submitJugada(pregunta.getPregunta(), 0, $scope.email, 1);
+             }
+        } 
         
     };
     
@@ -1510,8 +1523,9 @@ function ($scope, $stateParams, $state, $timeout, $compile, sopa, $firebaseArray
         $scope.loadParams();
         $state.go('sopaDeLetras', $scope.modeParams);
         };
-    $scope.exit = function(){
         
+    $scope.exit = function(){
+        $scope.stopTimer();
         if($scope.nPalabras === 0){
             dbarray.submitJugada($scope.objeto, 1, $scope.email, 5);
             $scope.puntos++;
@@ -1528,7 +1542,11 @@ function ($scope, $stateParams, $state, $timeout, $compile, sopa, $firebaseArray
         $scope.resultado++;
     };
     
-
+    $scope.guardar = function(){
+        dbarray.savePoints($scope.puntos, $scope.email);
+        $state.go('menu.home');
+    }
+    
     
     /////////////////////////////////////////////////////////  
     /////////////////////////Temporizador/////////////////////// 
