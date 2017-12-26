@@ -62,29 +62,36 @@ function ($scope, $stateParams, $state) {
     
     }])
    
-.controller('rankingCtrl', ['$scope', '$stateParams', '$firebaseArray', '$ionicUser', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('rankingCtrl', ['$scope', '$stateParams', '$firebaseArray', '$ionicUser', 'dbarray', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $firebaseArray, $ionicUser) {
+function ($scope, $stateParams, $firebaseArray, $ionicUser, dbarray) {
     
     $scope.data = {
-        'message': ''
+        'pregunta': '',
+        'respuestas' : '',
+        'correcta' : ''
+        
     }
     
-      var ref = firebase.database().ref().child("messages");
-      // create a synchronized array
-      $scope.messages = $firebaseArray(ref);
-      
+     dbarray.init("preguntas");
+     $scope.preguntas = dbarray.getArray();
+       
       // add new items to the array
       // the message is automatically added to our Firebase database!
-      $scope.addMessage = function() {
-        $scope.messages.$add({
-          text: $scope.data.message,
-          email: $ionicUser.details.email,
-          name: $ionicUser.details.name
+      $scope.addPregunta = function() {
+        $firebaseArray(dbarray.getRef()).$add({
+            pregunta: $scope.data.pregunta,
+            respuestas: $scope.data.respuestas,
+            correcta: $scope.data.correcta,
+            
         });
-        $scope.data.message = '';
+        $scope.data.pregunta = '';
+        $scope.data.respuestas = '';
+        $scope.data.correcta = '';
+        $scope.preguntas = dbarray.getArray();
       };
+      
 
 }])
    
@@ -652,10 +659,10 @@ function ($scope, $stateParams, $state, $timeout){
 
 ])
    
-.controller('preguntasCtrl', ['$scope', '$stateParams', '$state', '$timeout', 'pregunta', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('preguntasCtrl', ['$scope', '$stateParams', '$state', '$timeout', '$firebaseArray', 'pregunta', 'dbarray', '$q', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $state, $timeout, pregunta) {
+function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbarray, $q) {
     
     //Se comprueba el tema o la modalidad especifica que se ha elegido.
     if($stateParams.temaSeleccionado !== ''){
@@ -672,19 +679,39 @@ function ($scope, $stateParams, $state, $timeout, pregunta) {
     //Contador de ejercicios completados.
     $scope.contador = $stateParams.contador;
     
+    $scope.preguntas = [];
     
-    //Inicializar objecto pregunta
-    pregunta.init('Which one is included as an isolated teaching?');
+    dbarray.init("preguntas");
+
+    $scope.preguntas = dbarray.loadArray();
+
+     $timeout(function() {
+        console.log("promises");
+        console.log($scope.preguntas);
+        
+        var random = Math.floor(Math.random() * ($scope.preguntas.length));
+        console.log("Random: " + random);
+        pregunta.init($scope.preguntas[random]);
     
-    //Variables propias de cada pregunta
-    $scope.objeto = {
-        pregunta : pregunta.getPregunta(),
-        respuestas: pregunta.getRespuestas(),
-        selected:'',
-        correcta: pregunta.getCorrecta()
-    };
+        console.log($scope.preguntas[1]);
+        console.log($scope.preguntas[1].pregunta);
+        
+        //Variables propias de cada pregunta
+        $scope.objeto = {
+            pregunta : pregunta.getPregunta(),
+            respuestas: pregunta.getRespuestas(),
+            selected:'',
+            correcta: pregunta.getCorrecta()
+        };
+        
+        $scope.startTimer();
+        
+        $scope.resultado = '';
+
+    }, 3000);
     
-    $scope.resultado = '';
+    
+    
         
     //Parametros a enviar 
     $scope.modeParams = {

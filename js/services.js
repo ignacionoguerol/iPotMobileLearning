@@ -2,23 +2,29 @@ function Pregunta(){
     
     this.pregunta = '';
     
-    this.respuestas = '';
+    var respuestas = [];
         
     this.correcta = '';
     
-    this.init = function(pregunta){
+    this.init = function(p){
+    console.log("init");
+    console.log(p);
+
+    this.pregunta = p.pregunta;
+    angular.forEach(p.opciones, function(opcion) {
+                    respuestas.push(opcion); 
+                    console.log(opcion);
+                })
     
-    this.pregunta = pregunta;
-    
-    this.respuestas = [
+    /*this.respuestas = [
         {id: 'Mechanotherapy'},
         {id: 'Hydrotherapy'},
         {id: 'Kinesitherapy'},
         {id: 'Electrotherapy'},
         {id: 'All answers are correct'}
-        ];
+        ];*/
         
-    this.correcta = 'All answers are correct';
+    var correcta = 'All answers are correct';
     }
     
     this.getPregunta = function(){
@@ -26,7 +32,7 @@ function Pregunta(){
     };
     
     this.getRespuestas = function(){
-        return this.respuestas;
+        return respuestas;
     };
     
     this.getCorrecta = function(){
@@ -116,13 +122,49 @@ function Imagen(){
     };
 }
 
+function DBArray($firebaseArray){
+    
+    var cuenta = [];
+    
+    var array;
+    
+    var ref;
+    
+    this.init = function(campo){
+        
+        ref = firebase.database().ref().child(campo);
+    }
+    
+    this.loadArray = function(){
+        cuenta = [];
+        array = $firebaseArray(ref)
+        array.$loaded()
+            .then(function(){
+                 angular.forEach(array, function(pregunta) {
+                    cuenta.push(pregunta);
+                })
+                
+            
+        });
+        return cuenta;
+    }
+    
+    this.getArray = function(){
+        return cuenta;
+    }
+    
+    this.getRef =function(){
+        return ref;
+    }
+}
+
 
 
 angular.module('app.services', [])
 .service('pregunta', Pregunta)
 .service('video', Video)
-.service('imagen', Imagen);
-
+.service('imagen', Imagen)
+.service('dbarray', DBArray);
 
 
 

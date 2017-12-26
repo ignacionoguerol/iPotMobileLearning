@@ -1,21 +1,24 @@
 <ion-view title="Ranking" id="page2" style="background-color:#E9F3E9;">
   <ion-content padding="true" scroll="false" class="has-header">
     <ion-scroll id="ranking-container16" class="top-container">
+      <div id="ranking-markdown7" class="show-list-numbers-and-dots">
+        <p style="color:#000000;">{{preguntas[3].respuestas}}</p>
+      </div>
       <ion-list id="ranking-list7">
-        <ion-item class="item-avatar" id="ranking-list-item9" ng-repeat="message in messages">
-          <h2>{{message.email}}</h2>
-          <p>{{message.text}}</p>
+        <ion-item class="item-avatar" id="ranking-list-item9" ng-repeat="pregunta in preguntas">
+          <h2>{{pregunta.pregunta}}</h2>
+          <p style="white-space:normal;">{{pregunta.correcta}}</p>
         </ion-item>
       </ion-list>
     </ion-scroll>
-    <form id="ranking-form44" class="list bottom-form" ng-submit="addMessage()">
-      <label class="item item-input" id="ranking-input12">
-        <span class="input-label">Message</span>
-        <input type="text" placeholder="" ng-model="data.message">
-      </label>
-      <div style="margin-right:-20px;">
-        <button id="ranking-button28" style="left:-10px;" class="button button-positive button-full">Submit</button>
-      </div>
+    <form id="ranking-form44" class="list bottom-form" ng-submit="addPregunta()">
+      <label class="item item-input" id="ranking-textarea1">
+        <span class="input-label">Pregunta</span><textarea placeholder="" ng-model="data.pregunta"></textarea></label>
+      <label class="item item-input" id="ranking-textarea2">
+        <span class="input-label">Respuestas</span><textarea placeholder="" ng-model="data.respuestas"></textarea></label>
+      <label class="item item-input" id="ranking-textarea3">
+        <span class="input-label">Correcta</span><textarea placeholder="" ng-model="data.correcta"></textarea></label>
+      <button id="ranking-button28" class="button button-positive button-block">Submit</button>
     </form>
   </ion-content>
 </ion-view>
