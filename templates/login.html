@@ -1,13 +1,7 @@
-<ion-view title="Login" hide-nav-bar="true" cache-view="false" nav-transition="none" id="page4" style="background-color:#E9F3E9;">
-  <ion-content padding="true" class="manual-ios-statusbar-padding" scroll="false">
-    <div id="login-markdown1" ng-if="error != ''" style="text-align:center;" class="show-list-numbers-and-dots error-box">
-      <p style="color:#FFFFFF;">{{error}}</p>
-    </div>
+<ion-view title="Login" hide-nav-bar="true" cache-view="false" nav-transition="none" id="page4">
+  <ion-content padding="true" style="background: url(img/6nScv3dkRNqtat5SVZJE_1020PANTALLA2001.jpg) no-repeat center;background-size:cover;" class="manual-ios-statusbar-padding" scroll="false">
     <form id="login-form1" class="list center-form">
-      <div>
-        <img src="img/TxkHNItJT9WqudBk07nm_mobile-learning.png" style="display: block; width: 100%; height: auto; margin-left: auto; margin-right: auto;">
-      </div>
-      <div class="spacer" style="width: 300px; height: 21px;"></div>
+      <div class="spacer" style="width: 300px; height: 224px;"></div>
       <label class="item item-input bottom-input" id="login-input1">
         <span class="input-label">Email</span>
         <input type="email" placeholder="" ng-model="data.email">
@@ -16,7 +10,9 @@
         <span class="input-label">Password</span>
         <input type="password" placeholder="" ng-model="data.password">
       </label>
-      <div class="spacer" style="width: 300px; height: 30px;"></div>
+      <div id="login-markdown1" ng-if="error != ''" style="text-align:center;" class="show-list-numbers-and-dots error-box">
+        <p style="color:#FFFFFF;">{{error}}</p>
+      </div>
       <button id="login-button1" ng-click="login()" class="button button-positive button-block">Log in</button>
     </form>
   </ion-content>

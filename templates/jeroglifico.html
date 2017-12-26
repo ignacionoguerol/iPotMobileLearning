@@ -1,14 +1,14 @@
-<ion-view title="Jeroglifico" hide-back-button="true" cache-view="false" nav-transition="none" id="page11" style="background-color:#E9F3E9;">
-  <ion-nav-buttons side="left" class="has-header">
+<ion-view title="Jeroglifico" hide-back-button="true" cache-view="false" nav-transition="none" id="page11">
+  <ion-nav-buttons side="left" scroll="false" class="has-header">
     <button class="button button-icon icon ion-android-home" ng-click="exit()"></button>
   </ion-nav-buttons>
-  <ion-content padding="true" class="has-header">
+  <ion-content padding="true" scroll="false" class="has-header">
     <div ng-show="show === true" class="spinner-div">
       <ion-spinner class="spinner"></ion-spinner>
     </div>
     <div id="jeroglifico-container12" ng-show="show === false" class="container">
       <h4 id="jeroglifico-heading34" ng-if="resultado === ''" style="color:#000000;font-weight:400;text-align:right;">{{counter}}</h4>
-      <h3 id="jeroglifico-heading32" style="color:#6FB544;font-weight:400;text-align:center;">{{objeto.pista}}</h3>
+      <h4 id="jeroglifico-heading32" style="color:#439B90;font-weight:400;text-align:center;">{{objeto.pista}}</h4>
       <div class="jeroglifico">
         <img src="{{objeto.url}}" style="display: block; width: 90%; height: auto; margin-left: auto; margin-right: auto;">
       </div>
@@ -17,9 +17,11 @@
           <input id="input-in" type="text" placeholder="Case sensitive" ng-model="objeto.inputText">
         </label>
       </form>
-      <button id="jeroglifico-button22" ng-click="comprobar()" ng-if="!resuelto" ng-disabled="objeto.inputText == ''" class="button button-positive button-block">Submit</button>
+    </div>
+    <div id="jeroglifico-container19" class="container-boton">
       <button id="jeroglifico-button20" ng-click="siguiente()" ng-if="contador<10 &amp;&amp; resuelto" ng-disabled="objeto.selected === ''" class="button button-positive button-block">Siguiente</button>
       <button id="jeroglifico-button21" ng-if="contador>9 &amp;&amp; resuelto" ng-click="exit()" ng-disabled="objeto.selected === ''" class="button button-positive button-block">Exit!</button>
+      <button id="jeroglifico-button22" ng-click="comprobar()" ng-if="!resuelto" ng-disabled="objeto.inputText == ''" ng-show="show === false" class="button button-positive button-block">Submit</button>
     </div>
   </ion-content>
 </ion-view>

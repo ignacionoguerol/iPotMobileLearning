@@ -142,42 +142,15 @@ function Jeroglifico(){
 
 function Video(){
     
-    this.pregunta = '';
+    this.video = '';
     
-    this.respuestas = '';
-        
-    this.correcta = '';
-    
-    this.url = '';
-    
-    this.init = function(pregunta){
-    
-    this.pregunta = pregunta;
-    
-    this.respuestas = [
-        {id: 'True'},
-        {id: 'False'}
-        ];
-        
-    this.correcta = 'True';
-    
-    this.url = 'DCz4RStjxUM';
+    this.init = function(video){
+    this.video = video.id;
+    console.log("video: " + this.video);
     }
     
-    this.getPregunta = function(){
-        return this.pregunta;
-    };
-    
-    this.getRespuestas = function(){
-        return this.respuestas;
-    };
-    
-    this.getCorrecta = function(){
-        return this.correcta;
-    };
-    
-    this.getUrl = function(){
-        return this.url;
+    this.getVideo = function(){
+        return this.video;
     };
 }
 
@@ -364,6 +337,20 @@ function DBArray($firebaseArray, $timeout, $ionicPopup, $q){
             })
         
         }, waitTime);
+    }
+    
+    this.getVideo = function(){
+        var video = [];
+        this.init("Videos");
+        array = $firebaseArray(ref["Videos"]);
+         array.$loaded()
+            .then(function(){
+                angular.forEach(array, function(v){
+                    video.push(v);
+                });
+            });
+            
+        return video;
     }
     
 }

@@ -1,40 +1,34 @@
-<ion-view title="Home" hide-back-button="true" cache-view="false" id="page1" style="background-color:#E9F3E9;" mg-model="respuesta" ng-optiones="a.id as a.label for a in respuestas">
-  <ion-content padding="true" class="manual-remove-top-padding has-header">
-    <div class="spacer" style="width: 300px; height: 15px;"></div>
+<ion-view title="Home" hide-back-button="true" cache-view="false" id="page1" style="background-color:#FFFFFF;" mg-model="respuesta" ng-optiones="a.id as a.label for a in respuestas">
+  <ion-content padding="true" class="manual-remove-top-padding has-header" scroll="false">
     <div style="margin-left: -10px; width: calc(100% + 20px);">
-      <img src="img/4ajEJrU2TUyh6yBkosIV_logo.jpg" style="display: block; width: 100%; height: auto; margin-left: auto; margin-right: auto;">
+      <img src="img/OyZXmiRtQ2Kqd7SSOtwi_PANTALLAHOME.jpg" style="display: block; width: 100%; height: auto; margin-left: auto; margin-right: auto;">
     </div>
-    <div class="spacer" style="width: 300px; height: 12px;"></div>
-    <h4 id="home-heading9" style="color:#000000;font-weight:400;">Select a game mode</h4>
-    <ion-list id="home-list11">
-      <ion-item id="home-list-item11" ng-repeat="modalidad in modalidades" ng-click="juegoModalidad(modalidad.id)" class="container-mod text-center">{{modalidad.label}}</ion-item>
-    </ion-list>
-    <div id="home-container4" ng-show="false" class="container">
-      <h3 id="home-heading4" style="color:#000000;" class="text-center">Unit</h3>
-      <form id="home-form18" class="list">
-        <h5 id="home-heading2" style="color:#000000;font-weight:300;text-align:center;">Select unit to start playing!</h5>
-        <label class="item item-select" id="home-select6">
-          <span class="input-label">Units</span>
-          <select ng-model="tema.temaSeleccionado" ng-options="tema.label as tema.id for tema in temas"></select>
-        </label>
-        <div class="spacer" style="width: 300px; height: 15px;"></div>
-        <button id="home-button7" ng-click="juegoTema()" ng-disabled="tema.temaSeleccionado === ''" style="border-radius:4px 4px 4px 4px;" class="button button-positive home-button">Play!</button>
-      </form>
-    </div>
-    <div class="spacer" style="width: 300px; height: 15px;"></div>
-    <div id="home-container5" ng-show="ng-show" class="container">
-      <h3 id="home-heading5" style="color:#000000;" class="text-center">Mode</h3>
-      <h5 id="home-heading3" style="color:#000000;font-weight:300;text-align:center;">Select mode to start playing!</h5>
-      <form id="home-form19" class="list">
-        <label class="item item-select" id="home-select7">
-          <span class="input-label">Mode</span>
-          <select ng-model="modalidad.modalidadSeleccionada" ng-options="modalidad.id as modalidad.label for modalidad in modalidades"></select>
-        </label>
-        <div class="spacer" style="width: 300px; height: 15px;"></div>
-        <button id="home-button8" ng-click="juegoModalidad()" ng-disabled="modalidad.modalidadSeleccionada === ''" style="border-radius:4px 4px 4px 4px;" class="button button-positive home-button">Play!</button>
-      </form>
-    </div>
-    <div class="spacer" style="width: 300px; height: 15px;"></div>
+    <ion-scroll direction="y" style="height: 80%">
+      <div class="spacer" style="width: 300px; height: 29px;"></div>
+      <button class="button boton-modalidad" ng-click="juegoModalidad('preguntas')">
+        <img class="img-modalidad" src="img/bfM9vvhrRqjhRgNBBsCb_01QUESTIONS.jpg" style="display: block; width: 100%; height: auto; margin-left: auto; margin-right: auto;">
+      </button>
+
+      <button class="button boton-modalidad" ng-click="juegoModalidad('sopaDeLetras')">
+        <img class="img-modalidad" src="img/8oAOO8KFTSm3zZ37wd8I_02ALPHABETSOUP.jpg" style="display: block; width: 100%; height: auto; margin-left: auto; margin-right: auto;">
+      </button>
+
+      <button class="button boton-modalidad" ng-click="juegoModalidad('ahorcado')">
+        <img class="img-modalidad" src="img/l7SXu9jPTjeA8jo4RNWw_03HANGMAN.jpg" style="display: block; width: 100%; height: auto; margin-left: auto; margin-right: auto;">
+      </button>
+
+      <button class="button boton-modalidad" ng-click="juegoModalidad('jeroglifico')">
+        <img class="img-modalidad" src="img/VG7cbl6sQeCwZONBoOFF_04HIEROGLYPHIC.jpg" style="display: block; width: 100%; height: auto; margin-left: auto; margin-right: auto;">
+      </button>
+
+      <button class="button boton-modalidad" ng-click="juegoModalidad('puzzle')">
+        <img class="img-modalidad" src="img/J09ZqKCbRlyd0FhqVKWf_05PUZZLE.jpg" style="display: block; width: 100%; height: auto; margin-left: auto; margin-right: auto;">
+      </button>
+
+      <button class="button boton-modalidad">
+        <img class="img-modalidad" src="img/c5mSgLAJRmiVAShfPzON_06COUPLES.jpg" style="display: block; width: 100%; height: auto; margin-left: auto; margin-right: auto;">
+      </button>
+    </ion-scroll>
     <div id="home-container6" ng-show="false" class="container">
       <h3 id="home-heading6" style="color:#000000;" class="text-center">Random game</h3>
       <button id="home-button9" ng-click="juegoAleatorio()" style="border-radius:4px 4px 4px 4px;" class="button button-positive home-button">Play!</button>

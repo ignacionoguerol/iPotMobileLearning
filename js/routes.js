@@ -32,12 +32,12 @@ angular.module('app.routes', [])
     }
   })
 
-  .state('menu.profile', {
+  .state('menu.help', {
     url: '/page3',
     views: {
       'side-menu21': {
-        templateUrl: 'templates/profile.html',
-        controller: 'profileCtrl'
+        templateUrl: 'templates/help.html',
+        controller: 'helpCtrl'
       }
     }
   })
@@ -52,32 +52,6 @@ angular.module('app.routes', [])
     url: '/page4',
     templateUrl: 'templates/login.html',
     controller: 'loginCtrl'
-  })
-
-  .state('video', {
-    url: '/juego',
-	params: {
-		temaSeleccionado: "",
-		modalidadSeleccionada: "",
-		aleatorio: "",
-		por: "",
-		contador: ""		
-},
-    templateUrl: 'templates/video.html',
-    controller: 'videoCtrl'
-  })
-
-  .state('imagen', {
-    url: '/page8',
-	params: {
-		temaSeleccionado: "",
-		modalidadSeleccionada: "",
-		aleatorio: "",
-		por: "",
-		contador: ""		
-},
-    templateUrl: 'templates/imagen.html',
-    controller: 'imagenCtrl'
   })
 
   .state('jeroglifico', {

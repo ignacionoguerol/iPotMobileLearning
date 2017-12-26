@@ -1,14 +1,11 @@
-$positive: #6FB544;
+$positive: #439B90;
 $SIDEMENU_TOP: #6FB544;
 $SIDEMENU_BOTTOM: #A8DE8A;
 $SIDEMENU_TRANSPARENCY: rgba(255,255,255,0.4);
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 @import "../www/lib/ionic/scss";
 .side-menu-gradient {
-	background: -webkit-linear-gradient(left top, $SIDEMENU_TOP, $SIDEMENU_BOTTOM);
-	background: -o-linear-gradient(bottom right, $SIDEMENU_TOP, $SIDEMENU_BOTTOM);
-	background: -moz-linear-gradient(bottom right, $SIDEMENU_TOP, $SIDEMENU_BOTTOM);
-	background: linear-gradient(to bottom right, $SIDEMENU_TOP, $SIDEMENU_BOTTOM);
+	background-color: #e8e8e8;
 }
 
 .profile-image {
@@ -22,9 +19,13 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 	}
 	
 }
+.side-menu-item i {
+	color: #439B90;
+}
+
 .side-menu-item {
 	background: none;
-	color: white;
+	color: #3b3b3b;
 	font-weight: 300;
 	border: 0px;
 	.item-content {
@@ -97,10 +98,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 	background: white;
 	margin: 1%;
 	padding: 4%;
-	border-radius: 5px;
-	-webkit-box-shadow: 2px 3px 5px -3px rgba(0,0,0,0.65);
-	-moz-box-shadow: 2px 3px 5px -3px rgba(0,0,0,0.65);
-	box-shadow: 2px 3px 5px -3px rgba(0,0,0,0.65);
+	max-height: 90%;
 }
 
 .container-mod {
@@ -240,14 +238,29 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 .text-box-p {
 	padding: 3.5%;
-	//border: 0.5px solid gray;
-	background-color: #E9F3E9;
-	border-radius: 3%;
+	background-color: #e8e8e8;
 	font-size: small;
 }
 
 .counter {
 	width: 20%;
 	float: right;
+}
+
+.container-boton {
+	position: absolute;
+	bottom: 2%;
+	width: 90%;
+	margin-left: 2%;
+}
+
+.boton-modalidad {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+.img-modalidad {
+	height: 10%;
 }
 
