@@ -40,7 +40,6 @@ function ($scope, $stateParams, $state) {
         
     ];
     
-    
     //funcion de cada boton
     
     $scope.juegoTema = function(){
@@ -67,54 +66,53 @@ function ($scope, $stateParams, $state) {
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams, $firebaseArray, $ionicUser, dbarray) {
     
-    $scope.data = {
-        'pregunta': '',
-        'respuestas' : '',
-        'correcta' : ''
-        
-    }
-    
-     dbarray.init("preguntas");
-     $scope.preguntas = dbarray.getArray();
-       
-      // add new items to the array
-      // the message is automatically added to our Firebase database!
-      $scope.addPregunta = function() {
-        $firebaseArray(dbarray.getRef()).$add({
-            pregunta: $scope.data.pregunta,
-            respuestas: $scope.data.respuestas,
-            correcta: $scope.data.correcta,
-            
-        });
-        $scope.data.pregunta = '';
-        $scope.data.respuestas = '';
-        $scope.data.correcta = '';
-        $scope.preguntas = dbarray.getArray();
-      };
+     var init = dbarray.init("usuarios");
+     $scope.usuarios = dbarray.loadArrayUsuarios("usuarios");
       
 
 }])
    
-.controller('profileCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('profileCtrl', ['$scope', '$stateParams', '$ionicPopup', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+function ($scope, $stateParams, $ionicPopup) {
 
+$scope.resetPassword = function(){
+    
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            firebase.auth().sendPasswordResetEmail(user.email);
+            $ionicPopup.alert({
+            title: 'Se ha enviado un email a  ' + $scope.email + '.'
+            });
+        }else{
+            $ionicPopup.alert({
+            title: 'No ha sido posible enviar la solicitud'
+            })  
+        }
+    })
+    
+    
+    
+}
 
 }])
    
-.controller('menuCtrl', ['$scope', '$stateParams', '$ionicUser', '$ionicAuth', '$state', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('menuCtrl', ['$scope', '$stateParams', '$state', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $ionicUser, $ionicAuth, $state) {
+function ($scope, $stateParams, $state) {
     
-    $scope.email = $ionicUser.details.email;
-    
-    $scope.name = $ionicUser.details.username;
-    
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            $scope.email = user.email;
+        }else{
+            $scope.email = anonimo;
+        }
+    })
 
     $scope.logout = function(){
-        $ionicAuth.logout();
+        firebase.auth().signOut();
         $state.go('login');
     };
     
@@ -123,10 +121,10 @@ function ($scope, $stateParams, $ionicUser, $ionicAuth, $state) {
 
 ])
    
-.controller('loginCtrl', ['$scope', '$stateParams', '$ionicUser', '$ionicAuth', '$state', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('loginCtrl', ['$scope', '$stateParams', '$state', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $ionicUser, $ionicAuth, $state) {
+function ($scope, $stateParams, $state) {
 
     $scope.data = {
         'email': '',
@@ -135,20 +133,23 @@ function ($scope, $stateParams, $ionicUser, $ionicAuth, $state) {
     
     $scope.error = '';
     
-    if ($ionicAuth.isAuthenticated()) {
-        // Make sure the user data is going to be loaded
-        $ionicUser.load().then(function() {});
-        $state.go('menu.home'); 
+    firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        $scope.user=user; 
+        $state.go('menu.home');
     }
+    });
     
     $scope.login = function(){
-        $scope.error = '';
-        $ionicAuth.login('basic', $scope.data).then(function(){
+        const promise = firebase.auth().signInWithEmailAndPassword($scope.data.email,  $scope.data.password);
+        promise.then(resp => {
             $state.go('menu.home');
-        }, function(){
-            $scope.error = 'Error logging in. Try Again!';
-        });
-    };
+        }).catch(err => {
+            $scope.$apply(function(){     
+            $scope.error = err.message;
+            });
+        })
+    }
 
 }])
    
@@ -682,20 +683,22 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
     
     $scope.preguntas = [];
     
-    var init = dbarray.init("preguntas");
-    $scope.preguntas = dbarray.loadArray("preguntas");
+    var init = dbarray.init("PreguntasFisioterapia");
+    $scope.preguntas = dbarray.loadArray("PreguntasFisioterapia");
     
     var waitTime;
     
     if (init === 0){
-        waitTime = 2000;
+        waitTime = 3000;
     }else if (init === 1){
         waitTime = 0;
     }
     
+    
+    
     $scope.show = true; // controlla la visibilidad de la plantilla y el loading.
     
-     $timeout(function() {
+    $timeout(function() {
         $scope.show = false;
         var random = Math.floor(Math.random() * ($scope.preguntas.length));
         
@@ -712,6 +715,7 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
         $scope.startTimer();
         
         $scope.resultado = '';
+        
 
     }, waitTime);
     
@@ -719,10 +723,6 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
     if($stateParams.puntos !== ''){
         $scope.puntos = $stateParams.puntos;
     }
-    
-    console.log("params.puntos: " + $scope.puntos);
-        
-    
     
     //Funciones
     
@@ -759,6 +759,7 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
         $ionicPopup.alert({
             title: 'Has sumado ' + $scope.puntos + ' puntos'
          });
+         dbarray.savePoints($scope.puntos, $ionicUser.details.email);
          $state.go('menu.home');
         };  
         
@@ -768,10 +769,12 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
          if ($scope.objeto.selected === $scope.objeto.correcta){
              $scope.resultado = 'Correcto!';
              $scope.puntos++;
-             dbarray.submitJugada(pregunta.getId(), 1, $ionicUser.details.email, 1);
+             //dbarray.submitJugada(pregunta.getId(), 1, $ionicUser.details.email, 1);
+             dbarray.submitJugada(pregunta.getPregunta(), 1, $ionicUser.details.email, 1);
          }else{
              $scope.resultado = 'Has fallado!';
-             dbarray.submitJugada(pregunta.getId(), 0, $ionicUser.details.email, 1);
+             //dbarray.submitJugada(pregunta.getId(), 0, $ionicUser.details.email, 1);
+             dbarray.submitJugada(pregunta.getPregunta(), 0, $ionicUser.details.email, 1);
          }
             
         

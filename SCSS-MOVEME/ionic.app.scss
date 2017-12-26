@@ -224,6 +224,8 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 }
 
 .text-box {
-	overflow: ellipsis;
+	font-size: 13px;
+	white-space: normal;
+	overflow: visible;
 }
 

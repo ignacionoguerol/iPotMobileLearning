@@ -9957,4 +9957,6 @@ a.button {
   height: 10%; }
 
 .text-box {
-  overflow: ellipsis; }
+  font-size: 13px;
+  white-space: normal;
+  overflow: visible; }

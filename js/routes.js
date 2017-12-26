@@ -11,6 +11,9 @@ angular.module('app.routes', [])
 
       .state('menu.home', {
     url: '/page1',
+	params: {
+		user: ""		
+},
     views: {
       'side-menu21': {
         templateUrl: 'templates/home.html',
@@ -111,7 +114,8 @@ angular.module('app.routes', [])
 		aleatorio: "",
 		por: "",
 		contador: "",
-		puntos: ""		
+		puntos: "",
+		usuarios: ""		
 },
     templateUrl: 'templates/preguntas.html',
     controller: 'preguntasCtrl'

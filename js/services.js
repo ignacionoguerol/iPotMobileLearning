@@ -13,14 +13,16 @@ function Pregunta(){
     respuestas = [];
 
     this.pregunta = p.pregunta;
-    angular.forEach(p.opciones, function(opcion) {
+    
+    angular.forEach(p.respuestas, function(opcion) {
                     respuestas.push(opcion); 
                 })
     this.correcta = p.correcta;
     
     this.id = p.$id;
     
-    console.log(p);
+    //console.log("id: " + this.id);
+    //console.log(p);
     }
     
     this.getPregunta = function(){
@@ -122,7 +124,7 @@ function Imagen(){
     };
 }
 
-function DBArray($firebaseArray){
+function DBArray($firebaseArray, $timeout){
     
     var cuenta = [];
     var array;
@@ -142,9 +144,22 @@ function DBArray($firebaseArray){
         array = $firebaseArray(ref[campo])
         array.$loaded()
             .then(function(){
-                 angular.forEach(array, function(pregunta) {
+                angular.forEach(array, function(array2){
+                 angular.forEach(array2, function(pregunta) {
                     cuenta.push(pregunta);
-                }) 
+                    })
+                })
+        });
+        return cuenta;
+    }
+    
+    this.loadArrayUsuarios = function(campo){
+        var cuenta = [];
+        array = $firebaseArray(ref[campo])
+        array.$loaded().then(function(){
+                angular.forEach(array, function(pregunta){
+                    cuenta.push(pregunta);
+                })
         });
         return cuenta;
     }
@@ -166,6 +181,38 @@ function DBArray($firebaseArray){
             modalidad: mod
         });
     }
+    
+    this.savePoints = function(puntos, email){
+        
+        var init = this.init("usuarios");
+        var usuarios = this.loadArrayUsuarios("usuarios");
+        var waitTime = 0;
+        
+        if (init === 0){
+            waitTime = 2000;
+        }else if (init === 1){
+            waitTime = 0;
+        }
+        
+        $timeout(function() {
+        
+            angular.forEach(usuarios, function(usuario){
+                if(usuario.Email === email){
+                   
+                    var p = usuario.puntos;
+                    
+                    if(p === "zero"){
+                        p = puntos;
+                    }else{
+                        p = parseInt(p, 10) + puntos;
+                    } 
+                    ref["usuarios"].child(usuario.$id).update({"puntos" : p});
+                }
+            })
+        
+        }, waitTime);
+    }
+    
 }
 
 
