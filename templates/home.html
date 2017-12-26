@@ -1,0 +1,35 @@
+<ion-view title="Home" hide-back-button="true" cache-view="false" id="page1" style="background-color:#E9F3E9;" mg-model="respuesta" ng-optiones="a.id as a.label for a in respuestas">
+  <ion-content padding="true" class="manual-remove-top-padding has-header">
+    <div class="spacer" style="width: 300px; height: 15px;"></div>
+    <div id="home-container4" class="container">
+      <h3 id="home-heading4" style="color:#000000;" class="text-center">Unit</h3>
+      <form id="home-form18" class="list">
+        <h5 id="home-heading2" style="color:#000000;font-weight:300;text-align:center;">Select unit to start playing!</h5>
+        <label class="item item-select" id="home-select6">
+          <span class="input-label">Units</span>
+          <select ng-model="tema.temaSeleccionado" ng-options="tema.label as tema.id for tema in temas"></select>
+        </label>
+        <div class="spacer" style="width: 300px; height: 15px;"></div>
+        <button id="home-button7" ng-click="juegoTema()" ng-disabled="tema.temaSeleccionado === ''" style="border-radius:4px 4px 4px 4px;" class="button button-positive home-button">Play!</button>
+      </form>
+    </div>
+    <div class="spacer" style="width: 300px; height: 15px;"></div>
+    <div id="home-container5" class="container">
+      <h3 id="home-heading5" style="color:#000000;" class="text-center">Mode</h3>
+      <h5 id="home-heading3" style="color:#000000;font-weight:300;text-align:center;">Select mode to start playing!</h5>
+      <form id="home-form19" class="list">
+        <label class="item item-select" id="home-select7">
+          <span class="input-label">Mode</span>
+          <select ng-model="modalidad.modalidadSeleccionada" ng-options="modalidad.id as modalidad.label for modalidad in modalidades"></select>
+        </label>
+        <div class="spacer" style="width: 300px; height: 15px;"></div>
+        <button id="home-button8" ng-click="juegoModalidad()" ng-disabled="modalidad.modalidadSeleccionada === ''" style="border-radius:4px 4px 4px 4px;" class="button button-positive home-button">Play!</button>
+      </form>
+    </div>
+    <div class="spacer" style="width: 300px; height: 15px;"></div>
+    <div id="home-container6" class="container">
+      <h3 id="home-heading6" style="color:#000000;" class="text-center">Random game</h3>
+      <button id="home-button9" ng-click="juegoAleatorio()" style="border-radius:4px 4px 4px 4px;" class="button button-positive home-button">Play!</button>
+    </div>
+  </ion-content>
+</ion-view>

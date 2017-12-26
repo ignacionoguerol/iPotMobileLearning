@@ -1,0 +1,18 @@
+<ion-view title="Imagen" hide-back-button="true" cache-view="false" id="page8" style="background-color:#E9F3E9;" ng-init="startTimer()">
+  <ion-content padding="true" class="has-header">
+    <div id="imagen-container7" class="container">
+      <h5 id="imagen-heading15" style="color:#000000;font-weight:lighter;text-align:center;">Ejercicio: {{contador}}/10</h5>
+      <h3 id="imagen-heading16" style="color:#000000;font-weight:400;text-align:center;">{{objeto.pregunta}}</h3>
+      <div>
+        <img src="{{objeto.url}}" style="display: block; width: 100%; height: auto; margin-left: auto; margin-right: auto;">
+      </div>
+      <form id="imagen-form20" class="list">
+        <ion-radio id="imagen-radio4" ng-model="objeto.selected" ng-repeat="respuesta in objeto.respuestas" ng-value="respuesta.id" ng-click="comprobar()" ng-disabled="resultado !== ''">{{respuesta.id}}</ion-radio>
+      </form>
+      <h4 id="imagen-heading17" style="color:#000000;text-align:center;">{{resultado}}</h4>
+      <button id="imagen-button14" ng-click="siguiente()" ng-if="contador<10" ng-disabled="objeto.selected === ''" class="button button-positive button-block">Siguiente</button>
+      <button id="imagen-button15" ng-if="contador>9" ng-click="exit()" class="button button-positive button-block">Exit!</button>
+      <h5 id="imagen-heading18" ng-if="resultado === ''" style="color:#000000;font-weight:lighter;text-align:center;">Tiempo restante: {{counter}} segundos</h5>
+    </div>
+  </ion-content>
+</ion-view>

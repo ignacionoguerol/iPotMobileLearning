@@ -1,0 +1,29 @@
+<ion-view title="Ahorcado" hide-back-button="true" cache-view="false" id="page10" style="background-color:#E9F3E9;" ng-init="startTimer()">
+  <ion-content padding="true" class="has-header">
+    <div id="ahorcado-container9" ng-init="generarVectorAhorcado()" class="container">
+      <h5 id="ahorcado-heading26" style="color:#000000;font-weight:lighter;text-align:center;">Ejercicio: {{contador}}/10</h5>
+      <h3 id="ahorcado-heading27" style="color:#000000;font-weight:400;text-align:center;">{{objeto.pista}}</h3>
+      <div>
+        <img src="img/t46PlqvsQmaxLPIJBgyT_ahorcado.gif" style="display: block; width: 40%; height: auto; margin-left: auto; margin-right: auto;">
+      </div>
+      <table class="tabla-ahorcado">
+        <tbody>
+          <tr id="tabla-ahorcado">
+
+          </tr>
+        </tbody>
+      </table>
+      <form id="ahorcado-form30" class="list">
+        <h5 id="ahorcado-heading28" style="color:#000000;font-weight:400;text-align:center;">Fallos: {{fallos}}/{{intentos}} - Ok: {{letrasAcertadas}}/{{objeto.palabra.length}}</h5>
+        <button id="ahorcado-button20" ng-disabled="letraSeleccionada.length !== 1" ng-click="comprobar(letraSeleccionada)" class="button button-positive button-ahorcado">Add!</button>
+        <label class="item item-input input-ahorcado" id="ahorcado-input8">
+          <span class="input-label">Ahorcado</span>
+          <input type="text" placeholder="1 sola letra" ng-model="letraSeleccionada">
+        </label>
+      </form>
+      <button id="ahorcado-button18" ng-click="siguiente()" ng-if="contador<10" ng-disabled="letrasAcertadas < objeto.palabra.length" class="button button-positive button-block">Siguiente</button>
+      <button id="ahorcado-button19" ng-if="contador>9" ng-click="exit()" class="button button-positive button-block">Exit!</button>
+      <h5 id="ahorcado-heading29" ng-if="resultado === ''" style="color:#000000;font-weight:lighter;text-align:center;">Tiempo restante: {{counter}} segundos</h5>
+    </div>
+  </ion-content>
+</ion-view>

@@ -1,0 +1,30 @@
+<ion-side-menus enable-menu-with-back-views="false">
+  <ion-side-menu-content>
+    <ion-nav-bar class="bar-positive">
+      <ion-nav-back-button></ion-nav-back-button>
+      <ion-nav-buttons side="left">
+        <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
+      </ion-nav-buttons>
+    </ion-nav-bar>
+    <ion-nav-view name="side-menu21"></ion-nav-view>
+  </ion-side-menu-content>
+  <ion-side-menu side="left" id="side-menu21">
+    <ion-content padding="false" style="top:0px !important;" class="side-menu-left side-menu-gradient">
+      <div class="spacer" style="width: 268px; height: 34px;"></div>
+      <div class="profile-image">
+        <img src="img/MkWBOm04SwGjUV1rJ1Lm_538474-user_512x512.png" style="display: block; width: 40%; height: auto; margin-left: auto; margin-right: auto;">
+      </div>
+      <h3 id="menu-heading1" style="color:#FFFFFF;font-weight:300;text-align:center;">{{email}}</h3>
+      <div class="spacer" style="width: 268px; height: 32px;"></div>
+      <ion-list id="menu-list1">
+        <ion-item class="item-icon-left side-menu-item" id="menu-list-item1" ui-sref="menu.home()" menu-close="" active-page-highlight="">
+          <i class="icon ion-android-home"></i>Home</ion-item>
+        <ion-item class="item-icon-left side-menu-item" id="menu-list-item2" ui-sref="menu.ranking()" menu-close="" active-page-highlight="">
+          <i class="icon ion-trophy"></i>Ranking</ion-item>
+        <ion-item class="item-icon-left side-menu-item" id="menu-list-item3" ui-sref="menu.profile()" menu-close="" active-page-highlight="">
+          <i class="icon ion-ios-person"></i>Profile</ion-item>
+      </ion-list>
+      <button id="menu-button5" ng-click="logout()" class="button button-positive button-block">Log Out</button>
+    </ion-content>
+  </ion-side-menu>
+</ion-side-menus>
