@@ -11,13 +11,14 @@ function Pregunta(){
     this.pregunta = pregunta;
     
     this.respuestas = [
-        {id: 'Mi nombre es Pepe'},
-        {id: 'Mi nuevo nombre es Carlos'},
-        {id: 'Ahora me llamo Lucas'},
-        {id: 'Mi amigo se llama Juan'}
+        {id: 'Mechanotherapy'},
+        {id: 'Hydrotherapy'},
+        {id: 'Kinesitherapy'},
+        {id: 'Electrotherapy'},
+        {id: 'All answers are correct'}
         ];
         
-    this.correcta = 'Mi nombre es Pepe';
+    this.correcta = 'All answers are correct';
     }
     
     this.getPregunta = function(){
@@ -48,13 +49,11 @@ function Video(){
     this.pregunta = pregunta;
     
     this.respuestas = [
-        {id: 'Tecnica 1'},
-        {id: 'Tecnica 2'},
-        {id: 'Tecnica 3'},
-        {id: 'Tecnica 4'}
+        {id: 'True'},
+        {id: 'False'}
         ];
         
-    this.correcta = 'Tecnica 2';
+    this.correcta = 'True';
     
     this.url = 'DCz4RStjxUM';
     }
@@ -91,15 +90,13 @@ function Imagen(){
     this.pregunta = pregunta;
     
     this.respuestas = [
-        {id: 'Cabeza'},
-        {id: 'Pie'},
-        {id: 'Mano'},
-        {id: 'Coche'}
+        {id: 'True'},
+        {id: 'False'}
         ];
         
-    this.correcta = 'Coche';
+    this.correcta = 'False';
     
-    this.url = 'http://revistahsm.com/wp-content/uploads/2012/12/Coche-Mini.jpg';
+    this.url = 'http://fisioterapiabailio.com/wp-content/uploads/2015/04/Logo-Fisioterapia-Slider.png';
     }
     
     this.getPregunta = function(){
@@ -118,6 +115,7 @@ function Imagen(){
         return this.url;
     };
 }
+
 
 
 angular.module('app.services', [])

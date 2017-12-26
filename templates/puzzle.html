@@ -5,9 +5,12 @@
         <h5 id="puzzle-heading35" style="color:#000000;font-weight:lighter;text-align:center;">Ejercicio: {{contador}}/10</h5>
         <h3 id="puzzle-heading36" style="color:#000000;font-weight:400;text-align:center;">{{objeto.pista}}</h3>
         <ion-list id="puzzle-list2">
-          <ion-item id="puzzle-list-item7" ng-repeat="palabra in objeto.desordenadas" ng-value="palabra.id" ng-click="comprobar(palabra.id)">{{palabra.orden}} {{palabra.id}}</ion-item>
+          <ion-item id="puzzle-list-item7" ng-repeat="palabra in objeto.desordenadas" ng-value="palabra.id" ng-click="comprobar(palabra.id)" ng-if="resultado == ''">{{palabra.id}}</ion-item>
         </ion-list>
       </form>
+      <ion-list id="puzzle-list3">
+        <ion-item id="puzzle-list-item8" ng-repeat="palabra in objeto.ordenadas" ng-value="palabra.id">{{$index+1}} - {{palabra.id}}</ion-item>
+      </ion-list>
       <h4 id="puzzle-heading37" style="color:#000000;font-weight:300;text-align:center;">{{resultado}}</h4>
       <button id="puzzle-button23" ng-if="contador>9" ng-click="exit()" class="button button-positive button-block">Exit!</button>
       <button id="puzzle-button24" ng-click="siguiente()" ng-if="contador<10" ng-disabled="objeto.selected === ''" class="button button-positive button-block">Siguiente</button>

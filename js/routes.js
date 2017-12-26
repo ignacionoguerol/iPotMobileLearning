@@ -129,6 +129,19 @@ angular.module('app.routes', [])
     controller: 'puzzleCtrl'
   })
 
+  .state('parejas', {
+    url: '/page13',
+	params: {
+		temaSeleccionado: "",
+		modalidadSeleccionada: "",
+		aleatorio: "",
+		por: "",
+		contador: ""		
+},
+    templateUrl: 'templates/parejas.html',
+    controller: 'parejasCtrl'
+  })
+
   .state('sopaDeLetras', {
     url: '/page9',
 	params: {

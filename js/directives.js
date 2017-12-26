@@ -1,6 +1,6 @@
 angular.module('app.directives', [])
 
-.directive('activePageHighlight', ['$rootScope', '$state', function($rootScope, $state){
+.directive('activePageHighlight', ['$rootScope', '$state', '$compile', function($rootScope, $state){
 
    return function ($scope, $element, $attr) {
        
@@ -19,4 +19,5 @@ angular.module('app.directives', [])
      })
    };
 
-}]);
+}])
+

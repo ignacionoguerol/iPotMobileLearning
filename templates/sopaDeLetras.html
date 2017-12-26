@@ -2,11 +2,19 @@
   <ion-content padding="true" class="has-header">
     <div id="sopaDeLetras-container8" class="container">
       <h3 id="sopaDeLetras-heading19" style="color:#000000;text-align:center;">{{objeto.pregunta}}</h3>
-      <div class="divTable">
-        <div id="sopaLetras" class="divTableBody">
-        </div>
+      <h4 id="sopaDeLetras-heading21" style="color:#000000;font-weight:300;text-align:center;">{{palabras}} words left</h4>
+      <div id="sopaLetras" style="margin">
+        <table style="width: 100%;">
+          <tbody>
+            <tr ng-repeat="row in matrix">
+              <td id="elem{{$parent.$index}}-{{$index}}" ng-repeat="elem in row track by $index" ng-click="funciona({{$parent.$index}},{{$index}}, {{elem}})">
+                {{elem}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <h4 id="sopaDeLetras-heading21" style="color:#000000;font-weight:300;text-align:center;">{{resultado}}</h4>
+      <h4 id="sopaDeLetras-heading40" style="color:#000000;font-weight:300;text-align:center;">{{resultado}}</h4>
       <button id="sopaDeLetras-button16" ng-if="contador>9" ng-click="exit()" class="button button-positive button-block">Exit!</button>
       <button id="sopaDeLetras-button17" ng-click="siguiente()" ng-if="contador<10" ng-disabled="objeto.selected === ''" class="button button-positive button-block">Siguiente</button>
       <h5 id="sopaDeLetras-heading22" ng-if="resultado === ''" style="color:#000000;font-weight:lighter;text-align:center;">Tiempo restante: {{counter}} segundos</h5>
