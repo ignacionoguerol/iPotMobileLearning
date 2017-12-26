@@ -19,6 +19,8 @@ function Pregunta(){
     this.correcta = p.correcta;
     
     this.id = p.$id;
+    
+    console.log(p);
     }
     
     this.getPregunta = function(){
@@ -163,7 +165,6 @@ function DBArray($firebaseArray){
             resultado: res,
             modalidad: mod
         });
-        console.log("guardado");
     }
 }
 

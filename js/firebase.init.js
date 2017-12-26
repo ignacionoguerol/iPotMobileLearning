@@ -4,10 +4,10 @@ angular.module('firebaseConfig', ['firebase'])
 
   // Initialize Firebase
   var config = {
-    apiKey: "AIzaSyDvoRJw0G3te3xRv94gajd_MSvDzYjo2KM",
-    authDomain: "ipot-78ed1.firebaseapp.com",
-    databaseURL: "https://ipot-78ed1.firebaseio.com",
-    storageBucket: "ipot-78ed1.appspot.com",
+    apiKey: "AIzaSyDSLAQ-VDrQhweJ4Hclad8Y8s3PGQGLKqk",
+    authDomain: "ipot-mobile-learning.firebaseapp.com",
+    databaseURL: "https://ipot-mobile-learning.firebaseio.com",
+    storageBucket: "ipot-mobile-learning.appspot.com",
   };
   firebase.initializeApp(config);
 

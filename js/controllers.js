@@ -29,12 +29,12 @@ function ($scope, $stateParams, $state) {
     ];
     
     $scope.modalidades = [
-        { 'id':'preguntas', 'label':'Questions'},
+        { 'id':'preguntas', 'label':'Questions'}/*,
         { 'id':'video', 'label':'Video'},
         { 'id':'imagen', 'label':'Images'},
         { 'id':'sopaDeLetras', 'label':'Sopa de Letras'},
         { 'id':'ahorcado', 'label':'Ahorcado'},
-        { 'id':'jeroglifico', 'label':'Jeroglífico'}/* ,
+        { 'id':'jeroglifico', 'label':'Jeroglífico'} ,
        { 'id':'puzzle', 'label':'Puzzle'},
         { 'id':'parejas', 'label':'Parejas'}*/
         
@@ -659,10 +659,10 @@ function ($scope, $stateParams, $state, $timeout){
 
 ])
    
-.controller('preguntasCtrl', ['$scope', '$stateParams', '$state', '$timeout', '$firebaseArray', 'pregunta', 'dbarray', '$q', '$ionicUser', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('preguntasCtrl', ['$scope', '$stateParams', '$state', '$timeout', '$firebaseArray', 'pregunta', 'dbarray', '$q', '$ionicUser', '$ionicPopup', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbarray, $q, $ionicUser) {
+function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbarray, $q, $ionicUser, $ionicPopup) {
     
     //Se comprueba el tema o la modalidad especifica que se ha elegido.
     if($stateParams.temaSeleccionado !== ''){
@@ -673,6 +673,7 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
         $scope.tipo = $stateParams.aleatorio;
     }
   
+    
     //Parametro que guarda el modo desde el que se ha iniciado el juego.
     $scope.modo = $stateParams.por;
     
@@ -692,11 +693,12 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
         waitTime = 0;
     }
     
-    console.log("init: " + init + " - tiempo: " + waitTime);
+    $scope.show = true; // controlla la visibilidad de la plantilla y el loading.
     
      $timeout(function() {
+        $scope.show = false;
         var random = Math.floor(Math.random() * ($scope.preguntas.length));
-        console.log(random);
+        
         pregunta.init($scope.preguntas[random]);
     
         //Variables propias de cada pregunta
@@ -713,25 +715,37 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
 
     }, waitTime);
     
+    $scope.puntos = 0;
+    if($stateParams.puntos !== ''){
+        $scope.puntos = $stateParams.puntos;
+    }
     
-    
+    console.log("params.puntos: " + $scope.puntos);
         
-    //Parametros a enviar 
+    
+    
+    //Funciones
+    
+    $scope.loadParams = function(){
+        //Parametros a enviar 
     $scope.modeParams = {
         modalidadSeleccionada:'Preguntas',
         por: $scope.modo,
-        contador: $scope.contador+1
+        contador: $scope.contador+1,
+        puntos: $scope.puntos
     };
     $scope.unitParams = {
         modalidadSeleccionada:'Video',
         por: $scope.modo,
-        contador: $scope.contador+1
+        contador: $scope.contador+1,
+        puntos: $scope.puntos
     };
     
-    //Funciones
+    }
         
     $scope.siguiente = function(){
         $scope.stopTimer();
+        $scope.loadParams();
         if($scope.modo === 'Mode'){
             $state.go('preguntas', $scope.modeParams);
         }else{
@@ -739,7 +753,12 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
         }
     };
     
+    
+    
     $scope.exit = function(){
+        $ionicPopup.alert({
+            title: 'Has sumado ' + $scope.puntos + ' puntos'
+         });
          $state.go('menu.home');
         };  
         
@@ -748,6 +767,7 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
         
          if ($scope.objeto.selected === $scope.objeto.correcta){
              $scope.resultado = 'Correcto!';
+             $scope.puntos++;
              dbarray.submitJugada(pregunta.getId(), 1, $ionicUser.details.email, 1);
          }else{
              $scope.resultado = 'Has fallado!';

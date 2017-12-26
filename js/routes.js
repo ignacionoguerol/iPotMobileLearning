@@ -110,7 +110,8 @@ angular.module('app.routes', [])
 		modalidadSeleccionada: "",
 		aleatorio: "",
 		por: "",
-		contador: ""		
+		contador: "",
+		puntos: ""		
 },
     templateUrl: 'templates/preguntas.html',
     controller: 'preguntasCtrl'
