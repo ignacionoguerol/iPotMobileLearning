@@ -11,6 +11,9 @@ angular.module('app.routes', [])
 
       .state('menu.home', {
     url: '/page1',
+	params: {
+		user: ""		
+},
     views: {
       'side-menu21': {
         templateUrl: 'templates/home.html',
@@ -157,7 +160,7 @@ angular.module('app.routes', [])
     controller: 'sopaDeLetrasCtrl'
   })
 
-$urlRouterProvider.otherwise('/side-menu21/page1')
+$urlRouterProvider.otherwise('/page4')
 
 
 });

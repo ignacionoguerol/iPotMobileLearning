@@ -66,47 +66,55 @@ function ($scope, $stateParams, $state) {
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams, $firebaseArray, $ionicUser, dbarray) {
     
-     dbarray.init("usuarios");
-     $scope.preguntas = dbarray.getArray();
-       
-      /*// add new items to the array
-      // the message is automatically added to our Firebase database!
-      $scope.addPregunta = function() {
-        $firebaseArray(dbarray.getRef()).$add({
-            pregunta: $scope.data.pregunta,
-            respuestas: $scope.data.respuestas,
-            correcta: $scope.data.correcta,
-            
-        });
-        $scope.data.pregunta = '';
-        $scope.data.respuestas = '';
-        $scope.data.correcta = '';
-        $scope.preguntas = dbarray.getArray();
-      };*/
+     var init = dbarray.init("usuarios");
+     $scope.usuarios = dbarray.loadArrayUsuarios("usuarios");
       
 
 }])
    
-.controller('profileCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('profileCtrl', ['$scope', '$stateParams', '$ionicPopup', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+function ($scope, $stateParams, $ionicPopup) {
 
+$scope.resetPassword = function(){
+    
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            firebase.auth().sendPasswordResetEmail(user.email);
+            $ionicPopup.alert({
+            title: 'Se ha enviado un email a  ' + $scope.email + '.'
+            });
+        }else{
+            $ionicPopup.alert({
+            title: 'No ha sido posible enviar la solicitud'
+            })  
+        }
+    })
+    
+    
+    
+}
 
 }])
    
-.controller('menuCtrl', ['$scope', '$stateParams', '$ionicUser', '$ionicAuth', '$state', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('menuCtrl', ['$scope', '$stateParams', '$state', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $ionicUser, $ionicAuth, $state) {
+function ($scope, $stateParams, $state) {
     
-    $scope.email = $ionicUser.details.email;
     
-    $scope.name = $ionicUser.details.username;
-    
+    $scope.url = "https://cdn.pixabay.com/photo/2016/08/20/05/38/avatar-1606916_1280.png";
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            $scope.email = user.email;
+        }else{
+            $scope.email = anonimo;
+        }
+    })
 
     $scope.logout = function(){
-        $ionicAuth.logout();
+        firebase.auth().signOut();
         $state.go('login');
     };
     
@@ -115,10 +123,10 @@ function ($scope, $stateParams, $ionicUser, $ionicAuth, $state) {
 
 ])
    
-.controller('loginCtrl', ['$scope', '$stateParams', '$ionicUser', '$ionicAuth', '$state', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('loginCtrl', ['$scope', '$stateParams', '$state', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $ionicUser, $ionicAuth, $state) {
+function ($scope, $stateParams, $state) {
 
     $scope.data = {
         'email': '',
@@ -127,20 +135,23 @@ function ($scope, $stateParams, $ionicUser, $ionicAuth, $state) {
     
     $scope.error = '';
     
-    if ($ionicAuth.isAuthenticated()) {
-        // Make sure the user data is going to be loaded
-        $ionicUser.load().then(function() {});
-        $state.go('menu.home'); 
+    firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        $scope.user=user; 
+        $state.go('menu.home');
     }
+    });
     
     $scope.login = function(){
-        $scope.error = '';
-        $ionicAuth.login('basic', $scope.data).then(function(){
+        const promise = firebase.auth().signInWithEmailAndPassword($scope.data.email,  $scope.data.password);
+        promise.then(resp => {
             $state.go('menu.home');
-        }, function(){
-            $scope.error = 'Error logging in. Try Again!';
-        });
-    };
+        }).catch(err => {
+            $scope.$apply(function(){     
+            $scope.error = err.message;
+            });
+        })
+    }
 
 }])
    
@@ -651,10 +662,10 @@ function ($scope, $stateParams, $state, $timeout){
 
 ])
    
-.controller('preguntasCtrl', ['$scope', '$stateParams', '$state', '$timeout', '$firebaseArray', 'pregunta', 'dbarray', '$q', '$ionicUser', '$ionicPopup', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('preguntasCtrl', ['$scope', '$stateParams', '$state', '$timeout', '$firebaseArray', 'pregunta', 'dbarray', '$q', '$ionicPopup', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbarray, $q, $ionicUser, $ionicPopup) {
+function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbarray, $q, $ionicPopup) {
     
     //Se comprueba el tema o la modalidad especifica que se ha elegido.
     if($stateParams.temaSeleccionado !== ''){
@@ -680,12 +691,19 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
     var waitTime;
     
     if (init === 0){
-        waitTime = 3000;
+        waitTime = 2000;
     }else if (init === 1){
         waitTime = 0;
     }
     
-    
+    //Get user data
+     firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            $scope.email = user.email;
+        }else{
+            $scope.email = anonimo;
+        }
+    })
     
     $scope.show = true; // controlla la visibilidad de la plantilla y el loading.
     
@@ -750,7 +768,7 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
         $ionicPopup.alert({
             title: 'Has sumado ' + $scope.puntos + ' puntos'
          });
-         dbarray.savePoints($scope.puntos, $ionicUser.details.email);
+         dbarray.savePoints($scope.puntos, $scope.email);
          $state.go('menu.home');
         };  
         
@@ -761,11 +779,11 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
              $scope.resultado = 'Correcto!';
              $scope.puntos++;
              //dbarray.submitJugada(pregunta.getId(), 1, $ionicUser.details.email, 1);
-             dbarray.submitJugada(pregunta.getPregunta(), 1, $ionicUser.details.email, 1);
+             dbarray.submitJugada(pregunta.getPregunta(), 1, $scope.email, 1);
          }else{
              $scope.resultado = 'Has fallado!';
              //dbarray.submitJugada(pregunta.getId(), 0, $ionicUser.details.email, 1);
-             dbarray.submitJugada(pregunta.getPregunta(), 0, $ionicUser.details.email, 1);
+             dbarray.submitJugada(pregunta.getPregunta(), 0, $scope.email, 1);
          }
             
         
@@ -780,7 +798,7 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
         if($scope.counter ===  0) {
             $scope.stopTimer();
             // Apunta error si se acaba el tiempo
-            dbarray.submitJugada(pregunta.getId(), 0, $ionicUser.details.email, 1); 
+            dbarray.submitJugada(pregunta.getId(), 0, $scope.email, 1); 
             if($scope.contador<10){
             $scope.siguiente();
             }else{
@@ -959,7 +977,7 @@ function ($scope, $stateParams, $state, $timeout) {
     //Variables propias de cada pregunta
     $scope.objeto = {
         pista : 'Pista/Tema',
-        placeholder: "http://revistahsm.com/wp-content/uploads/2012/12/Coche-Mini.jpg",
+        placeholder: "",
         i: [
             {'url': 'Practitioner', 'orden': 3},
             {'url': 'Medical Technician Assistant', 'orden':1},
