@@ -34,8 +34,8 @@ function ($scope, $stateParams, $state) {
         //{ 'id':'imagen', 'label':'Images'},
         //{ 'id':'sopaDeLetras', 'label':'Sopa de Letras'},
         { 'id':'ahorcado', 'label':'Ahorcado'},
-        { 'id':'jeroglifico', 'label':'Jeroglífico'} 
-       //{ 'id':'puzzle', 'label':'Puzzle'},
+        { 'id':'jeroglifico', 'label':'Jeroglífico'},
+        { 'id':'puzzle', 'label':'Puzzle'},
         //{ 'id':'parejas', 'label':'Parejas'}
         
     ];
@@ -58,6 +58,7 @@ function ($scope, $stateParams, $state) {
         }
         $state.go('sopaDeLetras2', $scope.aleatorio);
     };
+    
     
     }])
    
@@ -413,6 +414,7 @@ function ($scope, $stateParams, $state, $timeout, dbarray, jeroglifico, $ionicPl
     $ionicPlatform.registerBackButtonAction(function (event) {
         event.preventDefault();
     }, 100);
+   
     
      //Comprobacion de parametros
      if($stateParams.temaSeleccionado !== ''){
@@ -551,6 +553,8 @@ function ($scope, $stateParams, $state, $timeout, dbarray, jeroglifico, $ionicPl
     $scope.onTimeout = function() {
         if($scope.counter ===  0) {
             $timeout.cancel(mytimeout);
+            // Apunta error si se acaba el tiempo
+            dbarray.submitJugada(pregunta.getId(), 0, $scope.email, 1);
             if($scope.contador<10){
                 $scope.siguiente();
             }else{
@@ -583,11 +587,17 @@ function ($scope, $stateParams, $state, $timeout, dbarray, jeroglifico, $ionicPl
 
 ])
    
-.controller('ahorcadoCtrl', ['$scope', '$stateParams', '$state', '$timeout', 'dbarray', 'ahorcado', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('ahorcadoCtrl', ['$scope', '$stateParams', '$state', '$timeout', 'dbarray', 'ahorcado', '$ionicPlatform', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $state, $timeout, dbarray, ahorcado){
+function ($scope, $stateParams, $state, $timeout, dbarray, ahorcado, $ionicPlatform){
 
+    // Disable BACK button on home
+    $ionicPlatform.registerBackButtonAction(function (event) {
+        event.preventDefault();
+    }, 100);
+     
+    
      //Comprobacion de parametros
     
     if($stateParams.temaSeleccionado !== ''){
@@ -798,6 +808,8 @@ function ($scope, $stateParams, $state, $timeout, dbarray, ahorcado){
     $scope.onTimeout = function() {
         if($scope.counter ===  0) {
             $timeout.cancel(mytimeout);
+            // Apunta error si se acaba el tiempo
+            dbarray.submitJugada(pregunta.getId(), 0, $scope.email, 1);
             if($scope.contador<10){
                 $scope.siguiente();
             }else{
@@ -837,7 +849,7 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
     $ionicPlatform.registerBackButtonAction(function (event) {
         event.preventDefault();
     }, 100);
-  
+     
     //Se comprueba el tema o la modalidad especifica que se ha elegido.
     if($stateParams.temaSeleccionado !== ''){
         $scope.tipo = $stateParams.temaSeleccionado;
@@ -943,10 +955,9 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
         };  
         
     $scope.comprobar = function(p, id){
-        console.log($scope.objeto.selected);
         $scope.objeto.selected = p;
         $scope.stopTimer();
-        console.log("ID: " + id)
+        
          if ($scope.objeto.selected === $scope.objeto.correcta){
              //$scope.resultado = 'Correcto!';
              document.getElementById(id).style.backgroundColor = '#33CD5F';
@@ -980,7 +991,6 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
             }
             return;
         }
-        console.log("Contador--");
         $scope.counter--;
         mytimeout = $timeout($scope.onTimeout, 1000);
     };
@@ -999,10 +1009,15 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
         
 }])
    
-.controller('puzzleCtrl', ['$scope', '$stateParams', '$state', '$timeout', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('puzzleCtrl', ['$scope', '$stateParams', '$state', '$timeout', 'puzzle', 'dbarray', '$ionicPlatform', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $state, $timeout) {
+function ($scope, $stateParams, $state, $timeout, puzzle, dbarray, $ionicPlatform) {
+    
+    // Disable BACK button on home
+    $ionicPlatform.registerBackButtonAction(function (event) {
+        event.preventDefault();
+    }, 100);
     
     //Se comprueba el tema o la modalidad especifica que se ha elegido.
     if($stateParams.temaSeleccionado !== ''){
@@ -1018,39 +1033,93 @@ function ($scope, $stateParams, $state, $timeout) {
     
     //Contador de ejercicios completados.
     $scope.contador = $stateParams.contador;
-
     
-    //Variables propias de cada pregunta
-    $scope.objeto = {
-        pista : 'Institutionalization of physiotherapy',
+    //Iniciar base de datos FIREBASE
+    var init = dbarray.init("PuzzlesFisioterapia");
+    $scope.preguntas = dbarray.loadArray("PuzzlesFisioterapia");
+    
+    var waitTime;
+    
+    if (init === 0){
+        waitTime = 2000;
+    }else if (init === 1){
+        waitTime = 0;
+    }
+    
+    //Get user data
+     firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            $scope.email = user.email;
+        }else{
+            $scope.email = anonimo;
+        }
+    })
+    
+    $scope.show = true; // controlla la visibilidad de la plantilla y el loading.
+    
+    $timeout(function() {
         
-        desordenadas: [
+        $scope.show = false;
+        var random = Math.floor(Math.random() * ($scope.preguntas.length));
+        
+        puzzle.init($scope.preguntas[random]);
+    
+        //Variables propias de cada pregunta
+       $scope.objeto = {
+        tema : puzzle.getTema(),
+        
+        /*desordenadas: [
             {'id': 'Practitioner', 'orden': 3},
             {'id': 'Medical Technician Assistant', 'orden':1},
             {'id': 'Physical Therapy', 'orden':2}
-        ],
+        ]*/
+        
+        desordenadas : puzzle.getPalabras(),
         
         ordenadas: [
+            {'id': ' '},
             {'id': ' '},
             {'id': ' '},
             {'id': ' '}
         ]
         
     };
+        
+        $scope.startTimer();
+        
+        $scope.resultado = '';
+        
+
+    }, waitTime);
+    
+    $scope.puntos = 0;
+    if($stateParams.puntos !== ''){
+        $scope.puntos = $stateParams.puntos;
+    }
+
+    
+    //Variables propias de cada pregunta
+    
     
     $scope.resultado = '';
-        
-    //Parametros a enviar 
-    $scope.modeParams = {
-        modalidadSeleccionada:'Preguntas',
-        por: $scope.modo,
-        contador: $scope.contador+1
-    };
-    $scope.unitParams = {
-        modalidadSeleccionada:'Video',
-        por: $scope.modo,
-        contador: $scope.contador+1
-    };
+    
+    
+    $scope.loadParams = function(){    
+        //Parametros a enviar 
+        $scope.modeParams = {
+            modalidadSeleccionada:'Preguntas',
+            por: $scope.modo,
+            contador: $scope.contador+1,
+            puntos: $scope.puntos
+        };
+        $scope.unitParams = {
+            modalidadSeleccionada:'Video',
+            por: $scope.modo,
+            contador: $scope.contador+1,
+            puntos: $scope.puntos
+        };
+    
+    }
     
     $scope.orden = 0;
     
@@ -1058,24 +1127,26 @@ function ($scope, $stateParams, $state, $timeout) {
         
     $scope.siguiente = function(){
         $scope.stopTimer();
-        if($scope.modo === 'Mode'){
-            $state.go('parejas', $scope.modeParams);
-        }else{
-            $state.go('ahorcado', $scope.unitParams);
-        }
+        //if($scope.modo === 'Mode'){
+        $scope.loadParams();
+        $state.go('puzzle', $scope.modeParams);
+        //}else{
+          //  $state.go('ahorcado', $scope.unitParams);
+        //}
     };
     
     $scope.exit = function(){
-         $state.go('menu.home');
-        };  
+        $scope.stopTimer();
+        dbarray.savePoints($scope.puntos, $scope.email);
+        $state.go('menu.home');
+    };  
         
     $scope.comprobar = function(palabra){
         
-        $scope.stopTimer();
         $scope.objeto.ordenadas[$scope.orden].id = palabra;
         $scope.orden++;
         
-        if($scope.orden >= 3){
+        if($scope.orden >= $scope.objeto.desordenadas.length){
                
             for (var i in $scope.objeto.desordenadas){
                 for (var e in $scope.objeto.ordenadas){
@@ -1091,7 +1162,8 @@ function ($scope, $stateParams, $state, $timeout) {
                 }
             }
             
-             $scope.resultado = 'Correcto!';
+            $scope.resultado = 'Correcto!';
+            $scope.puntos++;
             
         }
        
@@ -1100,13 +1172,15 @@ function ($scope, $stateParams, $state, $timeout) {
     /////////////////////////////////////////////////////////  
     /////////////////////////Temporizador/////////////////////// 
       
-      $scope.counter = 30;
+      $scope.counter = 60;
     
     $scope.onTimeout = function() {
         if($scope.counter ===  0) {
             $scope.stopTimer();
+            // Apunta error si se acaba el tiempo
+            dbarray.submitJugada(pregunta.getId(), 0, $scope.email, 1);
             if($scope.contador<10){
-            $scope.siguiente();
+                $scope.siguiente();
             }else{
                 $scope.exit();
             }

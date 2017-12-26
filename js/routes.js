@@ -130,7 +130,8 @@ angular.module('app.routes', [])
 		modalidadSeleccionada: "",
 		aleatorio: "",
 		por: "",
-		contador: ""		
+		contador: "",
+		puntos: ""		
 },
     templateUrl: 'templates/puzzle.html',
     controller: 'puzzleCtrl'

@@ -98,6 +98,7 @@ function Jeroglifico(){
     this.getUrl = function(){
         return this.url;
     }
+    
 }
 
 function Video(){
@@ -180,6 +181,27 @@ function Imagen(){
     this.getUrl = function(){
         return this.url;
     };
+}
+
+function Puzzle(){
+    
+    this.palabras = '';
+    this.tema = '';
+    
+    this.init = function(p){
+    
+        this.palabras = p.palabras;
+        this.tema = p.tema;
+    }
+    
+    this.getPalabras = function(){
+        return this.palabras;
+    };
+    
+    this.getTema = function(){
+        return this.tema;
+    };
+    
 }
 
 function DBArray($firebaseArray, $timeout, $ionicPopup){
@@ -277,15 +299,14 @@ function DBArray($firebaseArray, $timeout, $ionicPopup){
     
 }
 
-
-
 angular.module('app.services', [])
 .service('pregunta', Pregunta)
 .service('video', Video)
 .service('imagen', Imagen)
 .service('dbarray', DBArray)
 .service('ahorcado', Ahorcado)
-.service('jeroglifico', Jeroglifico);
+.service('jeroglifico', Jeroglifico)
+.service('puzzle', Puzzle);
 
 
 
