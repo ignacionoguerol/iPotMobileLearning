@@ -20,9 +20,6 @@ function Pregunta(){
     this.correcta = p.correcta;
     
     this.id = p.$id;
-    
-    //console.log("id: " + this.id);
-    //console.log(p);
     }
     
     this.getPregunta = function(){
@@ -35,6 +32,36 @@ function Pregunta(){
     
     this.getCorrecta = function(){
         return this.correcta;
+    };
+    
+    this.getId = function(){
+        return this.id;
+    }
+}
+
+function Ahorcado(){
+    
+    this.pista;
+    
+    this.palabra;
+    
+    this.id;
+    
+    this.init = function(p){
+
+    this.pista = p.Pista;
+    
+    this.palabra = p.Palabra;
+    
+    this.id = p.$id;
+    }
+    
+    this.getPalabra = function(){
+        return this.palabra;
+    };
+    
+    this.getPista = function(){
+        return this.pista;
     };
     
     this.getId = function(){
@@ -221,7 +248,8 @@ angular.module('app.services', [])
 .service('pregunta', Pregunta)
 .service('video', Video)
 .service('imagen', Imagen)
-.service('dbarray', DBArray);
+.service('dbarray', DBArray)
+.service('ahorcado', Ahorcado);
 
 
 

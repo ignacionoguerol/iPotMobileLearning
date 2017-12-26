@@ -100,7 +100,8 @@ angular.module('app.routes', [])
 		modalidadSeleccionada: "",
 		aleatorio: "",
 		por: "",
-		contador: ""		
+		contador: "",
+		puntos: ""		
 },
     templateUrl: 'templates/ahorcado.html',
     controller: 'ahorcadoCtrl'

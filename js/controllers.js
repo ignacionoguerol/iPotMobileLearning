@@ -29,14 +29,14 @@ function ($scope, $stateParams, $state) {
     ];
     
     $scope.modalidades = [
-        { 'id':'preguntas', 'label':'Questions'}/*,
-        { 'id':'video', 'label':'Video'},
-        { 'id':'imagen', 'label':'Images'},
-        { 'id':'sopaDeLetras', 'label':'Sopa de Letras'},
+        { 'id':'preguntas', 'label':'Questions'},
+        //{ 'id':'video', 'label':'Video'},
+        //{ 'id':'imagen', 'label':'Images'},
+        //{ 'id':'sopaDeLetras', 'label':'Sopa de Letras'},
         { 'id':'ahorcado', 'label':'Ahorcado'},
-        { 'id':'jeroglifico', 'label':'Jeroglífico'} ,
-       { 'id':'puzzle', 'label':'Puzzle'},
-        { 'id':'parejas', 'label':'Parejas'}*/
+        //{ 'id':'jeroglifico', 'label':'Jeroglífico'} ,
+       //{ 'id':'puzzle', 'label':'Puzzle'},
+        //{ 'id':'parejas', 'label':'Parejas'}
         
     ];
     
@@ -496,10 +496,10 @@ function ($scope, $stateParams, $state, $timeout){
 
 ])
    
-.controller('ahorcadoCtrl', ['$scope', '$stateParams', '$state', '$timeout', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('ahorcadoCtrl', ['$scope', '$stateParams', '$state', '$timeout', 'dbarray', 'ahorcado', '$ionicPopup', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $state, $timeout){
+function ($scope, $stateParams, $state, $timeout, dbarray, ahorcado, $ionicPopup){
 
      //Comprobacion de parametros
     
@@ -514,15 +514,53 @@ function ($scope, $stateParams, $state, $timeout){
     $scope.contador = $stateParams.contador;
     $scope.modo = $stateParams.por;
     
+     //Iniciar base de datos FIREBASE
+    var init = dbarray.init("AhorcadoFisioterapia");
+    $scope.preguntas = dbarray.loadArray("AhorcadoFisioterapia");
+
+    //Get user data
+     firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            $scope.email = user.email;
+        }else{
+            $scope.email = anonimo;
+        }
+    })
+    
+    var waitTime;
+    
+    if (init === 0){
+        waitTime = 2000;
+    }else if (init === 1){
+        waitTime = 1000;
+    }
+    
+    // controlla la visibilidad de la plantilla y el loading.
+    $scope.show = true; 
+    
+    
+   
+    $timeout(function() {
+        var random = Math.floor(Math.random() * ($scope.preguntas.length));
+       
+        ahorcado.init($scope.preguntas[random]);
+        
+        //Variables propias de cada pregunta
+        $scope.objeto = {
+            pista : ahorcado.getPista(),
+            palabra: ahorcado.getPalabra(),
+            url: ''
+        };
+        
+        $scope.generarVectorAhorcado();
+        $scope.show = false;
+        $scope.startTimer();
+        $scope.resultado = '';
+        
+
+    }, waitTime);
     
     //variables scope
-    
-    $scope.objeto = {
-        pista : 'Function of the physiotherapist',
-        palabra: 'Management',
-        url: ''
-    };
-    
     $scope.letraSeleccionada = '';
     $scope.letrasFalladas = '';
     $scope.letrasAcertadas = '';
@@ -530,27 +568,43 @@ function ($scope, $stateParams, $state, $timeout){
     $scope.intentos = 7;
     $scope.aciertos = 0;
     
+     $scope.puntos = 0;
+    if($stateParams.puntos !== ''){
+        $scope.puntos = $stateParams.puntos;
+    }
     
-    
+    //funciones
+    $scope.loadParams = function(){
     //Parametros a enviar 
      $scope.modeParams = {
         modalidadSeleccionada:'Video',
         por: $scope.modo,
-        contador: $scope.contador+1
+        contador: $scope.contador+1,
+        puntos: $scope.puntos
     };
     
     $scope.unitParams = {
         modalidadSeleccionada:'Preguntas',
         por: $scope.modo,
-        contador: $scope.contador+1
+        contador: $scope.contador+1,
+        puntos: $scope.puntos
     };
+    }
     
     
-    
-    //funciones
     
     $scope.siguiente = function(){
-            $scope.stopTimer();
+        $scope.stopTimer();
+        
+        if($scope.intentos !== $scope.fallos){
+            $scope.puntos++;
+            dbarray.submitJugada(ahorcado.getPalabra(), 1, $scope.email, 2);
+        }else{
+            dbarray.submitJugada(ahorcado.getPalabra(), 0, $scope.email, 2);
+        }
+        
+        $scope.loadParams();       
+        
         if($scope.modo === 'Mode'){
             $state.go('ahorcado', $scope.modeParams);
         }else{
@@ -559,10 +613,14 @@ function ($scope, $stateParams, $state, $timeout){
     };
     
     $scope.exit = function(){
+        $ionicPopup.alert({
+            title: 'Has sumado ' + $scope.puntos + ' puntos'
+         });
+         dbarray.savePoints($scope.puntos, $scope.email);
          $state.go('menu.home');
      };
      
-     $scope.comprobar = function(letra){
+    $scope.comprobar = function(letra){
          
         this.letraSeleccionada = '';
          
@@ -614,13 +672,19 @@ function ($scope, $stateParams, $state, $timeout){
         
     };
             
-
     $scope.generarVectorAhorcado = function(){
+        
+        
     
-    for (var i = 0, len = $scope.objeto.palabra.length; i < len; i++) {
-        document.getElementById("tabla-ahorcado").innerHTML += '<td   style=\'color: white\'class="vectorAhorcado letra-' 
-        + $scope.objeto.palabra[i].toUpperCase() + '">' + $scope.objeto.palabra[i] + '</td>';
-        }
+        document.getElementById("tabla-ahorcado").innerHTML += "";
+    
+        for (var i = 0, len = $scope.objeto.palabra.length; i < len; i++) {
+            document.getElementById("tabla-ahorcado").innerHTML += '<td style=\'color: white\' class="vectorAhorcado letra-'      
+            + $scope.objeto.palabra[i].toUpperCase() + '">' + $scope.objeto.palabra[i] + '</td>';
+        
+            }
+        
+           
     };
       
       
@@ -685,6 +749,8 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
     
     $scope.preguntas = [];
     
+    
+    //Iniciar base de datos FIREBASE
     var init = dbarray.init("PreguntasFisioterapia");
     $scope.preguntas = dbarray.loadArray("PreguntasFisioterapia");
     
