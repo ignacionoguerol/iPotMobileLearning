@@ -5,7 +5,6 @@ angular.module('app.controllers', [])
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams, $state) {
     
-    
     $scope.tema = {
         temaSeleccionado:'',
         por: 'Unit',
@@ -44,6 +43,7 @@ function ($scope, $stateParams, $state) {
     //funcion de cada boton
     
     $scope.juegoTema = function(){
+        navigator.vibrate(500);
         $state.go('ahorcado', $scope.tema);
     };
     
@@ -207,7 +207,7 @@ function ($scope, $stateParams, $state, dbarray, video, $timeout) {
 
 }])
    
-.controller('jeroglificoCtrl', ['$scope', '$stateParams', '$state', '$timeout', 'dbarray', 'jeroglifico', '$ionicPlatform', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('hieroglyphicCtrl', ['$scope', '$stateParams', '$state', '$timeout', 'dbarray', 'jeroglifico', '$ionicPlatform', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams, $state, $timeout, dbarray, jeroglifico, $ionicPlatform){
@@ -316,7 +316,7 @@ function ($scope, $stateParams, $state, $timeout, dbarray, jeroglifico, $ionicPl
         
         $scope.loadParams();   
         //if($scope.modo === 'Mode'){
-        $state.go('jeroglifico', $scope.modeParams);
+        $state.go('hieroglyphic', $scope.modeParams);
         //}else{
             //$state.go('preguntas',  $scope.unitParams);
         //}
@@ -390,11 +390,20 @@ function ($scope, $stateParams, $state, $timeout, dbarray, jeroglifico, $ionicPl
 
 ])
    
-.controller('ahorcadoCtrl', ['$scope', '$stateParams', '$state', '$timeout', 'dbarray', 'ahorcado', '$ionicPlatform', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('hangmanCtrl', ['$scope', '$stateParams', '$state', '$timeout', 'dbarray', 'ahorcado', '$ionicPlatform', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams, $state, $timeout, dbarray, ahorcado, $ionicPlatform){
 
+    //Get user data
+     firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            $scope.email = user.email;
+        }else{
+            $scope.email = anonimo;
+        }
+    })
+    
     // Disable BACK button on home
     $ionicPlatform.registerBackButtonAction(function (event) {
         event.preventDefault();
@@ -431,51 +440,68 @@ function ($scope, $stateParams, $state, $timeout, dbarray, ahorcado, $ionicPlatf
     $scope.intentos = 5;
     $scope.aciertos = 0;
     
-     //Iniciar base de datos FIREBASE
-    var init = dbarray.init("AhorcadoFisioterapia");
-    $scope.preguntas = dbarray.loadArray("AhorcadoFisioterapia");
-
-    //Get user data
-     firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-            $scope.email = user.email;
-        }else{
-            $scope.email = anonimo;
-        }
-    })
-    
-    var waitTime;
-    
+     var waitTime;
+    //COMPROBAR TIPO DE USUARIO
+    var init = dbarray.init("usuarios");
+    $scope.usuarios = dbarray.loadArrayUsuarios("usuarios");
+     
     if (init === 0){
         waitTime = 2000;
     }else if (init === 1){
-        waitTime = 1000;
+        waitTime = 0;
     }
     
-    // controlla la visibilidad de la plantilla y el loading.
-    $scope.show = true; 
-    
     $timeout(function() {
-        var random = Math.floor(Math.random() * ($scope.preguntas.length));
+        angular.forEach($scope.usuarios, function(usuario){
+            if(usuario.Email === $scope.email){
+                if(usuario.Grado === 1){
+                     $scope.grado = "AhorcadoFisioterapia"
+                }else{
+                     $scope.grado = "AhorcadoTerapia"
+                }
+            }
+         });
+        
+        console.log("grado: " + $scope.grado);
+        
+         //Iniciar base de datos FIREBASE
+        init = dbarray.init($scope.grado);
+        $scope.preguntas = dbarray.loadArray($scope.grado);
+    
+        
+        
        
-        ahorcado.init($scope.preguntas[random]);
         
-        //Variables propias de cada pregunta
-        $scope.objeto = {
-            pista : ahorcado.getPista(),
-            palabra: ahorcado.getPalabra(),
-            url: ''
-        };
+        if (init === 0){
+            waitTime = 2000;
+        }else if (init === 1){
+            waitTime = 1000;
+        }
         
-        $scope.generarVectorAhorcado();
-        $scope.show = false;
-        $scope.startTimer();
-        $scope.resultado = '';
+        // controlla la visibilidad de la plantilla y el loading.
+        $scope.show = true; 
         
-
+        $timeout(function() {
+            var random = Math.floor(Math.random() * ($scope.preguntas.length));
+            
+            ahorcado.init($scope.preguntas[random]);
+            
+            //Variables propias de cada pregunta
+            $scope.objeto = {
+                pista : ahorcado.getPista(),
+                palabra: ahorcado.getPalabra(),
+                url: ''
+            };
+            
+            $scope.generarVectorAhorcado();
+            $scope.show = false;
+            $scope.startTimer();
+            $scope.resultado = '';
+            
+    
+        }, waitTime);
+    
     }, waitTime);
-    
-    
     
      $scope.puntos = 0;
     if($stateParams.puntos !== ''){
@@ -515,9 +541,9 @@ function ($scope, $stateParams, $state, $timeout, dbarray, ahorcado, $ionicPlatf
         $scope.loadParams();       
         
         //if($scope.modo === 'Mode'){
-            $state.go('ahorcado', $scope.modeParams);
+            $state.go('hangman', $scope.modeParams);
         //}else{
-           // $state.go('jeroglifico',  $scope.unitParams);
+           // $state.go('hieroglyphic',  $scope.unitParams);
         //}
     };
     
@@ -601,8 +627,8 @@ function ($scope, $stateParams, $state, $timeout, dbarray, ahorcado, $ionicPlatf
         document.getElementById("tabla-ahorcado").innerHTML += "";
     
         for (var i = 0, len = $scope.objeto.palabra.length; i < len; i++) {
-            document.getElementById("tabla-ahorcado").innerHTML += '<td style=\'color: white\' class="vectorAhorcado letra-'      
-            + $scope.objeto.palabra[i].toUpperCase() + '">' + $scope.objeto.palabra[i] + '</td>';
+            document.getElementById("tabla-ahorcado").innerHTML += '<td style=\'color: white;\' class="vectorAhorcado letra-'      
+            + $scope.objeto.palabra[i].toUpperCase() + ' text-center">' + $scope.objeto.palabra[i] + '</td>';
         
             }
     };
@@ -617,7 +643,7 @@ function ($scope, $stateParams, $state, $timeout, dbarray, ahorcado, $ionicPlatf
         if($scope.counter ===  0) {
             $timeout.cancel(mytimeout);
             // Apunta error si se acaba el tiempo
-            dbarray.submitJugada(pregunta.getId(), 0, $scope.email, 1);
+            dbarray.submitJugada(ahorcado.getPalabra(), 0, $scope.email, 1);
             if($scope.contador<10){
                 $scope.siguiente();
             }else{
@@ -648,7 +674,7 @@ function ($scope, $stateParams, $state, $timeout, dbarray, ahorcado, $ionicPlatf
 
 ])
    
-.controller('preguntasCtrl', ['$scope', '$stateParams', '$state', '$timeout', '$firebaseArray', 'pregunta', 'dbarray', '$q', '$ionicPlatform', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('questionsCtrl', ['$scope', '$stateParams', '$state', '$timeout', '$firebaseArray', 'pregunta', 'dbarray', '$q', '$ionicPlatform', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbarray, $q, $ionicPlatform) {
@@ -709,10 +735,6 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
         }
      });
      
-     $scope.show = true;
-     
-        
-        
         //Iniciar base de datos FIREBASE
         init = dbarray.init($scope.grado);
         $scope.preguntas = dbarray.loadArray($scope.grado);
@@ -732,7 +754,7 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
         $timeout(function() {
             $scope.show = false;
             var random = Math.floor(Math.random() * ($scope.preguntas.length));
-            
+            $scope.r = random;
             pregunta.init($scope.preguntas[random]);
         
             //Variables propias de cada pregunta
@@ -778,7 +800,7 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
         $scope.stopTimer();
         $scope.loadParams();
         //if($scope.modo === 'Mode'){
-        $state.go('preguntas', $scope.modeParams);
+        $state.go('questions', $scope.modeParams);
         //}else{
          //   $state.go('imagen', $scope.unitParams);
         //}
@@ -789,7 +811,7 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
     $scope.exit = function(){
         $scope.stopTimer();
         dbarray.savePoints($scope.puntos, $scope.email);
-         $state.go('menu.home');
+        $state.go('menu.home');
         }; 
         
      $scope.guardar = function(){
@@ -799,6 +821,8 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
         };
         
     $scope.comprobar = function(p, id){
+        
+        console.log($scope.r)
         
         if($scope.resultado === ''){
             $scope.objeto.selected = p;
@@ -987,32 +1011,39 @@ function ($scope, $stateParams, $state, $timeout, puzzle, dbarray, $ionicPlatfor
         $state.go('menu.home');
     };  
         
-    $scope.comprobar = function(palabra){
-        
-        $scope.objeto.ordenadas[$scope.orden].id = palabra;
-        $scope.orden++;
-        
-        if($scope.orden >= $scope.objeto.desordenadas.length){
-               
-            for (var i in $scope.objeto.desordenadas){
-                for (var e in $scope.objeto.ordenadas){
-                    if($scope.objeto.desordenadas[i].id === $scope.objeto.ordenadas[e].id ){
-                        if($scope.objeto.desordenadas[i].orden !== ++e){
-                            e--;
-                            $scope.resultado = 'Has fallado!';
-                            dbarray.submitJugada($scope.objeto.tema, 0, $scope.email, 4);
-                            return;
-                        }else{
-                             e--;
+    $scope.comprobar = function(palabra, index){
+        var x = document.getElementById("list-" + index)
+        if(!x.classList.contains('Correcto')){
+            
+            x.classList.add("Correcto");
+            x.style.background = "white";
+            x.style.color = "white";
+            
+            $scope.objeto.ordenadas[$scope.orden].id = palabra;
+            $scope.orden++;
+            
+            if($scope.orden >= $scope.objeto.desordenadas.length){
+                   
+                for (var i in $scope.objeto.desordenadas){
+                    for (var e in $scope.objeto.ordenadas){
+                        if($scope.objeto.desordenadas[i].id === $scope.objeto.ordenadas[e].id ){
+                            if($scope.objeto.desordenadas[i].orden !== ++e){
+                                e--;
+                                $scope.resultado = 'Has fallado!';
+                                dbarray.submitJugada($scope.objeto.tema, 0, $scope.email, 4);
+                                return;
+                            }else{
+                                 e--;
+                            }
                         }
                     }
                 }
+                
+                $scope.resultado = 'Correcto!';
+                dbarray.submitJugada($scope.objeto.tema, 1, $scope.email, 4);
+                $scope.puntos++;
+                
             }
-            
-            $scope.resultado = 'Correcto!';
-            dbarray.submitJugada($scope.objeto.tema, 1, $scope.email, 4);
-            $scope.puntos++;
-            
         }
        
     };
@@ -1051,10 +1082,25 @@ function ($scope, $stateParams, $state, $timeout, puzzle, dbarray, $ionicPlatfor
         
 }])
    
-.controller('parejasCtrl', ['$scope', '$stateParams', '$state', '$timeout', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('couplesCtrl', ['$scope', '$stateParams', '$state', '$timeout', 'dbarray', '$ionicPlatform', 'couples', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $state, $timeout) {
+function ($scope, $stateParams, $state, $timeout, dbarray, $ionicPlatform, couples) {
+    
+    
+    //Get user data
+     firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            $scope.email = user.email;
+        }else{
+            $scope.email = anonimo;
+        }
+    })
+    
+    // Disable BACK button on home
+    $ionicPlatform.registerBackButtonAction(function (event) {
+        event.preventDefault();
+    }, 100);
     
     //Se comprueba el tema o la modalidad especifica que se ha elegido.
     if($stateParams.temaSeleccionado !== ''){
@@ -1070,82 +1116,201 @@ function ($scope, $stateParams, $state, $timeout) {
     
     //Contador de ejercicios completados.
     $scope.contador = $stateParams.contador;
-
     
-    //Variables propias de cada pregunta
-    $scope.objeto = {
-        pista : 'Pista/Tema',
-        placeholder: "",
-        i: [
-            {'url': 'Practitioner', 'orden': 3},
-            {'url': 'Medical Technician Assistant', 'orden':1},
-            {'url': 'Physical Therapy', 'orden':2}
-        ],
-        r: [
-            {'url': 'Practitioner', 'orden': 3},
-            {'url': 'Medical Technician Assistant', 'orden':1},
-            {'url': 'Physical Therapy', 'orden':2}
-        ]
+    
+    var waitTime;
+    
+    //COMPROBAR TIPO DE USUARIO
+    var init = dbarray.init("usuarios");
+    $scope.usuarios = dbarray.loadArrayUsuarios("usuarios");
+     
+    if (init === 0){
+        waitTime = 2000;
+    }else if (init === 1){
+        waitTime = 0;
+    }
+    
+    $timeout(function() {
+        angular.forEach($scope.usuarios, function(usuario){
+            if(usuario.Email === $scope.email){
+                if(usuario.Grado === 1){
+                     $scope.grado = "ParejasFisioterapia"
+                }else{
+                     $scope.grado = "ParejasFisioterapia"
+                }
+            }
+         });
+     
+        //Iniciar base de datos FIREBASE
+        init = dbarray.init($scope.grado);
+        $scope.preguntas = dbarray.loadArray($scope.grado);
         
-    };
-    
-    $scope.resultado = '';
         
-    //Parametros a enviar 
-    $scope.modeParams = {
-        modalidadSeleccionada:'Preguntas',
-        por: $scope.modo,
-        contador: $scope.contador+1
-    };
-    $scope.unitParams = {
-        modalidadSeleccionada:'Video',
-        por: $scope.modo,
-        contador: $scope.contador+1
-    };
-    
-    $scope.orden = 0;
-    
-    //Funciones
-        
-    $scope.siguiente = function(){
-        $scope.stopTimer();
-        if($scope.modo === 'Mode'){
-            $state.go('parejas', $scope.modeParams);
-        }else{
-            $state.go('ahorcado', $scope.unitParams);
+        if (init === 0){
+            waitTime = 2000;
+        }else if (init === 1){
+            waitTime = 0;
         }
+        
+        $scope.show = true; // controlla la visibilidad de la plantilla y el loading.
+        
+        $timeout(function() {
+            $scope.show = false;
+            var random = Math.floor(Math.random() * ($scope.preguntas.length));
+            $scope.r = random;
+            couples.init($scope.preguntas[random]);
+        
+                //Variables propias de cada pregunta
+            $scope.objeto = {
+                pista : couples.getPista(),
+                i: couples.getI(),
+                r: couples.getR()
+                
+            };
+            
+            $scope.primera = {
+                p: '',
+                i: ''
+            }
+            
+            $scope.segunda = {
+                p: '',
+                i: ''
+            }
+            
+            $scope.colores = {
+                1: '506FA4',
+                2: 'F7A56B',
+                3: 'F7C56B'
+            }
+            $scope.colorCorrecto = '#439B90';
+            $scope.resultado = '';
+            $scope.click = 0;
+            $scope.fallos = 0;
+            
+            $scope.puntos = 0;
+            if($stateParams.puntos !== ''){
+                $scope.puntos = $stateParams.puntos;
+            }
+            
+            $scope.startTimer();
+            
+            $scope.resultado = '';
+            
+            $scope.toque = 0;
+        
+        }, waitTime);
+    }, waitTime);
+    $scope.puntos = 0;
+    if($stateParams.puntos !== ''){
+        $scope.puntos = $stateParams.puntos;
+    }
+    
+        //Funciones
+
+    $scope.loadParams = function(){
+        //Parametros a enviar 
+        $scope.modeParams = {
+            modalidadSeleccionada:'Preguntas',
+            por: $scope.modo,
+            contador: $scope.contador+1,
+            puntos: $scope.puntos
+            
+        };
+        $scope.unitParams = {
+            modalidadSeleccionada:'Video',
+            por: $scope.modo,
+            contador: $scope.contador+1
+        };
+    }  
+    
+    $scope.siguiente = function(){
+        
+        if($scope.fallos>1){
+            $scope.loadParams();
+            //dbarray.submitJugada(pregunta.getPregunta(), 1, $scope.email, 1);
+        }else{
+            $scope.puntos++;
+            $scope.loadParams();
+            //dbarray.submitJugada(pregunta.getPregunta(), 0, $scope.email, 1);
+        }
+        
+        $scope.stopTimer();
+        $state.go('couples', $scope.modeParams);
     };
     
     $scope.exit = function(){
-         $state.go('menu.home');
-        };  
-        
-    $scope.click = 0;
-    
-    $scope.comprobar = function(id){
-        
-        var x = document.getElementById(id);
-        if(x.style.background === "red"){
-            x.style.background = "white";
+         if($scope.fallos>1){
+           dbarray.savePoints($scope.puntos, $scope.email);
         }else{
-            x.style.background = "red";
+            $scope.puntos++;
+            dbarray.savePoints($scope.puntos, $scope.email);
         }
+        $scope.stopTimer();
+        $state.go('menu.home');
         
-
-       if ($scope.click === 0){
-           $scope.click = 1;
-           
-       }else if ($scope.click === 1){
-           $scope.click = 0;
-       }
+    };  
+    
+    $scope.home = function(){
+        $scope.stopTimer();
+        dbarray.savePoints($scope.puntos, $scope.email);
+        $state.go('menu.home');
+    };  
+        
+    $scope.seleccionar = function(p, i){
+        $scope.toque = 1;
+        if($scope.primera.p === '' && !document.getElementById("top-" + i).classList.contains('Correcto')){
+            $scope.click++;
+            $scope.primera.p = p;
+            $scope.primera.i = i;
             
+            var x = document.getElementById("top-" + i);
+            x.style.background = '#'+$scope.colores[$scope.click];
+            $scope.click--;
+        }
+    }
+    
+    $scope.comprobar = function(p, i){
+        if($scope.toque == 1){
+            $scope.click++;
+            $scope.toque = 0;
+            if($scope.segunda.p === ''  && !document.getElementById("top-" + i).classList.contains('Correcto') ){
+                $scope.segunda.p = p;
+                $scope.segunda.i = i;
+                
+                var x = document.getElementById("top-" + $scope.primera.i);
+             var y = document.getElementById("bot-" + $scope.segunda.i);
+                
+                 if ($scope.primera.p === $scope.segunda.p){
+                    x.style.background = $scope.colorCorrecto;
+                    y.style.background = $scope.colorCorrecto;
+                    x.classList.add("Correcto");
+                    y.classList.add("Correcto");
+                    
+                    $scope.primera.p = '';
+                    $scope.segunda.p = '';
+                    
+                    $scope.correctas++;
+                    
+                }else{
+                    $scope.fallos++;
+                    $scope.click--;
+                    x.style.background = "";
+                    y.style.background = "";
+                    
+                    $scope.primera.p = '';
+                    $scope.segunda.p = '';
+                }
+                
+            }
+        }
        
     };
     
     /////////////////////////////////////////////////////////  
     /////////////////////////Temporizador/////////////////////// 
       
-      $scope.counter = 30;
+      $scope.counter = 60;
     
     $scope.onTimeout = function() {
         if($scope.counter ===  0) {
@@ -1174,10 +1339,21 @@ function ($scope, $stateParams, $state, $timeout) {
         
 }])
    
-.controller('sopaDeLetrasCtrl', ['$scope', '$stateParams', '$state', '$timeout', '$compile', 'sopa', '$firebaseArray', 'dbarray', '$ionicPlatform', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('alphabethSoupCtrl', ['$scope', '$stateParams', '$state', '$timeout', '$compile', 'sopa', '$firebaseArray', 'dbarray', '$ionicPlatform', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams, $state, $timeout, $compile, sopa, $firebaseArray, dbarray, $ionicPlatform) {
+    
+    
+     //Get user data
+     firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            $scope.email = user.email;
+        }else{
+            $scope.email = anonimo;
+        }
+    })
+    
     
     // Disable BACK button on home
     $ionicPlatform.registerBackButtonAction(function (event) {
@@ -1201,49 +1377,72 @@ function ($scope, $stateParams, $state, $timeout, $compile, sopa, $firebaseArray
     
     $scope.nPalabras = 0;
     
-    //Iniciar base de datos FIREBASE
-    var init = dbarray.init("SopaFisioterapia");
-    $scope.preguntas = dbarray.loadArray("SopaFisioterapia");
-    
     var waitTime;
-    
+     
+     //COMPROBAR TIPO DE USUARIO
+    var init = dbarray.init("usuarios");
+    $scope.usuarios = dbarray.loadArrayUsuarios("usuarios");
+     
     if (init === 0){
         waitTime = 2000;
     }else if (init === 1){
         waitTime = 0;
     }
     
-    //Get user data
-     firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-            $scope.email = user.email;
-        }else{
-            $scope.email = anonimo;
-        }
-    })
-    
-    $scope.show = true; // controlla la visibilidad de la plantilla y el loading.
-    
     $timeout(function() {
+        angular.forEach($scope.usuarios, function(usuario){
+            if(usuario.Email === $scope.email){
+                if(usuario.Grado === 1){
+                     $scope.grado = "SopaFisioterapia"
+                }else{
+                     $scope.grado = "SopaTerapia"
+                }
+            }
+         });
+        //Iniciar base de datos FIREBASE
+        var init = dbarray.init($scope.grado);
+        $scope.preguntas = dbarray.loadArray($scope.grado);
         
-        $scope.show = false;
-        var random = Math.floor(Math.random() * ($scope.preguntas.length));
         
-        sopa.init($scope.preguntas[random]);
+        if (init === 0){
+            waitTime = 2000;
+        }else if (init === 1){
+            waitTime = 0;
+        }
         
-        //Variables propias de cada pregunta
-        $scope.objeto = {
-            pregunta : sopa.getPregunta(),
-            palabras: sopa.getPalabras(),
-            letras: sopa.getLetras()
-        };
+        //Get user data
+         firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                $scope.email = user.email;
+            }else{
+                $scope.email = anonimo;
+            }
+        })
         
-        $scope.startTimer();
+        $scope.show = true; // controlla la visibilidad de la plantilla y el loading.
         
-        $scope.resultado = '';
-        
-        $scope.initSopa(); // Iniciarlizar sopa de letras
-
+        $timeout(function() {
+            
+            $scope.show = false;
+            var random = Math.floor(Math.random() * ($scope.preguntas.length));
+            
+            sopa.init($scope.preguntas[random]);
+            
+            //Variables propias de cada pregunta
+            $scope.objeto = {
+                pregunta : sopa.getPregunta(),
+                palabras: sopa.getPalabras(),
+                letras: sopa.getLetras()
+            };
+            
+            $scope.startTimer();
+            
+            $scope.resultado = '';
+            
+            $scope.initSopa(); // Iniciarlizar sopa de letras
+    
+        }, waitTime);
+    
     }, waitTime);
     
     $scope.puntos = 0;
@@ -1340,7 +1539,7 @@ function ($scope, $stateParams, $state, $timeout, $compile, sopa, $firebaseArray
         }
         
         $scope.loadParams();
-        $state.go('sopaDeLetras', $scope.modeParams);
+        $state.go('alphabethSoup', $scope.modeParams);
         };
         
     $scope.exit = function(){

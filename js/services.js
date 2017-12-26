@@ -216,6 +216,43 @@ function Puzzle(){
     
 }
 
+function Couples(){
+    
+    this.pista = '';
+    var i = [];
+    var r = [];
+    
+    this.init = function(p){
+    
+    i = [];
+    r = [];
+    
+    this.pista = p.pista;
+    
+    angular.forEach(p.i, function(opcion) {
+                    i.push(opcion); 
+                })
+                
+    angular.forEach(p.r, function(opcion) {
+                    r.push(opcion); 
+                })
+    }
+    
+    this.getPista = function(){
+        return this.pista;
+    };
+    
+    this.getI = function(){
+        return i;
+    };
+    
+    this.getR = function(){
+        return r;
+    };
+    
+}
+
+
 function DBArray($firebaseArray, $timeout, $ionicPopup, $q){
     
     var cuenta = [];
@@ -269,6 +306,7 @@ function DBArray($firebaseArray, $timeout, $ionicPopup, $q){
     this.submitJugada = function(idPreg, res, user, mod){
         this.init("jugadas");
         $firebaseArray(ref["jugadas"]).$add({
+            fecha: Date(),
             usuario: user,
             idPregunta: idPreg,
             resultado: res,
@@ -331,7 +369,6 @@ function DBArray($firebaseArray, $timeout, $ionicPopup, $q){
         
             angular.forEach(usuarios, function(usuario){
                 if(usuario.Email === email){
-                   
                     ref["usuarios"].child(usuario.$id).update({"nick" : nick});
                 }
             })
@@ -363,8 +400,5 @@ angular.module('app.services', [])
 .service('ahorcado', Ahorcado)
 .service('jeroglifico', Jeroglifico)
 .service('puzzle', Puzzle)
-.service('sopa', Sopa);
-
-
-
-
+.service('sopa', Sopa)
+.service('couples', Couples);

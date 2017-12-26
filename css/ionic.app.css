@@ -9889,10 +9889,11 @@ a.button {
   text-align: center; }
 
 .tabla-ahorcado {
-  width: 98%;
-  margin: auto;
+  width: 100%;
   margin-top: 7%;
   margin-bottom: 7%;
+  margin-left: 0;
+  margin-right: 0;
   border: 0.5px solid gray;
   text-align: center;
   border-color: #6FB544; }
@@ -9905,8 +9906,9 @@ a.button {
   float: right; }
 
 .vectorAhorcado {
-  border: 0.5px solid gray;
-  border-color: #6FB544; }
+  border: 0.5px solid;
+  border-color: #439B90;
+  margin: 0; }
 
 .clickable {
   cursor: pointer; }
@@ -9987,3 +9989,21 @@ a.button {
 
 .img-modalidad {
   height: 10%; }
+
+.scroll {
+  max-height: 80%; }
+
+body.platform-ios {
+  font-family: 'Poppins', sans-serif; }
+
+.ionic-body.platform-ios {
+  font-family: 'Poppins', sans-serif; }
+
+body.platform-android {
+  font-family: 'Poppins', sans-serif; }
+
+.ionic-body.platform-android {
+  font-family: 'Poppins', sans-serif; }
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .tab-item, input, button, select, textarea {
+  font-family: inherit; }

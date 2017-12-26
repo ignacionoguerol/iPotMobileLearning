@@ -54,7 +54,7 @@ angular.module('app.routes', [])
     controller: 'loginCtrl'
   })
 
-  .state('jeroglifico', {
+  .state('hieroglyphic', {
     url: '/page11',
 	params: {
 		temaSeleccionado: "",
@@ -64,11 +64,11 @@ angular.module('app.routes', [])
 		contador: "",
 		puntos: ""		
 },
-    templateUrl: 'templates/jeroglifico.html',
-    controller: 'jeroglificoCtrl'
+    templateUrl: 'templates/hieroglyphic.html',
+    controller: 'hieroglyphicCtrl'
   })
 
-  .state('ahorcado', {
+  .state('hangman', {
     url: '/page10',
 	params: {
 		temaSeleccionado: "",
@@ -78,11 +78,11 @@ angular.module('app.routes', [])
 		contador: "",
 		puntos: ""		
 },
-    templateUrl: 'templates/ahorcado.html',
-    controller: 'ahorcadoCtrl'
+    templateUrl: 'templates/hangman.html',
+    controller: 'hangmanCtrl'
   })
 
-  .state('preguntas', {
+  .state('questions', {
     url: '/page7',
 	params: {
 		temaSeleccionado: "",
@@ -93,8 +93,8 @@ angular.module('app.routes', [])
 		puntos: "",
 		usuarios: ""		
 },
-    templateUrl: 'templates/preguntas.html',
-    controller: 'preguntasCtrl'
+    templateUrl: 'templates/questions.html',
+    controller: 'questionsCtrl'
   })
 
   .state('puzzle', {
@@ -111,20 +111,21 @@ angular.module('app.routes', [])
     controller: 'puzzleCtrl'
   })
 
-  .state('parejas', {
+  .state('couples', {
     url: '/page13',
 	params: {
 		temaSeleccionado: "",
 		modalidadSeleccionada: "",
 		aleatorio: "",
 		por: "",
-		contador: ""		
+		contador: "",
+		puntos: ""		
 },
-    templateUrl: 'templates/parejas.html',
-    controller: 'parejasCtrl'
+    templateUrl: 'templates/couples.html',
+    controller: 'couplesCtrl'
   })
 
-  .state('sopaDeLetras', {
+  .state('alphabethSoup', {
     url: '/page9',
 	params: {
 		temaSeleccionado: "",
@@ -134,8 +135,8 @@ angular.module('app.routes', [])
 		contador: "",
 		puntos: ""		
 },
-    templateUrl: 'templates/sopaDeLetras.html',
-    controller: 'sopaDeLetrasCtrl'
+    templateUrl: 'templates/alphabethSoup.html',
+    controller: 'alphabethSoupCtrl'
   })
 
 $urlRouterProvider.otherwise('/page4')

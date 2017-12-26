@@ -1,0 +1,37 @@
+<ion-view title="Hangman" hide-back-button="true" cache-view="false" id="page10">
+  <ion-nav-buttons side="left" scroll="false" class="has-header">
+    <button class="button button-icon icon ion-android-home" ng-click="guardar()"></button>
+  </ion-nav-buttons>
+  <ion-content padding="true" scroll="false" class="has-header">
+    <div ng-show="show === true" class="spinner-div">
+      <ion-spinner class="spinner"></ion-spinner>
+    </div>
+    <div id="hangman-container9" ng-show="show === false">
+      <h4 id="hangman-heading29" style="color:#000000;font-weight:400;text-align:right;" class="counter"> {{counter}}</h4>
+      <h5 id="hangman-heading28" ng-if="letrasFalladas!=''" style="color:#000000;font-weight:400;">Errores: {{letrasFalladas}}</h5>
+      <h5 id="hangman-heading30" style="color:#000000;font-weight:400;">Fallos: {{fallos}}/{{intentos}} </h5>
+      <div class="spacer" style="width: 270px; height: 1px;"></div>
+      <h4 id="hangman-heading27" style="color:#439B90;font-weight:400;text-align:center;">{{objeto.pista}}</h4>
+      <div>
+        <img src="{{fotoAhorcado[fallos]}}" style="display: block; width: 70%; height: auto; margin-left: auto; margin-right: auto;">
+      </div>
+      <table class="tabla-ahorcado">
+        <tbody>
+          <tr id="tabla-ahorcado">
+
+          </tr>
+        </tbody>
+      </table>
+      <form id="hangman-form35" class="list">
+        <label class="item item-input" id="hangman-input10">
+          <span class="input-label">Insert a letter</span>
+          <input type="text" placeholder="" ng-model="letraSeleccionada" ng-change="comprobar(letraSeleccionada)" ng-disabled="fallos>=intentos">
+        </label>
+      </form>
+    </div>
+    <div id="hangman-container20" class="container-boton">
+      <button id="hangman-button18" ng-click="siguiente()" ng-if="contador<10" ng-disabled="fallos < intentos &amp;&amp; aciertos < objeto.palabra.length" ng-show="show === false" class="button button-positive button-block">Siguiente</button>
+      <button id="hangman-button19" ng-if="contador>9" ng-click="exit()" class="button button-positive button-block">Exit!</button>
+    </div>
+  </ion-content>
+</ion-view>

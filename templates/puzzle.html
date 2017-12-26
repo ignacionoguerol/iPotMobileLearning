@@ -1,4 +1,4 @@
-<ion-view title="Puzzle" hide-back-button="true" cache-view="false" nav-transition="none" id="page12">
+<ion-view title="Puzzle" hide-back-button="true" cache-view="false" id="page12">
   <ion-nav-buttons side="left" scroll="false" class="has-header">
     <button class="button button-icon icon ion-android-home" ng-click="exit()"></button>
   </ion-nav-buttons>
@@ -11,20 +11,25 @@
         <h4 style="color:#000000;font-weight:400;text-align:right;">{{counter}}</h4>
         <h4 style="color:#000000;font-weight:400;text-align:center;">{{objeto.tema}}</h4>
       </form>
-      <ion-scroll direction="y">
+      <div style="position: absolute; top: 20%; bottom: -45%; left: 10%; right: 10%;">
+        <ion-scroll style="height: 50%; !important" direction="y">
+          <h4 id="list-{{$index}}" ng-value="palabra.id" ng-repeat="palabra in objeto.desordenadas" ng-click="comprobar(palabra.id, $index)" ng-if="resultado == ''" style="color:#000000;font-weight:300;text-align:justify; " class="text-box-p">{{palabra.id}}</h4>
 
-        <h4 ng-value="palabra.id" ng-repeat="palabra in objeto.desordenadas" ng-click="comprobar(palabra.id)" ng-if="resultado == ''" style="color:#000000;font-weight:300;text-align:justify; " class="text-box-p">{{palabra.id}}</h4>
+          <br>
 
-        <br>
-        <div style="margin-top:3%;">
-          <h4 ng-value="palabra.id" ng-repeat="palabra in objeto.desordenadas" style="color:#000000;font-weight:300;text-align:justify;" class="text-box-p">{{$index+1}} - {{objeto.ordenadas[$index].id}}</h4>
-        </div>
-      </ion-scroll>
-      <h4 style="color:#000000;font-weight:300;text-align:center;">{{resultado}}</h4>
+
+          <div style="margin-top:3%;">
+            <h4 ng-value="palabra.id" ng-repeat="palabra in objeto.desordenadas" style="color:#000000;font-weight:300;text-align:justify;" class="text-box-p">{{$index+1}} - {{objeto.ordenadas[$index].id}}</h4>
+          </div>
+          <h4 style="color:#000000;font-weight:300;text-align:center;">{{resultado}}</h4>
+        </ion-scroll>
+
+      </div>
+
     </div>
     <div id="puzzle-container18" ng-show="show === false" class="container-boton">
-      <button id="puzzle-button27" ng-if="contador>9" ng-click="exit()" style="border-radius:0px 0px 0px 0px;" class="button button-positive button-block">Exit!</button>
-      <button id="puzzle-button28" ng-click="siguiente()" ng-if="contador<10" ng-disabled="objeto.selected === ''" style="border-radius:0px 0px 0px 0px;" class="button button-positive button-block">Siguiente</button>
+      <button id="puzzle-button27" ng-if="contador>9" ng-click="exit()" ng-disabled="resultado === &quot;&quot;" style="border-radius:0px 0px 0px 0px;" class="button button-positive button-block">Exit!</button>
+      <button id="puzzle-button28" ng-click="siguiente()" ng-if="contador<10" ng-disabled="resultado === ''" style="border-radius:0px 0px 0px 0px;" class="button button-positive button-block">Siguiente</button>
     </div>
   </ion-content>
 </ion-view>
