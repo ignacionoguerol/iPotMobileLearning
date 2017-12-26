@@ -9888,7 +9888,8 @@ a.button {
 .tabla-ahorcado {
   width: 95%;
   margin-top: 7%;
-  margin-bottom: 7%; }
+  margin-bottom: 7%;
+  border: 0.5px solid gray; }
 
 .input-ahorcado {
   width: 70%; }
@@ -9896,6 +9897,11 @@ a.button {
 .button-ahorcado {
   width: 25%;
   float: right; }
+
+.vectorAhorcado {
+  border: none;
+  border-bottom: 1.5px solid black;
+  border-spacing: 3px 3px; }
 
 .clickable {
   cursor: pointer; }
@@ -9927,8 +9933,6 @@ a.button {
   font-weight: bold; }
 
 .jeroglifico {
-  border-color: #000000;
-  border: 1px solid;
   margin-bottom: 6%; }
 
 .img-parejas {
@@ -9956,7 +9960,8 @@ a.button {
   width: 10%;
   height: 10%; }
 
-.text-box {
-  font-size: 13px;
-  white-space: normal;
-  overflow: visible; }
+.text-box-p {
+  padding: 3.5%;
+  background-color: #E9F3E9;
+  border-radius: 3%;
+  font-size: small; }

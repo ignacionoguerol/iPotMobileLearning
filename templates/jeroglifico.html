@@ -1,21 +1,22 @@
-<ion-view title="Jeroglifico" hide-back-button="true" cache-view="false" id="page11" style="background-color:#E9F3E9;" ng-init="startTimer()">
+<ion-view title="Jeroglifico" hide-back-button="true" cache-view="false" id="page11" style="background-color:#E9F3E9;">
   <ion-content padding="true" class="has-header">
-    <div id="jeroglifico-container12" class="container">
-      <h5 id="jeroglifico-heading31" style="color:#000000;font-weight:lighter;text-align:center;">Ejercicio: {{contador}}/10</h5>
-      <h3 id="jeroglifico-heading32" style="color:#000000;font-weight:400;text-align:center;">{{objeto.pista}}</h3>
+    <div ng-show="show === true" class="spinner-div">
+      <ion-spinner class="spinner"></ion-spinner>
+    </div>
+    <div id="jeroglifico-container12" ng-show="show === false" class="container">
+      <h4 id="jeroglifico-heading34" ng-if="resultado === ''" style="color:#000000;font-weight:400;text-align:right;">{{counter}}</h4>
+      <h3 id="jeroglifico-heading32" style="color:#6FB544;font-weight:400;text-align:center;">{{objeto.pista}}</h3>
       <div class="jeroglifico">
         <img src="{{objeto.url}}" style="display: block; width: 90%; height: auto; margin-left: auto; margin-right: auto;">
       </div>
       <form id="jeroglifico-form37" class="list">
-        <label class="item item-input text-center" id="jeroglifico-input7">
-          <input type="text" placeholder="Case sensitive" ng-model="objeto.inputText">
+        <label id="input" class="item item-input">
+          <input id="input-in" type="text" placeholder="Case sensitive" ng-model="objeto.inputText">
         </label>
       </form>
-      <h4 id="jeroglifico-heading33" style="color:#000000;text-align:center;">{{resultado}}</h4>
       <button id="jeroglifico-button22" ng-click="comprobar()" ng-if="!resuelto" ng-disabled="objeto.inputText == ''" class="button button-positive button-block">Submit</button>
       <button id="jeroglifico-button20" ng-click="siguiente()" ng-if="contador<10 &amp;&amp; resuelto" ng-disabled="objeto.selected === ''" class="button button-positive button-block">Siguiente</button>
-      <button id="jeroglifico-button21" ng-if="contador>9" ng-click="exit()" class="button button-positive button-block">Exit!</button>
-      <h5 id="jeroglifico-heading34" ng-if="resultado === ''" style="color:#000000;font-weight:lighter;text-align:center;">Tiempo restante: {{counter}} segundos</h5>
+      <button id="jeroglifico-button21" ng-if="contador>9 &amp;&amp; resuelto" ng-click="exit()" ng-disabled="objeto.selected === ''" class="button button-positive button-block">Exit!</button>
     </div>
   </ion-content>
 </ion-view>

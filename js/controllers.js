@@ -29,14 +29,14 @@ function ($scope, $stateParams, $state) {
     ];
     
     $scope.modalidades = [
-        { 'id':'preguntas', 'label':'Questions'}/*,
-        { 'id':'video', 'label':'Video'},
-        { 'id':'imagen', 'label':'Images'},
-        { 'id':'sopaDeLetras', 'label':'Sopa de Letras'},
+        { 'id':'preguntas', 'label':'Questions'},
+        //{ 'id':'video', 'label':'Video'},
+        //{ 'id':'imagen', 'label':'Images'},
+        //{ 'id':'sopaDeLetras', 'label':'Sopa de Letras'},
         { 'id':'ahorcado', 'label':'Ahorcado'},
-        { 'id':'jeroglifico', 'label':'Jeroglífico'} ,
-       { 'id':'puzzle', 'label':'Puzzle'},
-        { 'id':'parejas', 'label':'Parejas'}*/
+        { 'id':'jeroglifico', 'label':'Jeroglífico'} 
+       //{ 'id':'puzzle', 'label':'Puzzle'},
+        //{ 'id':'parejas', 'label':'Parejas'}
         
     ];
     
@@ -61,44 +61,69 @@ function ($scope, $stateParams, $state) {
     
     }])
    
-.controller('rankingCtrl', ['$scope', '$stateParams', '$firebaseArray', '$ionicUser', 'dbarray', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('rankingCtrl', ['$scope', '$stateParams', '$firebaseArray', '$ionicUser', 'dbarray', '$timeout', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $firebaseArray, $ionicUser, dbarray) {
+function ($scope, $stateParams, $firebaseArray, $ionicUser, dbarray, $timeout) {
     
-     dbarray.init("usuarios");
-     $scope.preguntas = dbarray.getArray();
-       
-      /*// add new items to the array
-      // the message is automatically added to our Firebase database!
-      $scope.addPregunta = function() {
-        $firebaseArray(dbarray.getRef()).$add({
-            pregunta: $scope.data.pregunta,
-            respuestas: $scope.data.respuestas,
-            correcta: $scope.data.correcta,
-            
-        });
-        $scope.data.pregunta = '';
-        $scope.data.respuestas = '';
-        $scope.data.correcta = '';
-        $scope.preguntas = dbarray.getArray();
-      };*/
-      
+     var init = dbarray.init("usuarios");
+     $scope.usuarios = dbarray.loadArrayUsuarios("usuarios");
+     
+     $scope.usuariosFisio = [];
+     $scope.usuariosTerapia = [];
+     
+    if (init === 0){
+        waitTime = 2000;
+    }else if (init === 1){
+        waitTime = 0;
+    }
+    
+    $scope.show = false;
+     
+     $timeout(function() {
+     angular.forEach($scope.usuarios, function(usuario){
+         if(usuario.Grado === 1){
+             $scope.usuariosFisio.push(usuario);
+         }else{
+             $scope.usuariosTerapia.push(usuario);
+         }
+     });
+     
+     $scope.show = true;
+     }, waitTime);
+}])
+   
+.controller('profileCtrl', ['$scope', '$stateParams', '$ionicPopup', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+// You can include any angular dependencies as parameters for this function
+// TIP: Access Route Parameters for your page via $stateParams.parameterName
+function ($scope, $stateParams, $ionicPopup) {
+
+$scope.resetPassword = function(){
+    
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            firebase.auth().sendPasswordResetEmail(user.email);
+            $ionicPopup.alert({
+            title: 'Se ha enviado un email a  ' + $scope.email + '.'
+            });
+        }else{
+            $ionicPopup.alert({
+            title: 'No ha sido posible enviar la solicitud'
+            })  
+        }
+    })
+    
+    
+    
+}
 
 }])
    
-.controller('profileCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('menuCtrl', ['$scope', '$stateParams', '$state', '$firebaseObject', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
-
-
-}])
-   
-.controller('menuCtrl', ['$scope', '$stateParams', '$state', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $state) {
+function ($scope, $stateParams, $state, $firebaseObject) {
+    
     
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
@@ -107,7 +132,7 @@ function ($scope, $stateParams, $state) {
             $scope.email = anonimo;
         }
     })
-
+    
     $scope.logout = function(){
         firebase.auth().signOut();
         $state.go('login');
@@ -147,24 +172,6 @@ function ($scope, $stateParams, $state) {
             });
         })
     }
-    
-    
-    
-    /*
-    if ($ionicAuth.isAuthenticated()) {
-        // Make sure the user data is going to be loaded
-        $ionicUser.load().then(function() {});
-        $state.go('menu.home'); 
-    }
-    
-    $scope.login = function(){
-        $scope.error = '';
-        $ionicAuth.login('basic', $scope.data).then(function(){
-            $state.go('menu.home');
-        }, function(){
-            $scope.error = 'Error logging in. Try Again!';
-        });
-    };*/
 
 }])
    
@@ -397,10 +404,184 @@ function ($scope, $stateParams, $state, $timeout, imagen){
 
 ])
    
-.controller('jeroglificoCtrl', ['$scope', '$stateParams', '$state', '$timeout', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('jeroglificoCtrl', ['$scope', '$stateParams', '$state', '$timeout', 'dbarray', 'jeroglifico', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $state, $timeout){
+function ($scope, $stateParams, $state, $timeout, dbarray, jeroglifico){
+
+     //Comprobacion de parametros
+     if($stateParams.temaSeleccionado !== ''){
+        $scope.tipo = $stateParams.temaSeleccionado;
+    }else if ($stateParams.modalidadSeleccionada !==''){
+         $scope.tipo =$stateParams.modalidadSeleccionada;
+    }else if ($stateParams.aleatorio !== ''){
+        $scope.tipo = $stateParams.aleatorio;
+    }
+    
+    $scope.contador = $stateParams.contador;
+    $scope.modo = $stateParams.por;
+    
+    //variables scope
+    $scope.objeto = {
+        pista : '',
+        respuestas: '',
+        inputText: '',
+        url: ''
+    };
+    
+    //$scope.resultado = '';
+    $scope.resuelto = false;
+    
+    
+    //Iniciar base de datos FIREBASE
+    var init = dbarray.init("JeroglificoFisioterapia");
+    $scope.preguntas = dbarray.loadArray("JeroglificoFisioterapia");
+    
+    var waitTime = 0;
+    if (init === 0){
+        waitTime = 2000;
+    }else if (init === 1){
+        waitTime = 0;
+    }
+    
+    //Get user data
+     firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            $scope.email = user.email;
+        }else{
+            $scope.email = anonimo;
+        }
+    });
+    
+    $scope.show = true; // controlla la visibilidad de la plantilla y el loading.
+    
+    $timeout(function() {
+       
+        var random = Math.floor(Math.random() * ($scope.preguntas.length));
+        
+        jeroglifico.init($scope.preguntas[random]);
+        console.log(jeroglifico.getRespuesta())
+        //Variables propias de cada pregunta
+        $scope.objeto = {
+            pista : jeroglifico.getPista(),
+            respuesta: jeroglifico.getRespuesta(),
+            url: jeroglifico.getUrl(),
+            inputText: ''
+        };
+        
+        $scope.show = false;
+        $scope.startTimer();
+        $scope.resultado = '';
+    
+    }, waitTime);
+    
+    $scope.puntos = 0;
+    
+    if($stateParams.puntos !== ''){
+        $scope.puntos = $stateParams.puntos;
+    }
+    console.log($scope.puntos);
+    
+    
+    $scope.loadParams = function(){
+    //Parametros a enviar 
+     $scope.modeParams = {
+        modalidadSeleccionada:'Video',
+        por: $scope.modo,
+        contador: $scope.contador+1,
+        puntos: $scope.puntos
+    };
+    
+    $scope.unitParams = {
+        modalidadSeleccionada:'Preguntas',
+        por: $scope.modo,
+        contador: $scope.contador+1,
+        puntos: $scope.puntos
+    };
+    
+    }
+    
+    //funciones
+    
+    $scope.siguiente = function(){
+        
+        $scope.loadParams();   
+        //if($scope.modo === 'Mode'){
+        $state.go('jeroglifico', $scope.modeParams);
+        //}else{
+            //$state.go('preguntas',  $scope.unitParams);
+        //}
+    }
+    
+    $scope.exit = function(){
+         dbarray.savePoints($scope.puntos, $scope.email);
+         $state.go('menu.home');
+     } 
+     
+    $scope.comprobar = function(){
+        $scope.stopTimer();
+        $scope.resuelto = true;
+        
+         if ($scope.objeto.inputText === $scope.objeto.respuesta){
+             //$scope.resultado = 'Correct!';
+             document.getElementById("input").style.backgroundColor = '#33CD5F';
+             document.getElementById("input-in").style.backgroundColor = '#33CD5F';
+             $scope.puntos++;
+             dbarray.submitJugada(jeroglifico.getRespuesta(), 1, $scope.email, 3);
+         }else{
+             //$scope.resultado = 'Fail';
+             document.getElementById("input").style.backgroundColor = '#EF473A';
+             document.getElementById("input-in").style.backgroundColor = '#EF473A';
+             dbarray.submitJugada(jeroglifico.getRespuesta(), 0, $scope.email, 3);
+         }
+            
+    };
+      
+      
+      /////////////////////////////////////////////////////////  
+      /////////////////////////////////////////////////////////  
+    
+    $scope.counter = 60;
+    
+    $scope.onTimeout = function() {
+        if($scope.counter ===  0) {
+            $timeout.cancel(mytimeout);
+            if($scope.contador<10){
+                $scope.siguiente();
+            }else{
+                $scope.exit();
+            }
+            return;
+        }
+        
+        $scope.counter-=1;
+        mytimeout = $timeout($scope.onTimeout, 1000);
+    };
+    $scope.startTimer = function() {
+        mytimeout = $timeout($scope.onTimeout, 1000);
+    };
+    // stops and resets the current timer
+    $scope.stopTimer = function() {
+        $timeout.cancel(mytimeout);
+    };
+    
+    /////////////////////////////////////////////////////////  
+      ///////////////////////////////////////////////////////// 
+        
+       
+        
+}
+
+
+
+
+
+])
+   
+.controller('ahorcadoCtrl', ['$scope', '$stateParams', '$state', '$timeout', 'dbarray', 'ahorcado', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+// You can include any angular dependencies as parameters for this function
+// TIP: Access Route Parameters for your page via $stateParams.parameterName
+function ($scope, $stateParams, $state, $timeout, dbarray, ahorcado){
 
      //Comprobacion de parametros
     
@@ -414,66 +595,200 @@ function ($scope, $stateParams, $state, $timeout){
     
     $scope.contador = $stateParams.contador;
     $scope.modo = $stateParams.por;
-
+    
+    $scope.fotoAhorcado = {
+        0: "https://firebasestorage.googleapis.com/v0/b/ipot-mobile-learning.appspot.com/o/1.gif?alt=media&token=2624db2a-c8b4-4478-805f-e031cdeea656",
+        1: "https://firebasestorage.googleapis.com/v0/b/ipot-mobile-learning.appspot.com/o/2.gif?alt=media&token=ae744050-7584-4fe2-8c1f-7c3c8191aa98",
+        2: "https://firebasestorage.googleapis.com/v0/b/ipot-mobile-learning.appspot.com/o/3.gif?alt=media&token=a16b32fb-da1b-4275-b1ed-4f11598406c2",
+        3: "https://firebasestorage.googleapis.com/v0/b/ipot-mobile-learning.appspot.com/o/4.gif?alt=media&token=62ddd6dc-aa5d-445b-b192-094830622e10",
+        4: "https://firebasestorage.googleapis.com/v0/b/ipot-mobile-learning.appspot.com/o/5.gif?alt=media&token=c9365881-0a9f-4658-9bb0-9c87b6da9e64",
+        5: "https://firebasestorage.googleapis.com/v0/b/ipot-mobile-learning.appspot.com/o/6.gif?alt=media&token=0109743c-7f53-4d81-8389-672dd46ccece"
+    }
     
     //variables scope
+    $scope.letraSeleccionada = '';
+    $scope.letrasFalladas = '';
+    $scope.letrasAcertadas = '';
+    $scope.fallos = 0;
+    $scope.intentos = 5;
+    $scope.aciertos = 0;
     
-    $scope.objeto = {
-        pista : 'Something important',
-        respuestas: 'Keywords',
-        inputText: '',
-        url: 'https://image.ibb.co/dg77ca/Ejemplo_2.png'
-    };
+     //Iniciar base de datos FIREBASE
+    var init = dbarray.init("AhorcadoFisioterapia");
+    $scope.preguntas = dbarray.loadArray("AhorcadoFisioterapia");
+
+    //Get user data
+     firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            $scope.email = user.email;
+        }else{
+            $scope.email = anonimo;
+        }
+    })
     
-    $scope.resultado = '';
+    var waitTime;
     
-    $scope.resuelto = false;
+    if (init === 0){
+        waitTime = 2000;
+    }else if (init === 1){
+        waitTime = 1000;
+    }
+    
+    // controlla la visibilidad de la plantilla y el loading.
+    $scope.show = true; 
+    
+    $timeout(function() {
+        var random = Math.floor(Math.random() * ($scope.preguntas.length));
+       
+        ahorcado.init($scope.preguntas[random]);
+        
+        //Variables propias de cada pregunta
+        $scope.objeto = {
+            pista : ahorcado.getPista(),
+            palabra: ahorcado.getPalabra(),
+            url: ''
+        };
+        
+        $scope.generarVectorAhorcado();
+        $scope.show = false;
+        $scope.startTimer();
+        $scope.resultado = '';
+        
+
+    }, waitTime);
+    
+    
+    
+     $scope.puntos = 0;
+    if($stateParams.puntos !== ''){
+        $scope.puntos = $stateParams.puntos;
+    }
+    
+    //funciones
+    $scope.loadParams = function(){
     //Parametros a enviar 
      $scope.modeParams = {
         modalidadSeleccionada:'Video',
         por: $scope.modo,
-        contador: $scope.contador+1
+        contador: $scope.contador+1,
+        puntos: $scope.puntos
     };
     
     $scope.unitParams = {
         modalidadSeleccionada:'Preguntas',
         por: $scope.modo,
-        contador: $scope.contador+1
+        contador: $scope.contador+1,
+        puntos: $scope.puntos
     };
-    
-    
-    //funciones
-    
-    $scope.siguiente = function(){
-            $scope.stopTimer();
-        if($scope.modo === 'Mode'){
-            $state.go('jeroglifico', $scope.modeParams);
-        }else{
-            $state.go('preguntas',  $scope.unitParams);
-        }
     }
     
-    $scope.exit = function(){
-         $state.go('menu.home');
-     } 
-     
-     $scope.comprobar = function(){
+    
+    
+    $scope.siguiente = function(){
         $scope.stopTimer();
-        $scope.resuelto = true;
         
-         if ($scope.objeto.inputText === $scope.objeto.respuestas){
-             $scope.resultado = 'Correct!';
-         }else{
-             $scope.resultado = 'Fail';
-         }
+        if($scope.intentos !== $scope.fallos && $scope.counter > 0){
+            $scope.puntos++;
+            dbarray.submitJugada(ahorcado.getPalabra(), 1, $scope.email, 2);
+        }else{
+            dbarray.submitJugada(ahorcado.getPalabra(), 0, $scope.email, 2);
+        }
+        
+        $scope.loadParams();       
+        
+        //if($scope.modo === 'Mode'){
+            $state.go('ahorcado', $scope.modeParams);
+        //}else{
+           // $state.go('jeroglifico',  $scope.unitParams);
+        //}
+    };
+    
+    $scope.exit = function(){
+        $scope.stopTimer();
+        if($scope.intentos !== $scope.fallos){
+            $scope.puntos++;
+            dbarray.submitJugada(ahorcado.getPalabra(), 1, $scope.email, 2);
+        }else{
+            dbarray.submitJugada(ahorcado.getPalabra(), 0, $scope.email, 2);
+        }
+         dbarray.savePoints($scope.puntos, $scope.email);
+         $state.go('menu.home');
+     };
+     
+    $scope.comprobar = function(letra){
+         
+        this.letraSeleccionada = '';
+         
+        var encontrada = false;
+        var repetida = false;
+        var repetidaF = false;
+        
+        
+        for(var c = 0; c < $scope.letrasAcertadas.length; c++){
             
+                if($scope.letrasAcertadas[c] === letra.toUpperCase()){
+                    repetida = true;
+                }
+        }
+                
+         
+        for (var i = 0, len = $scope.objeto.palabra.length; i < len; i++) {
+            
+            L = $scope.objeto.palabra[i].toUpperCase(); //mayúscula
+            l = $scope.objeto.palabra[i].toLowerCase(); //minúscula
+
+            if((l === letra.toLowerCase() || L === letra.toUpperCase()) & !encontrada & !repetida){
+                
+                $scope.elements = document.getElementsByClassName("letra-"+L);
+                for (var e = 0; e < $scope.elements.length; e++){
+                    $scope.elements[e].style.color = 'black';
+                    $scope.aciertos++;
+                    if($scope.aciertos == $scope.objeto.palabra.length){
+                        $scope.stopTimer();
+                    }
+                }
+                $scope.letraSeleccionada = null;
+                encontrada = true;
+                $scope.letrasAcertadas += L;
+                return;
+            }
+            
+        }
+        
+        for(var cc = 0; cc < $scope.letrasFalladas.length; cc++){
+            
+                if($scope.letrasFalladas[cc] === letra.toUpperCase()){
+                    repetidaF = true;
+                }
+        }
+        
+        if(!encontrada && !repetida && !repetidaF){
+            $scope.fallos++;
+            if($scope.fallos == $scope.intentos){
+                $scope.stopTimer();
+            }
+            $scope.letrasFalladas += letra.toUpperCase();
+        }
+        
+        
+    };
+            
+    $scope.generarVectorAhorcado = function(){
+    
+        document.getElementById("tabla-ahorcado").innerHTML += "";
+    
+        for (var i = 0, len = $scope.objeto.palabra.length; i < len; i++) {
+            document.getElementById("tabla-ahorcado").innerHTML += '<td style=\'color: white\' class="vectorAhorcado letra-'      
+            + $scope.objeto.palabra[i].toUpperCase() + '">' + $scope.objeto.palabra[i] + '</td>';
+        
+            }
     };
       
       
       /////////////////////////////////////////////////////////  
       /////////////////////////////////////////////////////////  
     
-    $scope.counter = 30;
+    $scope.counter = 60;
     
     $scope.onTimeout = function() {
         if($scope.counter ===  0) {
@@ -506,179 +821,12 @@ function ($scope, $stateParams, $state, $timeout){
 
 
 
-
 ])
    
-.controller('ahorcadoCtrl', ['$scope', '$stateParams', '$state', '$timeout', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('preguntasCtrl', ['$scope', '$stateParams', '$state', '$timeout', '$firebaseArray', 'pregunta', 'dbarray', '$q', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $state, $timeout){
-
-     //Comprobacion de parametros
-    
-    if($stateParams.temaSeleccionado !== ''){
-        $scope.tipo = $stateParams.temaSeleccionado;
-    }else if ($stateParams.modalidadSeleccionada !==''){
-         $scope.tipo =$stateParams.modalidadSeleccionada;
-    }else if ($stateParams.aleatorio !== ''){
-        $scope.tipo = $stateParams.aleatorio;
-    }
-    
-    $scope.contador = $stateParams.contador;
-    $scope.modo = $stateParams.por;
-    
-    
-    //variables scope
-    
-    $scope.objeto = {
-        pista : 'Function of the physiotherapist',
-        palabra: 'Management',
-        url: ''
-    };
-    
-    $scope.letraSeleccionada = '';
-    $scope.letrasFalladas = '';
-    $scope.letrasAcertadas = '';
-    $scope.fallos = 0;
-    $scope.intentos = 7;
-    $scope.aciertos = 0;
-    
-    
-    
-    //Parametros a enviar 
-     $scope.modeParams = {
-        modalidadSeleccionada:'Video',
-        por: $scope.modo,
-        contador: $scope.contador+1
-    };
-    
-    $scope.unitParams = {
-        modalidadSeleccionada:'Preguntas',
-        por: $scope.modo,
-        contador: $scope.contador+1
-    };
-    
-    
-    
-    //funciones
-    
-    $scope.siguiente = function(){
-            $scope.stopTimer();
-        if($scope.modo === 'Mode'){
-            $state.go('ahorcado', $scope.modeParams);
-        }else{
-            $state.go('jeroglifico',  $scope.unitParams);
-        }
-    };
-    
-    $scope.exit = function(){
-         $state.go('menu.home');
-     };
-     
-     $scope.comprobar = function(letra){
-         
-        this.letraSeleccionada = '';
-         
-        var encontrada = false;
-        var repetida = false;
-        var repetidaF = false;
-        
-        
-        for(var c = 0; c < $scope.letrasAcertadas.length; c++){
-            
-                if($scope.letrasAcertadas[c] === letra.toUpperCase()){
-                    repetida = true;
-                }
-        }
-                
-         
-        for (var i = 0, len = $scope.objeto.palabra.length; i < len; i++) {
-            
-            L = $scope.objeto.palabra[i].toUpperCase(); //mayúscula
-            l = $scope.objeto.palabra[i].toLowerCase(); //minúscula
-
-            if((l === letra.toLowerCase() || L === letra.toUpperCase()) & !encontrada & !repetida){
-                
-                $scope.elements = document.getElementsByClassName("letra-"+L);
-                for (var e = 0; e < $scope.elements.length; e++){
-                    $scope.elements[e].style.color = 'black';
-                    $scope.aciertos++;
-                }
-                $scope.letraSeleccionada = null;
-                encontrada = true;
-                $scope.letrasAcertadas += L;
-                return;
-            }
-            
-        }
-        
-        for(var cc = 0; cc < $scope.letrasFalladas.length; cc++){
-            
-                if($scope.letrasFalladas[cc] === letra.toUpperCase()){
-                    repetidaF = true;
-                }
-        }
-        
-        if(!encontrada && !repetida && !repetidaF){
-            $scope.fallos++;
-            $scope.letrasFalladas += letra.toUpperCase();
-        }
-        
-        
-    };
-            
-
-    $scope.generarVectorAhorcado = function(){
-    
-    for (var i = 0, len = $scope.objeto.palabra.length; i < len; i++) {
-        document.getElementById("tabla-ahorcado").innerHTML += '<td   style=\'color: white\'class="vectorAhorcado letra-' 
-        + $scope.objeto.palabra[i].toUpperCase() + '">' + $scope.objeto.palabra[i] + '</td>';
-        }
-    };
-      
-      
-      /////////////////////////////////////////////////////////  
-      /////////////////////////////////////////////////////////  
-    
-    $scope.counter = 30;
-    
-    $scope.onTimeout = function() {
-        if($scope.counter ===  0) {
-            $timeout.cancel(mytimeout);
-            if($scope.contador<10){
-                //$scope.siguiente();
-            }else{
-                $scope.exit();
-            }
-            return;
-        }
-        $scope.counter--;
-        mytimeout = $timeout($scope.onTimeout, 1000);
-    };
-    $scope.startTimer = function() {
-        mytimeout = $timeout($scope.onTimeout, 1000);
-    };
-    // stops and resets the current timer
-    $scope.stopTimer = function() {
-        $timeout.cancel(mytimeout);
-    };
-    
-    /////////////////////////////////////////////////////////  
-      ///////////////////////////////////////////////////////// 
-        
-       
-        
-}
-
-
-
-
-])
-   
-.controller('preguntasCtrl', ['$scope', '$stateParams', '$state', '$timeout', '$firebaseArray', 'pregunta', 'dbarray', '$q', '$ionicUser', '$ionicPopup', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbarray, $q, $ionicUser, $ionicPopup) {
+function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbarray, $q) {
     
     //Se comprueba el tema o la modalidad especifica que se ha elegido.
     if($stateParams.temaSeleccionado !== ''){
@@ -698,18 +846,27 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
     
     $scope.preguntas = [];
     
+    
+    //Iniciar base de datos FIREBASE
     var init = dbarray.init("PreguntasFisioterapia");
     $scope.preguntas = dbarray.loadArray("PreguntasFisioterapia");
     
     var waitTime;
     
     if (init === 0){
-        waitTime = 3000;
+        waitTime = 2000;
     }else if (init === 1){
         waitTime = 0;
     }
     
-    
+    //Get user data
+     firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            $scope.email = user.email;
+        }else{
+            $scope.email = anonimo;
+        }
+    })
     
     $scope.show = true; // controlla la visibilidad de la plantilla y el loading.
     
@@ -761,35 +918,36 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
     $scope.siguiente = function(){
         $scope.stopTimer();
         $scope.loadParams();
-        if($scope.modo === 'Mode'){
-            $state.go('preguntas', $scope.modeParams);
-        }else{
-            $state.go('imagen', $scope.unitParams);
-        }
+        //if($scope.modo === 'Mode'){
+        $state.go('preguntas', $scope.modeParams);
+        //}else{
+         //   $state.go('imagen', $scope.unitParams);
+        //}
     };
     
     
     
     $scope.exit = function(){
-        $ionicPopup.alert({
-            title: 'Has sumado ' + $scope.puntos + ' puntos'
-         });
-         dbarray.savePoints($scope.puntos, $ionicUser.details.email);
+        dbarray.savePoints($scope.puntos, $scope.email);
          $state.go('menu.home');
         };  
         
-    $scope.comprobar = function(){
+    $scope.comprobar = function(p, id){
+        console.log($scope.objeto.selected);
+        $scope.objeto.selected = p;
         $scope.stopTimer();
-        
+        console.log("ID: " + id)
          if ($scope.objeto.selected === $scope.objeto.correcta){
-             $scope.resultado = 'Correcto!';
+             //$scope.resultado = 'Correcto!';
+             document.getElementById(id).style.backgroundColor = '#33CD5F';
              $scope.puntos++;
              //dbarray.submitJugada(pregunta.getId(), 1, $ionicUser.details.email, 1);
-             dbarray.submitJugada(pregunta.getPregunta(), 1, $ionicUser.details.email, 1);
+             dbarray.submitJugada(pregunta.getPregunta(), 1, $scope.email, 1);
          }else{
-             $scope.resultado = 'Has fallado!';
-             //dbarray.submitJugada(pregunta.getId(), 0, $ionicUser.details.email, 1);
-             dbarray.submitJugada(pregunta.getPregunta(), 0, $ionicUser.details.email, 1);
+             //$scope.resultado = 'Has fallado!';
+            document.getElementById(id).style.backgroundColor = '#EF473A';             
+            //dbarray.submitJugada(pregunta.getId(), 0, $ionicUser.details.email, 1);
+             dbarray.submitJugada(pregunta.getPregunta(), 0, $scope.email, 1);
          }
             
         
@@ -798,13 +956,13 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
     /////////////////////////////////////////////////////////  
     /////////////////////////Temporizador/////////////////////// 
       
-      $scope.counter = 15;
+      $scope.counter = 60;
     
     $scope.onTimeout = function() {
         if($scope.counter ===  0) {
             $scope.stopTimer();
             // Apunta error si se acaba el tiempo
-            dbarray.submitJugada(pregunta.getId(), 0, $ionicUser.details.email, 1); 
+            dbarray.submitJugada(pregunta.getId(), 0, $scope.email, 1); 
             if($scope.contador<10){
             $scope.siguiente();
             }else{
@@ -812,6 +970,7 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
             }
             return;
         }
+        console.log("Contador--");
         $scope.counter--;
         mytimeout = $timeout($scope.onTimeout, 1000);
     };
@@ -983,7 +1142,7 @@ function ($scope, $stateParams, $state, $timeout) {
     //Variables propias de cada pregunta
     $scope.objeto = {
         pista : 'Pista/Tema',
-        placeholder: "http://revistahsm.com/wp-content/uploads/2012/12/Coche-Mini.jpg",
+        placeholder: "",
         i: [
             {'url': 'Practitioner', 'orden': 3},
             {'url': 'Medical Technician Assistant', 'orden':1},
@@ -1033,7 +1192,12 @@ function ($scope, $stateParams, $state, $timeout) {
     $scope.comprobar = function(id){
         
         var x = document.getElementById(id);
-        x.style.background = "red";
+        if(x.style.background === "red"){
+            x.style.background = "white";
+        }else{
+            x.style.background = "red";
+        }
+        
 
        if ($scope.click === 0){
            $scope.click = 1;

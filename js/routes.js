@@ -87,7 +87,8 @@ angular.module('app.routes', [])
 		modalidadSeleccionada: "",
 		aleatorio: "",
 		por: "",
-		contador: ""		
+		contador: "",
+		puntos: ""		
 },
     templateUrl: 'templates/jeroglifico.html',
     controller: 'jeroglificoCtrl'
@@ -100,7 +101,8 @@ angular.module('app.routes', [])
 		modalidadSeleccionada: "",
 		aleatorio: "",
 		por: "",
-		contador: ""		
+		contador: "",
+		puntos: ""		
 },
     templateUrl: 'templates/ahorcado.html',
     controller: 'ahorcadoCtrl'
@@ -160,7 +162,7 @@ angular.module('app.routes', [])
     controller: 'sopaDeLetrasCtrl'
   })
 
-$urlRouterProvider.otherwise('/side-menu21/page1')
+$urlRouterProvider.otherwise('/page4')
 
 
 });
