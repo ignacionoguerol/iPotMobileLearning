@@ -404,11 +404,16 @@ function ($scope, $stateParams, $state, $timeout, imagen){
 
 ])
    
-.controller('jeroglificoCtrl', ['$scope', '$stateParams', '$state', '$timeout', 'dbarray', 'jeroglifico', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('jeroglificoCtrl', ['$scope', '$stateParams', '$state', '$timeout', 'dbarray', 'jeroglifico', '$ionicPlatform', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $state, $timeout, dbarray, jeroglifico){
+function ($scope, $stateParams, $state, $timeout, dbarray, jeroglifico, $ionicPlatform){
 
+    // Disable BACK button on home
+    $ionicPlatform.registerBackButtonAction(function (event) {
+        event.preventDefault();
+    }, 100);
+    
      //Comprobacion de parametros
      if($stateParams.temaSeleccionado !== ''){
         $scope.tipo = $stateParams.temaSeleccionado;
@@ -823,11 +828,16 @@ function ($scope, $stateParams, $state, $timeout, dbarray, ahorcado){
 
 ])
    
-.controller('preguntasCtrl', ['$scope', '$stateParams', '$state', '$timeout', '$firebaseArray', 'pregunta', 'dbarray', '$q', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('preguntasCtrl', ['$scope', '$stateParams', '$state', '$timeout', '$firebaseArray', 'pregunta', 'dbarray', '$q', '$ionicPlatform', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbarray, $q) {
+function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbarray, $q, $ionicPlatform) {
     
+    // Disable BACK button on home
+    $ionicPlatform.registerBackButtonAction(function (event) {
+        event.preventDefault();
+    }, 100);
+  
     //Se comprueba el tema o la modalidad especifica que se ha elegido.
     if($stateParams.temaSeleccionado !== ''){
         $scope.tipo = $stateParams.temaSeleccionado;
@@ -984,6 +994,8 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
     
     /////////////////////////////////////////////////////////  
     ///////////////////////////////////////////////////////// 
+        
+    
         
 }])
    
