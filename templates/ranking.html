@@ -1,15 +1,14 @@
 <ion-view title="Ranking" id="page2" style="background-color:#E8E8E8;">
   <ion-content padding="true" style="background: url(img/WzogDV8SQCrIcQaPTXXW_fondo20rankin.jpg) no-repeat center;background-size:cover;" class="has-header">
-    <h3 id="ranking-heading23" ng-show="show" style="color:#000000;text-align:center;">You</h3>
     <ion-list id="ranking-list10">
       <ion-item class="item-avatar positive" id="ranking-list-item15" ng-show="show">
         <img src="img/lRZ4gOokQKSgVeOascqc_LOGOcabesa.png">
         <h2positive>{{nick}}
-          <p style="white-space:normal;"> {{puntos}} points. Place: {{posicion}} of {{contador}}</p>
+          <p style="white-space:normal;"> {{puntos}} points. Rank: {{posicion}} of {{contador}}</p>
         </h2positive>
       </ion-item>
     </ion-list>
-    <h3 id="ranking-heading10" ng-show="show" style="color:#000000;text-align:center;">General</h3>
+    <h4 id="ranking-heading10" ng-show="show" style="color:#000000;text-align:center;">General</h4>
     <ion-list id="ranking-list9">
       <ion-item class="item-avatar positive" id="ranking-list-item9" ng-repeat="user in usuarios | orderBy:'-puntos' | limitTo:10" ng-show="show">
         <img src="img/lRZ4gOokQKSgVeOascqc_LOGOcabesa.png">
@@ -18,7 +17,7 @@
         </h2positive>
       </ion-item>
     </ion-list>
-    <h3 id="ranking-heading43" ng-show="show === true" style="color:#000000;text-align:center;"> Physiotherapy</h3>
+    <h4 id="ranking-heading43" ng-show="show === true" style="color:#000000;text-align:center;"> Physiotherapy</h4>
     <ion-list id="ranking-list7">
       <ion-item class="item-avatar positive" id="ranking-list-item14" ng-repeat="user in usuariosFisio | orderBy:'-puntos' | limitTo:10">
         <img src="img/lRZ4gOokQKSgVeOascqc_LOGOcabesa.png">
@@ -27,7 +26,7 @@
         </h2positive>
       </ion-item>
     </ion-list>
-    <h3 id="ranking-heading44" ng-show="show === true" style="color:#000000;text-align:center;">Occupational therapy</h3>
+    <h4 id="ranking-heading44" ng-show="show === true" style="color:#000000;text-align:center;">Occupational therapy</h4>
     <ion-list id="ranking-list8">
       <ion-item class="item-avatar positive" id="ranking-list-item10" ng-repeat="user in usuariosTerapia | orderBy:'-puntos' | limitTo:10">
         <img src="img/MUCyb4iURq1sG0NjWJeq_LOGOcabesa.png">

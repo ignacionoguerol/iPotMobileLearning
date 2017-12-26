@@ -69,6 +69,7 @@ function ($scope, $stateParams, $state, dbarray, $timeout, video) {
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams, $firebaseArray, $ionicUser, dbarray, $timeout) {
     
+    
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
             $scope.email = user.email;
@@ -80,7 +81,8 @@ function ($scope, $stateParams, $firebaseArray, $ionicUser, dbarray, $timeout) {
      
      var init = dbarray.init("usuarios");
      $scope.usuarios = dbarray.loadArrayUsuarios("usuarios");
-     
+     $scope.usuarios = sortByKey($scope.usuarios, "puntos");
+     $scope.usuarios.reverse();
      $scope.usuariosFisio = [];
      $scope.usuariosTerapia = [];
      
@@ -114,6 +116,37 @@ function ($scope, $stateParams, $firebaseArray, $ionicUser, dbarray, $timeout) {
      
      $scope.show = true;
      }, waitTime);
+     
+     $scope.update = function(){
+         console.log("Actualizando");
+         $scope.contador = 1;
+         
+         $scope.usuarios = sortByKey($scope.usuarios, "puntos");
+         $scope.usuarios.reverse();
+         angular.forEach($scope.usuarios, function(usuario){
+         
+         if(usuario.Email == $scope.email){
+             $scope.nick = usuario.nick;
+             $scope.puntos = usuario.puntos; 
+             $scope.posicion = $scope.contador; 
+         }
+         $scope.contador++; 
+     });
+     
+     }
+     
+    $scope.$on('$ionicView.enter', function() {
+        $scope.update();
+    });
+    
+    function sortByKey(array, key) {
+    return array.sort(function(a, b) {
+        var x = a[key]; var y = b[key];
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    });
+}
+
+     
 }])
    
 .controller('helpCtrl', ['$scope', '$stateParams', '$ionicPopup', 'video', 'dbarray', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
