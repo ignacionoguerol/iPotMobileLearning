@@ -69,6 +69,37 @@ function Ahorcado(){
     }
 }
 
+function Jeroglifico(){
+    
+    this.pista;
+    this.respuesta;
+    this.id;
+    this.url;
+    
+    this.init = function(p){
+    this.pista = p.tema;
+    this.respuesta = p.respuesta;
+    this.id = p.$id;
+    this.url = p.url;
+    }
+    
+    this.getRespuesta = function(){
+        return this.respuesta;
+    };
+    
+    this.getPista = function(){
+        return this.pista;
+    };
+    
+    this.getId = function(){
+        return this.id;
+    };
+    
+    this.getUrl = function(){
+        return this.url;
+    }
+}
+
 function Video(){
     
     this.pregunta = '';
@@ -253,7 +284,8 @@ angular.module('app.services', [])
 .service('video', Video)
 .service('imagen', Imagen)
 .service('dbarray', DBArray)
-.service('ahorcado', Ahorcado);
+.service('ahorcado', Ahorcado)
+.service('jeroglifico', Jeroglifico);
 
 
 

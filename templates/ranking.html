@@ -1,9 +1,6 @@
 <ion-view title="Ranking" id="page2" style="background-color:#E9F3E9;">
   <ion-content padding="true" class="has-header">
     <h3 id="ranking-heading23" ng-show="show" style="color:#6FB544;text-align:center;">General</h3>
-    <div ng-show="show !== true" class="spinner-div">
-      <ion-spinner class="spinner"></ion-spinner>
-    </div>
     <ion-list id="ranking-list6">
       <ion-item class="item-avatar positive" id="ranking-list-item15" ng-repeat="user in usuarios | orderBy:'-puntos' | limitTo:5" ng-show="show">
         <img src="img/n2DRFRhcTWu1j1I4hZIO_avatar-1606916_1280.png">
@@ -30,5 +27,8 @@
         </h2positive>
       </ion-item>
     </ion-list>
+    <div ng-show="show !== true" class="spinner-div">
+      <ion-spinner class="spinner"></ion-spinner>
+    </div>
   </ion-content>
 </ion-view>
