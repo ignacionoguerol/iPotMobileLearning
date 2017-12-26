@@ -39,6 +39,45 @@ function Pregunta(){
     }
 }
 
+function Sopa(){
+    
+    this.pregunta = '';
+    this.letras = '';
+    var palabras = [];
+    this.id;
+    
+    this.init = function(p){
+    palabras = [];
+    this.pregunta = p.pregunta;
+    
+    angular.forEach(p.palabras, function(opcion) {
+                    palabras.push(opcion); 
+                })
+    this.letras = p.letras;
+    this.id = p.$id;
+    }
+    
+    this.getPregunta = function(){
+        return this.pregunta;
+    };
+    
+    this.getPalabras = function(){
+        return palabras;
+    };
+    
+    this.getLetras = function(){
+        return this.letras;
+    };
+    
+    this.getCorrecta = function(){
+        return this.correcta;
+    };
+    
+    this.getId = function(){
+        return this.id;
+    }
+}
+
 function Ahorcado(){
     
     this.pista;
@@ -204,11 +243,13 @@ function Puzzle(){
     
 }
 
-function DBArray($firebaseArray, $timeout, $ionicPopup){
+function DBArray($firebaseArray, $timeout, $ionicPopup, $q){
     
     var cuenta = [];
     var array;
     var ref = [];
+    var usuarios;
+    var nombre = "";
     
     this.init = function(campo){
         if(ref[campo] === undefined){
@@ -269,7 +310,7 @@ function DBArray($firebaseArray, $timeout, $ionicPopup){
          });
          
         var init = this.init("usuarios");
-        var usuarios = this.loadArrayUsuarios("usuarios");
+        usuarios = this.loadArrayUsuarios("usuarios");
         var waitTime;
         
         if (init === 0){
@@ -297,6 +338,34 @@ function DBArray($firebaseArray, $timeout, $ionicPopup){
         }, waitTime);
     }
     
+    this.changeNick = function(email, nick){
+        
+        $ionicPopup.alert({
+            title: 'Tu nuevo nick es ' + nick
+         });
+         
+        var init = this.init("usuarios");
+        usuarios = this.loadArrayUsuarios("usuarios");
+        var waitTime;
+        
+        if (init === 0){
+            waitTime = 2000;
+        }else if (init === 1){
+            waitTime = 0;
+        }
+        
+        $timeout(function() {
+        
+            angular.forEach(usuarios, function(usuario){
+                if(usuario.Email === email){
+                   
+                    ref["usuarios"].child(usuario.$id).update({"nick" : nick});
+                }
+            })
+        
+        }, waitTime);
+    }
+    
 }
 
 angular.module('app.services', [])
@@ -306,7 +375,8 @@ angular.module('app.services', [])
 .service('dbarray', DBArray)
 .service('ahorcado', Ahorcado)
 .service('jeroglifico', Jeroglifico)
-.service('puzzle', Puzzle);
+.service('puzzle', Puzzle)
+.service('sopa', Sopa);
 
 
 

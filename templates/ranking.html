@@ -4,7 +4,7 @@
     <ion-list id="ranking-list6">
       <ion-item class="item-avatar positive" id="ranking-list-item15" ng-repeat="user in usuarios | orderBy:'-puntos' | limitTo:5" ng-show="show">
         <img src="img/n2DRFRhcTWu1j1I4hZIO_avatar-1606916_1280.png">
-        <h2positive>{{$index+1}} - {{user.Nombre}}
+        <h2positive>{{$index+1}} - {{user.nick}}
           <p style="white-space:normal;"> {{user.puntos}} puntos</p>
         </h2positive>
       </ion-item>
@@ -13,7 +13,7 @@
     <ion-list id="ranking-list7">
       <ion-item class="item-avatar positive" id="ranking-list-item9" ng-repeat="user in usuariosFisio | orderBy:'-puntos' | limitTo:5">
         <img src="img/wNU2ufN5Qvq7YiMSVsRW_avatar-1606916_960_720.png">
-        <h2positive>{{$index+1}} - {{user.Nombre}}
+        <h2positive>{{$index+1}} - {{user.nick}}
           <p style="white-space:normal;"> {{user.puntos}} puntos</p>
         </h2positive>
       </ion-item>
@@ -22,7 +22,7 @@
     <ion-list id="ranking-list8">
       <ion-item class="item-avatar positive" id="ranking-list-item10" ng-repeat="user in usuariosTerapia | orderBy:'-puntos' | limitTo:5">
         <img src="img/wNU2ufN5Qvq7YiMSVsRW_avatar-1606916_960_720.png">
-        <h2positive>{{$index+1}} - {{user.Nombre}}
+        <h2positive>{{$index+1}} - {{user.nick}}
           <p style="white-space:normal;"> {{user.puntos}} puntos</p>
         </h2positive>
       </ion-item>

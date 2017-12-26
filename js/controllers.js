@@ -5,6 +5,7 @@ angular.module('app.controllers', [])
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams, $state) {
     
+    
     $scope.tema = {
         temaSeleccionado:'',
         por: 'Unit',
@@ -32,10 +33,10 @@ function ($scope, $stateParams, $state) {
         { 'id':'preguntas', 'label':'Questions'},
         //{ 'id':'video', 'label':'Video'},
         //{ 'id':'imagen', 'label':'Images'},
-        //{ 'id':'sopaDeLetras', 'label':'Sopa de Letras'},
+        { 'id':'sopaDeLetras', 'label':'Sopa de Letras'},
         { 'id':'ahorcado', 'label':'Ahorcado'},
         { 'id':'jeroglifico', 'label':'Jeroglífico'},
-        { 'id':'puzzle', 'label':'Puzzle'},
+        { 'id':'puzzle', 'label':'Puzzle'}
         //{ 'id':'parejas', 'label':'Parejas'}
         
     ];
@@ -94,36 +95,49 @@ function ($scope, $stateParams, $firebaseArray, $ionicUser, dbarray, $timeout) {
      }, waitTime);
 }])
    
-.controller('profileCtrl', ['$scope', '$stateParams', '$ionicPopup', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('profileCtrl', ['$scope', '$stateParams', '$ionicPopup', 'dbarray', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $ionicPopup) {
-
-$scope.resetPassword = function(){
+function ($scope, $stateParams, $ionicPopup, dbarray) {
     
-    firebase.auth().onAuthStateChanged(function(user) {
+    $scope.nick = "";
+    
+    //Get user data
+     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
-            firebase.auth().sendPasswordResetEmail(user.email);
-            $ionicPopup.alert({
-            title: 'Se ha enviado un email a  ' + $scope.email + '.'
-            });
+            $scope.email = user.email;
+            $scope.nombre  = user.Nombre;
         }else{
-            $ionicPopup.alert({
-            title: 'No ha sido posible enviar la solicitud'
-            })  
+            $scope.email = anonimo;
         }
     })
     
-    
-    
-}
+    $scope.changeNick = function(nick){
+        dbarray.changeNick($scope.email, nick);
+    }
+
+    $scope.resetPassword = function(){
+        
+        if ($scope.mail !== null) {
+            firebase.auth().sendPasswordResetEmail($scope.email);
+            $ionicPopup.alert({
+                title: 'Se ha enviado un email a  ' + $scope.email + '.'
+            });
+        }else{
+            $ionicPopup.alert({
+                title: 'No ha sido posible enviar la solicitud'
+            })  
+        }
+    }
 
 }])
    
-.controller('menuCtrl', ['$scope', '$stateParams', '$state', '$firebaseObject', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('menuCtrl', ['$scope', '$stateParams', '$state', '$firebaseObject', 'dbarray', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $state, $firebaseObject) {
+function ($scope, $stateParams, $state, $firebaseObject, dbarray) {
+    
+    //Fibebase object necesario? 
     
     
     firebase.auth().onAuthStateChanged(function(user) {
@@ -158,7 +172,7 @@ function ($scope, $stateParams, $state) {
     
     firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
-        $scope.user=user; 
+        $scope.user=user;
         $state.go('menu.home');
     }
     });
@@ -1154,6 +1168,7 @@ function ($scope, $stateParams, $state, $timeout, puzzle, dbarray, $ionicPlatfor
                         if($scope.objeto.desordenadas[i].orden !== ++e){
                             e--;
                             $scope.resultado = 'Has fallado!';
+                            dbarray.submitJugada($scope.objeto.tema, 0, $scope.email, 4);
                             return;
                         }else{
                              e--;
@@ -1163,6 +1178,7 @@ function ($scope, $stateParams, $state, $timeout, puzzle, dbarray, $ionicPlatfor
             }
             
             $scope.resultado = 'Correcto!';
+            dbarray.submitJugada($scope.objeto.tema, 1, $scope.email, 4);
             $scope.puntos++;
             
         }
@@ -1326,10 +1342,16 @@ function ($scope, $stateParams, $state, $timeout) {
         
 }])
    
-.controller('sopaDeLetrasCtrl', ['$scope', '$stateParams', '$state', '$timeout', '$compile', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('sopaDeLetrasCtrl', ['$scope', '$stateParams', '$state', '$timeout', '$compile', 'sopa', '$firebaseArray', 'dbarray', '$ionicPlatform', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $state, $timeout, $compile) {
+function ($scope, $stateParams, $state, $timeout, $compile, sopa, $firebaseArray, dbarray, $ionicPlatform) {
+    
+    // Disable BACK button on home
+    $ionicPlatform.registerBackButtonAction(function (event) {
+        event.preventDefault();
+    }, 100);
+    
     //Se comprueba el tema o la modalidad especifica que se ha elegido.
     if($stateParams.temaSeleccionado !== ''){
         $scope.tipo = $stateParams.temaSeleccionado;
@@ -1345,16 +1367,56 @@ function ($scope, $stateParams, $state, $timeout, $compile) {
     //Contador de ejercicios completados.
     $scope.contador = $stateParams.contador;
     
-    //Variables propias de cada pregunta
-    $scope.objeto = {
-        pregunta : "Fisioterapia asiática",
-        letras : "XGJLDWIY,SOCIALMZ,OPMAETIU,NHLISHCM,NLXOCISP,OZTDUCHY,HSICOIBN,BUGLLTFX,JCFWQBAP,LOCSXBJK,XFXLWDUC,ZDRYCVQO."
-    };
+    $scope.nPalabras = 0;
     
-    $scope.funciona = function(parent, index, letra){
+    //Iniciar base de datos FIREBASE
+    var init = dbarray.init("SopaFisioterapia");
+    $scope.preguntas = dbarray.loadArray("SopaFisioterapia");
+    
+    var waitTime;
+    
+    if (init === 0){
+        waitTime = 2000;
+    }else if (init === 1){
+        waitTime = 0;
+    }
+    
+    //Get user data
+     firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            $scope.email = user.email;
+        }else{
+            $scope.email = anonimo;
+        }
+    })
+    
+    $scope.show = true; // controlla la visibilidad de la plantilla y el loading.
+    
+    $timeout(function() {
+        
+        $scope.show = false;
+        var random = Math.floor(Math.random() * ($scope.preguntas.length));
+        
+        sopa.init($scope.preguntas[random]);
+        
+        //Variables propias de cada pregunta
+        $scope.objeto = {
+            pregunta : sopa.getPregunta(),
+            palabras: sopa.getPalabras(),
+            letras: sopa.getLetras()
+        };
+        
+        $scope.startTimer();
+        
+        $scope.resultado = '';
+        
+        $scope.initSopa(); // Iniciarlizar sopa de letras
 
-        var x = document.getElementById("elem"+parent+"-"+index);
-        x.style.background = "red";
+    }, waitTime);
+    
+    $scope.puntos = 0;
+    if($stateParams.puntos !== ''){
+        $scope.puntos = $stateParams.puntos;
     }
     
     $scope.initSopa = function(){
@@ -1362,48 +1424,103 @@ function ($scope, $stateParams, $state, $timeout, $compile) {
         $scope.matrix = [];
         var row = [];
         var l = $scope.objeto.letras; 
-    
-        for (var i=0; i<=l.length; i++){
+        
+        for (var i in l){
             if(l[i] !== "." && l[i] !== ","){
                 row.push($scope.objeto.letras[i]);
             }else{
                 $scope.matrix.push(row);
                 row = [];
-                $scope.palabras ++;
             }
         }
+        
+        $scope.nPalabras = $scope.objeto.palabras.length;
     };
     
+    var palabra = "";
+    var parents = [];
+    var indexes = [];
     
-    $scope.initSopa(); // Iniciarlizar sopa de letras
+    $scope.funciona = function(parent, index, elem){
+        if($scope.counter > 0){
+            var x = document.getElementById("elem"+parent+"-"+index);
+            x.style.background = "grey";
+            parents.push(parent);
+            indexes.push(index);
+            palabra = palabra + elem;
+            angular.forEach($scope.objeto.palabras, function(p){
+                if(palabra === p){
+                   
+                    $scope.nPalabras--;
+                    for (i = 0; i<parents.length; i++){
+                        var x = document.getElementById("elem"+parents[i]+"-"+indexes[i]);
+                        x.style.background = "#33CD5F";
+                    }
+                    palabra = "";
+                    parents = [];
+                    indexes = [];
+                }
+            })
+            
+            
+            
+            }
+        }   
+    
+    $scope.clear = function(){
+        for (i = 0; i<parents.length; i++){
+            var x = document.getElementById("elem"+parents[i]+"-"+indexes[i]);
+            x.style.background = "";
+        }
+        
+        palabra = "";
+        parents = [];
+        indexes = [];
+    }
     
     
-
-    //Parametros a enviar 
-    $scope.modeParams = {
-        modalidadSeleccionada:'Preguntas',
-        por: $scope.modo,
-        contador: $scope.contador+1
-    };
-    $scope.unitParams = {
-        modalidadSeleccionada:'Video',
-        por: $scope.modo,
-        contador: $scope.contador+1
-    };
+    $scope.loadParams = function(){
+        //Parametros a enviar 
+        $scope.modeParams = {
+            modalidadSeleccionada:'Preguntas',
+            por: $scope.modo,
+            contador: $scope.contador+1,
+            puntos: $scope.puntos
+        };
+        $scope.unitParams = {
+            modalidadSeleccionada:'Video',
+            por: $scope.modo,
+            contador: $scope.contador+1,
+            puntos: $scope.puntos
+        };
+        
+    }
     
     //Funciones
         
     $scope.siguiente = function(){
         $scope.stopTimer();
-        if($scope.modo === 'Mode'){
-            $state.go('preguntas', $scope.modeParams);
+        if($scope.nPalabras === 0){
+            dbarray.submitJugada($scope.objeto, 1, $scope.email, 5);
+            $scope.puntos++;
         }else{
-            $state.go('ahorcado', $scope.unitParams);
+            dbarray.submitJugada($scope.objeto, 0, $scope.email, 5);
         }
-    };
-    
+        
+        $scope.loadParams();
+        $state.go('sopaDeLetras', $scope.modeParams);
+        };
     $scope.exit = function(){
-         $state.go('menu.home');
+        
+        if($scope.nPalabras === 0){
+            dbarray.submitJugada($scope.objeto, 1, $scope.email, 5);
+            $scope.puntos++;
+        }else{
+             dbarray.submitJugada($scope.objeto, 0, $scope.email, 5);
+        }
+            
+        dbarray.savePoints($scope.puntos, $scope.email);
+        $state.go('menu.home');
         };  
         
     $scope.comprobar = function(){
@@ -1416,13 +1533,13 @@ function ($scope, $stateParams, $state, $timeout, $compile) {
     /////////////////////////////////////////////////////////  
     /////////////////////////Temporizador/////////////////////// 
       
-      $scope.counter = 30;
+      $scope.counter = 120;
     
     $scope.onTimeout = function() {
         if($scope.counter ===  0) {
             $scope.stopTimer();
-            if($scope.contador<10){
-            //$scope.siguiente();
+            if($scope.contador<5){
+                $scope.siguiente();
             }else{
                 $scope.exit();
             }

@@ -4,10 +4,10 @@
     <div style="margin-left: -10px; width: calc(100% + 20px);">
       <img src="img/4ajEJrU2TUyh6yBkosIV_logo.jpg" style="display: block; width: 100%; height: auto; margin-left: auto; margin-right: auto;">
     </div>
-    <div class="spacer" style="width: 300px; height: 40px;"></div>
+    <div class="spacer" style="width: 300px; height: 12px;"></div>
     <h4 id="home-heading9" style="color:#000000;font-weight:400;">Select a game mode</h4>
     <ion-list id="home-list11">
-      <ion-item id="home-list-item11" ng-repeat="modalidad in modalidades" ng-click="juegoModalidad(modalidad.id)" class="container-mod text-center">{{modalidad.id}}</ion-item>
+      <ion-item id="home-list-item11" ng-repeat="modalidad in modalidades" ng-click="juegoModalidad(modalidad.id)" class="container-mod text-center">{{modalidad.label}}</ion-item>
     </ion-list>
     <div id="home-container4" ng-show="false" class="container">
       <h3 id="home-heading4" style="color:#000000;" class="text-center">Unit</h3>
