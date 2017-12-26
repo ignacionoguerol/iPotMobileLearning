@@ -9897,6 +9897,11 @@ a.button {
   width: 25%;
   float: right; }
 
+.vectorAhorcado {
+  border: none;
+  border-bottom: 1.5px solid black;
+  border-spacing: 3px 3px; }
+
 .clickable {
   cursor: pointer; }
 

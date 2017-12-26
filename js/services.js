@@ -151,7 +151,7 @@ function Imagen(){
     };
 }
 
-function DBArray($firebaseArray, $timeout){
+function DBArray($firebaseArray, $timeout, $ionicPopup){
     
     var cuenta = [];
     var array;
@@ -211,9 +211,13 @@ function DBArray($firebaseArray, $timeout){
     
     this.savePoints = function(puntos, email){
         
+        $ionicPopup.alert({
+            title: 'Has sumado ' + puntos + ' puntos'
+         });
+         
         var init = this.init("usuarios");
         var usuarios = this.loadArrayUsuarios("usuarios");
-        var waitTime = 0;
+        var waitTime;
         
         if (init === 0){
             waitTime = 2000;

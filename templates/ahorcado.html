@@ -7,21 +7,17 @@
       <h5 id="ahorcado-heading26" style="color:#000000;font-weight:lighter;text-align:center;">Ejercicio: {{contador}}/10</h5>
       <h3 id="ahorcado-heading27" style="color:#000000;font-weight:400;text-align:center;">{{objeto.pista}}</h3>
       <div>
-        <img src="img/t46PlqvsQmaxLPIJBgyT_ahorcado.gif" style="display: block; width: 40%; height: auto; margin-left: auto; margin-right: auto;">
+        <img src="{{fotoAhorcado[fallos]}}" style="display: block; width: 60%; height: auto; margin-left: auto; margin-right: auto;">
       </div>
       <h5 id="ahorcado-heading30" style="color:#000000;font-weight:400;text-align:center;">Fallos: {{fallos}}/{{intentos}} - Ok: {{aciertos}}/{{objeto.palabra.length}}</h5>
       <h5 id="ahorcado-heading28" ng-if="letrasFalladas!=''" style="color:#000000;font-weight:400;text-align:center;">Errores: {{letrasFalladas}}</h5>
-      <div>
-        <p>ahorcado</p>
-        <table class="tabla-ahorcado">
-          <tbody>
-            <tr id="tabla-ahorcado">
+      <table class="tabla-ahorcado">
+        <tbody>
+          <tr id="tabla-ahorcado">
 
-            </tr>
-          </tbody>
-        </table>
-        <p>ahorcado</p>
-      </div>
+          </tr>
+        </tbody>
+      </table>
       <form id="ahorcado-form35" class="list">
         <label class="item item-input" id="ahorcado-input10">
           <span class="input-label">Insert a letter</span>

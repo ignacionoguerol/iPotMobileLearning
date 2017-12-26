@@ -496,10 +496,10 @@ function ($scope, $stateParams, $state, $timeout){
 
 ])
    
-.controller('ahorcadoCtrl', ['$scope', '$stateParams', '$state', '$timeout', 'dbarray', 'ahorcado', '$ionicPopup', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('ahorcadoCtrl', ['$scope', '$stateParams', '$state', '$timeout', 'dbarray', 'ahorcado', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $state, $timeout, dbarray, ahorcado, $ionicPopup){
+function ($scope, $stateParams, $state, $timeout, dbarray, ahorcado){
 
      //Comprobacion de parametros
     
@@ -513,6 +513,23 @@ function ($scope, $stateParams, $state, $timeout, dbarray, ahorcado, $ionicPopup
     
     $scope.contador = $stateParams.contador;
     $scope.modo = $stateParams.por;
+    
+    $scope.fotoAhorcado = {
+        0: "https://firebasestorage.googleapis.com/v0/b/ipot-mobile-learning.appspot.com/o/1.gif?alt=media&token=2624db2a-c8b4-4478-805f-e031cdeea656",
+        1: "https://firebasestorage.googleapis.com/v0/b/ipot-mobile-learning.appspot.com/o/2.gif?alt=media&token=ae744050-7584-4fe2-8c1f-7c3c8191aa98",
+        2: "https://firebasestorage.googleapis.com/v0/b/ipot-mobile-learning.appspot.com/o/3.gif?alt=media&token=a16b32fb-da1b-4275-b1ed-4f11598406c2",
+        3: "https://firebasestorage.googleapis.com/v0/b/ipot-mobile-learning.appspot.com/o/4.gif?alt=media&token=62ddd6dc-aa5d-445b-b192-094830622e10",
+        4: "https://firebasestorage.googleapis.com/v0/b/ipot-mobile-learning.appspot.com/o/5.gif?alt=media&token=c9365881-0a9f-4658-9bb0-9c87b6da9e64",
+        5: "https://firebasestorage.googleapis.com/v0/b/ipot-mobile-learning.appspot.com/o/6.gif?alt=media&token=0109743c-7f53-4d81-8389-672dd46ccece"
+    }
+    
+    //variables scope
+    $scope.letraSeleccionada = '';
+    $scope.letrasFalladas = '';
+    $scope.letrasAcertadas = '';
+    $scope.fallos = 0;
+    $scope.intentos = 5;
+    $scope.aciertos = 0;
     
      //Iniciar base de datos FIREBASE
     var init = dbarray.init("AhorcadoFisioterapia");
@@ -538,8 +555,6 @@ function ($scope, $stateParams, $state, $timeout, dbarray, ahorcado, $ionicPopup
     // controlla la visibilidad de la plantilla y el loading.
     $scope.show = true; 
     
-    
-   
     $timeout(function() {
         var random = Math.floor(Math.random() * ($scope.preguntas.length));
        
@@ -560,13 +575,7 @@ function ($scope, $stateParams, $state, $timeout, dbarray, ahorcado, $ionicPopup
 
     }, waitTime);
     
-    //variables scope
-    $scope.letraSeleccionada = '';
-    $scope.letrasFalladas = '';
-    $scope.letrasAcertadas = '';
-    $scope.fallos = 0;
-    $scope.intentos = 7;
-    $scope.aciertos = 0;
+    
     
      $scope.puntos = 0;
     if($stateParams.puntos !== ''){
@@ -613,9 +622,13 @@ function ($scope, $stateParams, $state, $timeout, dbarray, ahorcado, $ionicPopup
     };
     
     $scope.exit = function(){
-        $ionicPopup.alert({
-            title: 'Has sumado ' + $scope.puntos + ' puntos'
-         });
+        $scope.stopTimer();
+        if($scope.intentos !== $scope.fallos){
+            $scope.puntos++;
+            dbarray.submitJugada(ahorcado.getPalabra(), 1, $scope.email, 2);
+        }else{
+            dbarray.submitJugada(ahorcado.getPalabra(), 0, $scope.email, 2);
+        }
          dbarray.savePoints($scope.puntos, $scope.email);
          $state.go('menu.home');
      };
@@ -673,8 +686,6 @@ function ($scope, $stateParams, $state, $timeout, dbarray, ahorcado, $ionicPopup
     };
             
     $scope.generarVectorAhorcado = function(){
-        
-        
     
         document.getElementById("tabla-ahorcado").innerHTML += "";
     
@@ -683,21 +694,19 @@ function ($scope, $stateParams, $state, $timeout, dbarray, ahorcado, $ionicPopup
             + $scope.objeto.palabra[i].toUpperCase() + '">' + $scope.objeto.palabra[i] + '</td>';
         
             }
-        
-           
     };
       
       
       /////////////////////////////////////////////////////////  
       /////////////////////////////////////////////////////////  
     
-    $scope.counter = 30;
+    $scope.counter = 20;
     
     $scope.onTimeout = function() {
         if($scope.counter ===  0) {
             $timeout.cancel(mytimeout);
             if($scope.contador<10){
-                //$scope.siguiente();
+                $scope.siguiente();
             }else{
                 $scope.exit();
             }
@@ -726,10 +735,10 @@ function ($scope, $stateParams, $state, $timeout, dbarray, ahorcado, $ionicPopup
 
 ])
    
-.controller('preguntasCtrl', ['$scope', '$stateParams', '$state', '$timeout', '$firebaseArray', 'pregunta', 'dbarray', '$q', '$ionicPopup', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('preguntasCtrl', ['$scope', '$stateParams', '$state', '$timeout', '$firebaseArray', 'pregunta', 'dbarray', '$q', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbarray, $q, $ionicPopup) {
+function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbarray, $q) {
     
     //Se comprueba el tema o la modalidad especifica que se ha elegido.
     if($stateParams.temaSeleccionado !== ''){
@@ -831,10 +840,7 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
     
     
     $scope.exit = function(){
-        $ionicPopup.alert({
-            title: 'Has sumado ' + $scope.puntos + ' puntos'
-         });
-         dbarray.savePoints($scope.puntos, $scope.email);
+        dbarray.savePoints($scope.puntos, $scope.email);
          $state.go('menu.home');
         };  
         
