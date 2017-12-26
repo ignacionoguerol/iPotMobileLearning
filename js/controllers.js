@@ -66,35 +66,32 @@ function ($scope, $stateParams, $state) {
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams, $firebaseArray, $ionicUser, dbarray) {
     
-     var init = dbarray.init("usuarios");
-     $scope.usuarios = dbarray.loadArrayUsuarios("usuarios");
+     dbarray.init("usuarios");
+     $scope.preguntas = dbarray.getArray();
+       
+      /*// add new items to the array
+      // the message is automatically added to our Firebase database!
+      $scope.addPregunta = function() {
+        $firebaseArray(dbarray.getRef()).$add({
+            pregunta: $scope.data.pregunta,
+            respuestas: $scope.data.respuestas,
+            correcta: $scope.data.correcta,
+            
+        });
+        $scope.data.pregunta = '';
+        $scope.data.respuestas = '';
+        $scope.data.correcta = '';
+        $scope.preguntas = dbarray.getArray();
+      };*/
       
 
 }])
    
-.controller('profileCtrl', ['$scope', '$stateParams', '$ionicPopup', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('profileCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $ionicPopup) {
+function ($scope, $stateParams) {
 
-$scope.resetPassword = function(){
-    
-    firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-            firebase.auth().sendPasswordResetEmail(user.email);
-            $ionicPopup.alert({
-            title: 'Se ha enviado un email a  ' + $scope.email + '.'
-            });
-        }else{
-            $ionicPopup.alert({
-            title: 'No ha sido posible enviar la solicitud'
-            })  
-        }
-    })
-    
-    
-    
-}
 
 }])
    
@@ -150,6 +147,24 @@ function ($scope, $stateParams, $state) {
             });
         })
     }
+    
+    
+    
+    /*
+    if ($ionicAuth.isAuthenticated()) {
+        // Make sure the user data is going to be loaded
+        $ionicUser.load().then(function() {});
+        $state.go('menu.home'); 
+    }
+    
+    $scope.login = function(){
+        $scope.error = '';
+        $ionicAuth.login('basic', $scope.data).then(function(){
+            $state.go('menu.home');
+        }, function(){
+            $scope.error = 'Error logging in. Try Again!';
+        });
+    };*/
 
 }])
    

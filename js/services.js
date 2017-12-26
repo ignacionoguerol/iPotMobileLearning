@@ -154,6 +154,7 @@ function DBArray($firebaseArray, $timeout){
     }
     
     this.loadArrayUsuarios = function(campo){
+        console.log("Cargando Usuarios")
         var cuenta = [];
         array = $firebaseArray(ref[campo])
         array.$loaded().then(function(){
@@ -161,6 +162,8 @@ function DBArray($firebaseArray, $timeout){
                     cuenta.push(pregunta);
                 })
         });
+        console.log("Cargado Usuarios")
+        console.log(cuenta);
         return cuenta;
     }
     
@@ -200,19 +203,22 @@ function DBArray($firebaseArray, $timeout){
                 if(usuario.Email === email){
                    
                     var p = usuario.puntos;
+                    console.log('1: ' + p);
                     
                     if(p === "zero"){
                         p = puntos;
                     }else{
                         p = parseInt(p, 10) + puntos;
                     } 
+                    console.log('2: ' + p);
+                    console.log('3: ' + p);
                     ref["usuarios"].child(usuario.$id).update({"puntos" : p});
+                    console.log("Puntos añadidos: " + p);
                 }
             })
         
         }, waitTime);
     }
-    
 }
 
 
