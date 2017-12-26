@@ -2,7 +2,7 @@
   <ion-content padding="true" class="has-header">
     <div id="preguntas-container2" class="container">
       <form id="preguntas-form17" class="list">
-        <h5 id="preguntas-heading7" style="color:#000000;font-weight:lighter;text-align:center;">Ejercicio: {{contador}}/10 {{objeto.correcta}}</h5>
+        <h5 id="preguntas-heading7" style="color:#000000;font-weight:lighter;text-align:center;">Ejercicio: {{contador}}/10</h5>
         <h3 id="preguntas-heading8" style="color:#000000;font-weight:400;text-align:center;">{{objeto.pregunta}}</h3>
         <ion-radio id="preguntas-radio2" name="data" ng-model="objeto.selected" ng-value="respuesta" ng-repeat="respuesta in objeto.respuestas" ng-click="comprobar()" ng-disabled="resultado !== ''">{{respuesta}}</ion-radio>
       </form>

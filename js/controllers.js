@@ -659,10 +659,10 @@ function ($scope, $stateParams, $state, $timeout){
 
 ])
    
-.controller('preguntasCtrl', ['$scope', '$stateParams', '$state', '$timeout', '$firebaseArray', 'pregunta', 'dbarray', '$q', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('preguntasCtrl', ['$scope', '$stateParams', '$state', '$timeout', '$firebaseArray', 'pregunta', 'dbarray', '$q', '$ionicUser', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbarray, $q) {
+function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbarray, $q, $ionicUser) {
     
     //Se comprueba el tema o la modalidad especifica que se ha elegido.
     if($stateParams.temaSeleccionado !== ''){
@@ -681,21 +681,24 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
     
     $scope.preguntas = [];
     
-    dbarray.init("preguntas");
-
-    $scope.preguntas = dbarray.loadArray();
-
+    var init = dbarray.init("preguntas");
+    $scope.preguntas = dbarray.loadArray("preguntas");
+    
+    var waitTime;
+    
+    if (init === 0){
+        waitTime = 2000;
+    }else if (init === 1){
+        waitTime = 0;
+    }
+    
+    console.log("init: " + init + " - tiempo: " + waitTime);
+    
      $timeout(function() {
-        console.log("promises");
-        console.log($scope.preguntas);
-        
         var random = Math.floor(Math.random() * ($scope.preguntas.length));
-        console.log("Random: " + random);
+        console.log(random);
         pregunta.init($scope.preguntas[random]);
     
-        console.log($scope.preguntas[1]);
-        console.log($scope.preguntas[1].pregunta);
-        
         //Variables propias de cada pregunta
         $scope.objeto = {
             pregunta : pregunta.getPregunta(),
@@ -708,7 +711,7 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
         
         $scope.resultado = '';
 
-    }, 3000);
+    }, waitTime);
     
     
     
@@ -745,8 +748,10 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
         
          if ($scope.objeto.selected === $scope.objeto.correcta){
              $scope.resultado = 'Correcto!';
+             dbarray.submitJugada(pregunta.getId(), 1, $ionicUser.details.email, 1);
          }else{
              $scope.resultado = 'Has fallado!';
+             dbarray.submitJugada(pregunta.getId(), 0, $ionicUser.details.email, 1);
          }
             
         
@@ -755,11 +760,13 @@ function ($scope, $stateParams, $state, $timeout, $firebaseArray, pregunta, dbar
     /////////////////////////////////////////////////////////  
     /////////////////////////Temporizador/////////////////////// 
       
-      $scope.counter = 30;
+      $scope.counter = 15;
     
     $scope.onTimeout = function() {
         if($scope.counter ===  0) {
             $scope.stopTimer();
+            // Apunta error si se acaba el tiempo
+            dbarray.submitJugada(pregunta.getId(), 0, $ionicUser.details.email, 1); 
             if($scope.contador<10){
             $scope.siguiente();
             }else{

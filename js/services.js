@@ -6,25 +6,19 @@ function Pregunta(){
         
     this.correcta = '';
     
+    this.id;
+    
     this.init = function(p){
-    console.log("init");
-    console.log(p);
+    
+    respuestas = [];
 
     this.pregunta = p.pregunta;
     angular.forEach(p.opciones, function(opcion) {
                     respuestas.push(opcion); 
-                    console.log(opcion);
                 })
+    this.correcta = p.correcta;
     
-    /*this.respuestas = [
-        {id: 'Mechanotherapy'},
-        {id: 'Hydrotherapy'},
-        {id: 'Kinesitherapy'},
-        {id: 'Electrotherapy'},
-        {id: 'All answers are correct'}
-        ];*/
-        
-    var correcta = 'All answers are correct';
+    this.id = p.$id;
     }
     
     this.getPregunta = function(){
@@ -38,6 +32,10 @@ function Pregunta(){
     this.getCorrecta = function(){
         return this.correcta;
     };
+    
+    this.getId = function(){
+        return this.id;
+    }
 }
 
 function Video(){
@@ -125,26 +123,26 @@ function Imagen(){
 function DBArray($firebaseArray){
     
     var cuenta = [];
-    
     var array;
-    
-    var ref;
+    var ref = [];
     
     this.init = function(campo){
-        
-        ref = firebase.database().ref().child(campo);
+        if(ref[campo] === undefined){
+        ref[campo] = firebase.database().ref().child(campo);
+        return 0;
+        }else{
+            return 1;
+        }
     }
     
-    this.loadArray = function(){
+    this.loadArray = function(campo){
         cuenta = [];
-        array = $firebaseArray(ref)
+        array = $firebaseArray(ref[campo])
         array.$loaded()
             .then(function(){
                  angular.forEach(array, function(pregunta) {
                     cuenta.push(pregunta);
-                })
-                
-            
+                }) 
         });
         return cuenta;
     }
@@ -155,6 +153,17 @@ function DBArray($firebaseArray){
     
     this.getRef =function(){
         return ref;
+    }
+    
+    this.submitJugada = function(idPreg, res, user, mod){
+        this.init("jugadas");
+        $firebaseArray(ref["jugadas"]).$add({
+            usuario: user,
+            idPregunta: idPreg,
+            resultado: res,
+            modalidad: mod
+        });
+        console.log("guardado");
     }
 }
 
