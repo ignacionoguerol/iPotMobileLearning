@@ -1,6 +1,8 @@
 
 \.DS_Store
 
+angular-tour-of-heroes
+
 Web/fire/src/environments/environment\.prod\.ts
 
 Web/fire/src/environments/environment\.ts

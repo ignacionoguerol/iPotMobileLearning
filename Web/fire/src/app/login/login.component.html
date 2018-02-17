@@ -1,0 +1,19 @@
+<mat-card class="card">
+	<form class="example-form">
+	
+	<mat-chip-list *ngIf="errorMessage" class="mat-chip-list-stacked">
+  		<mat-chip *ngFor="let chip of availableColors" selected="true" [color]="chip.color">
+    		{{errorMessage}}
+  		</mat-chip>
+	</mat-chip-list>
+	
+	<mat-form-field class="example-full-width">
+	    <input [(ngModel)]="email" matInput type="email" placeholder="User" name="user">
+	  </mat-form-field>
+	
+	  <mat-form-field class="example-full-width">
+	    <input [(ngModel)]="pass" matInput type="password" placeholder="Password" name="password">
+	  </mat-form-field>
+	  <button [disabled]="!(email != '' && pass != '')" (click)="login()" mat-raised-button color="primary">Log In</button>
+	</form>
+</mat-card>
