@@ -1,0 +1,57 @@
+<button *ngIf="!(nuevoGestor || modificarGestor)" class="mat-elevation-z8 add-button" (click)="newGestor()" mat-fab color="primary"><mat-icon mat-list-icon>add</mat-icon></button>
+
+<mat-card class="mat-elevation-z8 funciones" *ngIf="nuevoGestor">
+	<form class="example-form">
+	  <mat-form-field >
+	    <input [(ngModel)]="name" matInput placeholder="Name" name="name">
+	  </mat-form-field>
+	  <mat-form-field>
+	    <input [(ngModel)]="email"type="email" matInput placeholder="Email" name="email">
+	  </mat-form-field>
+	  <mat-form-field>
+	    <input [(ngModel)]="password" type="password" matInput placeholder="Password" name="pass">
+	  </mat-form-field>
+  	</form>
+  	<div>
+	  <button (click)="addGestor()" mat-raised-button color="primary">Añadir gestor</button>
+	  <button (click)="newGestor()" mat-raised-button color="primary">Cancelar</button>
+	</div>
+</mat-card>
+
+<mat-card class="mat-elevation-z8 funciones" *ngIf="modificarGestor">
+	<form class="example-form">
+	  <mat-form-field >
+	    <input [(ngModel)]="name" matInput placeholder="Name" name="name">
+	  </mat-form-field>
+  	</form>
+  	<div>
+	  <button  mat-raised-button color="primary">Renombrar</button>
+	  <button (click)="modifyGestor()" mat-raised-button color="primary">Cancelar</button>
+	</div>
+</mat-card>
+
+<mat-card class="example-container mat-elevation-z8 lista">
+	<mat-progress-bar *ngIf="!gestoresList.length" mode="query"></mat-progress-bar>
+	<mat-list class="cabecera" *ngIf="gestoresList.length">
+		<mat-list-item role="listitem" >
+		  	<h3 class="name">Nombre</h3> 
+		  	<mat-divider [vertical]="true"></mat-divider>
+		  	<h3 class="email">Email</h3>
+		 </mat-list-item>
+		 <mat-divider></mat-divider>
+	</mat-list>
+	<mat-list class="lista" role="list" *ngFor="let gestor of gestoresList">
+	  	<mat-list-item role="listitem" >
+		  	<h4 class="name">{{ gestor.nombre}}</h4> 
+		  	<h4 class="email">{{gestor.email}}</h4>
+		  	<span class="spacer"></span>
+		  	<button  mat-raised-button color="primary" (click)="modifyGestor(gestor.nombre)"><mat-icon mat-list-icon>edit</mat-icon></button>
+		  	<button  mat-raised-button color="warn" (click)="deleteGestor(gestor.uid)"><mat-icon mat-list-icon>delete</mat-icon></button>
+		</mat-list-item>
+	  	<mat-divider [inset]="true"></mat-divider>
+	</mat-list>
+</mat-card>
+
+
+
+

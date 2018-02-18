@@ -1,19 +1,40 @@
-<mat-card class="card">
-	<form class="example-form">
+<!-- <mat-card class="card"> -->
+<!-- 	<form class="example-form"> -->
 	
+
+	
+<!-- 	<mat-form-field class="example-full-width"> -->
+<!-- 	    <input [(ngModel)]="email" matInput type="email" placeholder="User" name="user"> -->
+<!-- 	  </mat-form-field> -->
+	
+<!-- 	  <mat-form-field class="example-full-width"> -->
+<!-- 	    <input [(ngModel)]="pass" matInput type="password" placeholder="Password" name="password"> -->
+<!-- 	  </mat-form-field> -->
+<!-- 	  <button [disabled]="!(email != '' && pass != '')" (click)="login()" mat-raised-button color="primary">Log In</button> -->
+<!-- 	</form> -->
+<!-- </mat-card> -->
+
+<div>
+  <img src="../../assets/iPot.png">
+  <h3>By Ignacio Noguerol Sicilia</h3>
+</div>
+<form>
+
 	<mat-chip-list *ngIf="errorMessage" class="mat-chip-list-stacked">
   		<mat-chip *ngFor="let chip of availableColors" selected="true" [color]="chip.color">
     		{{errorMessage}}
   		</mat-chip>
 	</mat-chip-list>
-	
-	<mat-form-field class="example-full-width">
-	    <input [(ngModel)]="email" matInput type="email" placeholder="User" name="user">
-	  </mat-form-field>
-	
-	  <mat-form-field class="example-full-width">
-	    <input [(ngModel)]="pass" matInput type="password" placeholder="Password" name="password">
-	  </mat-form-field>
-	  <button [disabled]="!(email != '' && pass != '')" (click)="login()" mat-raised-button color="primary">Log In</button>
-	</form>
-</mat-card>
+  <div class="group">
+    <input [(ngModel)]="email" type="email" placeholder="email" name="user"><span class="highlight"></span><span class="bar"></span>
+  </div>
+  <div class="group">
+    <input [(ngModel)]="pass" type="password" placeholder="password" name="password"><span class="highlight"></span><span class="bar"></span>
+  </div>
+  <button [disabled]="!(email != '' && pass != '')" (click)="login()" type="button" class="button buttonBlue">Log In
+    <div class="ripples buttonRipples"><span class="ripplesCircle"></span></div>
+  </button>
+
+
+</form>
+

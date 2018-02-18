@@ -13,7 +13,7 @@ export const firebaseConfig = environment.firebaseConfig;
 
 // Components
 import { LoginComponent } from './login/login.component';
-
+import { GestoresComponent } from './gestores/gestores.component';
 
 // Material
 import { MatInputModule } from '@angular/material/input';
@@ -26,16 +26,22 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import {MatTableModule} from '@angular/material/table';
+
+
 
 // Services
 import { LoginService } from './login.service';
+import { GestoresService } from './gestores.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    DashboardComponent
-  ],
+    DashboardComponent,
+    GestoresComponent  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -51,10 +57,14 @@ import { LoginService } from './login.service';
     MatChipsModule,
     MatMenuModule,
     MatIconModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatListModule,
+    MatProgressBarModule,
+    MatTableModule
   ],
   providers: [
-    LoginService
+    LoginService,
+    GestoresService
   ],
   bootstrap: [
     AppComponent

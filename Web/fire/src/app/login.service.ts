@@ -4,6 +4,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { User } from 'firebase';
 import { Observable } from 'rxjs/Observable';
 
+
 @Injectable()
 export class LoginService {
 
@@ -26,9 +27,26 @@ export class LoginService {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password);
   }
 
+  emailSignUp(email: string, password: string) {
+    return this.afAuth.auth.createUserWithEmailAndPassword(email, password);
+  }
+
+  deleteUser(uid: string) {
+    return null;
+  }
+
+
   checkSession() {
     this.afAuth.authState.subscribe(userData => this.usuario = userData);
     return this.usuario;
+  }
+
+  logout() {
+    return this.afAuth.auth.signOut();
+  }
+
+  gitUser() {
+    return this.afAuth.auth.currentUser;
   }
 
   // If error, console log and notify user

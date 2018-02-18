@@ -1,1 +1,29 @@
-<p>DASHBOARD</p>
+<mat-sidenav-container class="">
+  <mat-sidenav mode="side" opened>
+  	<a  (click)="showGestores()" class="docs-button  mat-button"  mat-button="" tabindex="0" aria-disabled="false">
+		<span class="mat-button-wrapper">Gestores</span>
+	</a>
+	<mat-divider></mat-divider>
+	<a  (click)="showGestores()" class="docs-button  mat-button"  mat-button="" tabindex="0" aria-disabled="false">
+		<span class="mat-button-wrapper">Cursos</span>
+	</a>
+	<mat-divider></mat-divider>
+  </mat-sidenav>
+  <mat-sidenav-content class="padding-to-side-nav">
+  	<mat-toolbar class="top" color="primary">
+		<nav>
+		<h5>iPot Mobile Learning</h5> <span class="spacer"></span> <h2>{{section}}</h2>
+		<span class="spacer"></span>
+		<a  (click)="logout()" class="docs-button docs-navbar-hide-small mat-button"  mat-button="" tabindex="0" aria-disabled="false">
+			<span class="mat-button-wrapper">Log Out</span>
+		</a>
+		</nav>
+	</mat-toolbar>
+ 	<app-gestores *ngIf="gestores"></app-gestores>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+
+
+
+
