@@ -42,6 +42,9 @@ export class GestoresComponent implements OnInit {
       this.nuevoGestor = false;
     } else {
       this.nuevoGestor = true;
+      this.modificarGestor = false;
+      this.email = '';
+      this.name = '';
     }
   }
 
@@ -51,6 +54,7 @@ export class GestoresComponent implements OnInit {
       this.name = '';
     } else {
       this.modificarGestor = true;
+      this.nuevoGestor = false;
       this.email = email;
       this.name = name;
     }

@@ -1,9 +1,9 @@
-<mat-card class="mat-elevation-z2 list-card">
+<mat-card class="mat-elevation-z2 list-card mat-typography">
 	<mat-progress-bar *ngIf="!gestoresList.length" mode="query"></mat-progress-bar>
 	
 	<form class="cabecera" *ngIf="gestoresList.length">
 	  <mat-form-field class="campo-busqueda">
-	    <input  [(ngModel)]="filter" matInput placeholder="Búsqueda por nombre o email" value="" name="search">
+	    <input [(ngModel)]="filter" matInput placeholder="Búsqueda por nombre o email" value="" name="search">
 	  </mat-form-field>
 	  <button (click)="newGestor()" mat-raised-button color="primary">AGREGAR GESTOR</button>
 	</form>
@@ -13,7 +13,6 @@
 	<mat-list class="cabecera" *ngIf="gestoresList.length">
 		<mat-list-item role="listitem" >
 		  	<h3 class="name">Nombre</h3> 
-		  	<mat-divider [vertical]="true"></mat-divider>
 		  	<h3 class="email">Email</h3>
 		 </mat-list-item>
 		 <mat-divider></mat-divider>
@@ -43,7 +42,7 @@
 		  	<p class="name">{{ gestor.nombre}}</p> 
 		  	<p class="email">{{gestor.email}}</p>
 		  	<span class="spacer"></span>
-		  	<button  mat-raised-button color="primary" (click)="modifyGestor(gestor.nombre, gestor.email)"><mat-icon mat-list-icon>edit</mat-icon></button>
+		  	<button  mat-raised-button color="basic" (click)="modifyGestor(gestor.nombre, gestor.email)"><mat-icon mat-list-icon>edit</mat-icon></button>
 		  	<button  mat-raised-button color="warn" (click)="deleteGestor(gestor.uid)"><mat-icon mat-list-icon>delete</mat-icon></button>
 		  	<mat-divider [inset]="true"></mat-divider>
 		</mat-list-item>

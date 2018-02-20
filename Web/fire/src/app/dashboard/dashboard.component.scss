@@ -20,13 +20,19 @@ nav {
     padding: 8px 16px;
 }
 
-a {
+a{
   padding: 0 14px;
+}
+
+mat-toolbar p{
+	margin-top: 0.5%;
+	
 }
 
 .spacer {
   flex: 1 1 auto;
 }
+
 
 mat-tab-group{
 	position: absolute;

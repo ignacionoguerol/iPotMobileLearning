@@ -10,9 +10,11 @@ import { Gestor } from './gestor';
 export class GestoresService {
 
   array = [];
-  constructor(private db: AngularFireDatabase, private loginService: LoginService) {}
+  constructor(private db: AngularFireDatabase, private loginService: LoginService) {
+    this.loadList();
+  }
 
-  getList() {
+  loadList() {
     const self = this;
     self.array = [];
     this.db.list('/gestores').valueChanges().subscribe(gestores => {
@@ -23,6 +25,10 @@ export class GestoresService {
       });
     });
     return self.array;
+  }
+
+  getList() {
+    return this.array;
   }
 
   addGestor(name: string, email: string, password: string) {
@@ -48,6 +54,16 @@ export class GestoresService {
   deleteGestorData(uid: string) {
     const url = 'gestores/' + uid;
     this.db.object(url).remove();
+  }
+  
+  getGestorName(uid: string) {
+     let nombre = uid;
+     this.array.forEach(gestor => {
+      if (gestor.uid === uid) {
+        nombre = gestor.nombre;
+      }
+    });
+    return nombre;
   }
 
 }
