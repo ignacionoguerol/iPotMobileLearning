@@ -1,5 +1,14 @@
 mat-card{
 	margin: 4%;
+	padding: 0;
+}
+
+
+.list{
+ 	overflow-y: auto;
+ 	height: auto;
+ 	max-height: 800px;
+ 	margin-bottom: 0;
 }
 
 mat-list-item{
@@ -27,4 +36,20 @@ button{
 	margin: 30px !important;
 	float: right;
 	z-index: 1;
+}
+.cabecera{
+	background-color: #f5f5f5;
+	margin: 0 !important;
+	padding: 0 !important; 
+}
+
+.campo-busqueda{
+	margin-left: 30%;
+	margin-top: 1%;
+	margin-right: 10%;
+	width: 40% !important; 
+}
+
+.funciones{
+	
 }

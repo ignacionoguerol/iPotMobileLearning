@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../login.service';
 import { Router } from '@angular/router';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,25 +10,15 @@ import { Router } from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
 
-  gestores: boolean;
-  section;
-
-  constructor(private loginService: LoginService, private router: Router) {
-    this.gestores = false;
-    this.section = '';
+  admin: boolean;
+  gestor: boolean;
+  constructor(private loginService: LoginService, private router: Router, private afAuth: AngularFireAuth) {
+    this.admin = false;
+    this.gestor = true;
+    this.soyAdmin();
   }
 
   ngOnInit() {
-  }
-
-  showGestores() {
-    if (this.gestores) {
-      this.resetName();
-      this.gestores = false;
-    } else {
-      this.changeName('Gestores');
-      this.gestores = true;
-    }
   }
 
   logout() {
@@ -36,14 +27,12 @@ export class DashboardComponent implements OnInit {
       self.router.navigateByUrl('/login');
     });
   }
-  
-  resetName() {
-    this.section = '';
-  }
-  
-  changeName(name: string) {
-    this.section = name;
-  }
 
+  soyAdmin() {
+    this.loginService.soyAdmin().subscribe(res => {
+      this.admin = (res === this.afAuth.auth.currentUser.uid);
+      console.log('ADMINISTRADOR = ' + this.admin);
+    });
+  }
 
 }

@@ -1,27 +1,21 @@
-<mat-sidenav-container class="">
-  <mat-sidenav mode="side" opened>
-  	<a  (click)="showGestores()" class="docs-button  mat-button"  mat-button="" tabindex="0" aria-disabled="false">
-		<span class="mat-button-wrapper">Gestores</span>
+<mat-toolbar class="mat-elevation-z4" color="primary" >
+	<nav>
+	<h5>iPot Mobile Learning</h5>
+	<span class="spacer"></span>
+	<h4 *ngIf="admin">Administrador</h4>
+	<a  (click)="logout()" class="docs-button docs-navbar-hide-small mat-button"  mat-button="" tabindex="0" aria-disabled="false">
+		<span class="mat-button-wrapper">Log Out</span>
 	</a>
-	<mat-divider></mat-divider>
-	<a  (click)="showGestores()" class="docs-button  mat-button"  mat-button="" tabindex="0" aria-disabled="false">
-		<span class="mat-button-wrapper">Cursos</span>
-	</a>
-	<mat-divider></mat-divider>
-  </mat-sidenav>
-  <mat-sidenav-content class="padding-to-side-nav">
-  	<mat-toolbar class="top" color="primary">
-		<nav>
-		<h5>iPot Mobile Learning</h5> <span class="spacer"></span> <h2>{{section}}</h2>
-		<span class="spacer"></span>
-		<a  (click)="logout()" class="docs-button docs-navbar-hide-small mat-button"  mat-button="" tabindex="0" aria-disabled="false">
-			<span class="mat-button-wrapper">Log Out</span>
-		</a>
-		</nav>
-	</mat-toolbar>
- 	<app-gestores *ngIf="gestores"></app-gestores>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+	</nav>
+</mat-toolbar>
+
+<mat-tab-group class="mat-elevation-z2"> 
+ 		<mat-tab label="Gestores" *ngIf="admin === true"><app-gestores></app-gestores></mat-tab>
+ 		<mat-tab label="Cursos" *ngIf="admin === true">Cursos</mat-tab>
+ 		<mat-tab label="Alumnos" *ngIf="admin === false">Alumnos</mat-tab>
+ 		<mat-tab label="Modulos" *ngIf="admin === false">Módulos</mat-tab>
+</mat-tab-group>
+
 
 
 

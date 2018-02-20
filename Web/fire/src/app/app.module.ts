@@ -15,7 +15,7 @@ export const firebaseConfig = environment.firebaseConfig;
 import { LoginComponent } from './login/login.component';
 import { GestoresComponent } from './gestores/gestores.component';
 
-// Material
+// Angular Material
 import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
@@ -23,25 +23,30 @@ import { MatButtonModule } from '@angular/material/button';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import {MatTableModule} from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
 
-
+// Pipes
+import {FilterGestor} from './filterGestorPipe';
 
 // Services
 import { LoginService } from './login.service';
 import { GestoresService } from './gestores.service';
+import { DialogComponent } from './dialog/dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     DashboardComponent,
-    GestoresComponent  ],
+    GestoresComponent,
+    FilterGestor,
+    DialogComponent,
+    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -55,12 +60,12 @@ import { GestoresService } from './gestores.service';
     NoopAnimationsModule,
     FormsModule,
     MatChipsModule,
-    MatMenuModule,
     MatIconModule,
-    MatSidenavModule,
     MatListModule,
     MatProgressBarModule,
-    MatTableModule
+    MatTabsModule,
+    MatSnackBarModule,
+    MatDialogModule
   ],
   providers: [
     LoginService,
@@ -68,6 +73,9 @@ import { GestoresService } from './gestores.service';
   ],
   bootstrap: [
     AppComponent
-  ]
+  ],
+  entryComponents: [
+    DialogComponent
+    ]
 })
 export class AppModule { }

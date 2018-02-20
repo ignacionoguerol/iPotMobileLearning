@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireDatabase } from 'angularfire2/database';
 import { User } from 'firebase';
 import { Observable } from 'rxjs/Observable';
 
@@ -12,7 +13,8 @@ export class LoginService {
   user: Observable<User | null>;
 
   constructor(private afAuth: AngularFireAuth,
-              private router: Router) {
+              private router: Router,
+              private db: AngularFireDatabase) {
     this.user = this.afAuth.authState
       .switchMap((user) => {
         if (user) {
@@ -47,6 +49,11 @@ export class LoginService {
 
   gitUser() {
     return this.afAuth.auth.currentUser;
+  }
+
+  soyAdmin() {
+    const self = this;
+    return this.db.object('/administrador').valueChanges();
   }
 
   // If error, console log and notify user

@@ -1,37 +1,15 @@
-<button *ngIf="!(nuevoGestor || modificarGestor)" class="mat-elevation-z8 add-button" (click)="newGestor()" mat-fab color="primary"><mat-icon mat-list-icon>add</mat-icon></button>
-
-<mat-card class="mat-elevation-z8 funciones" *ngIf="nuevoGestor">
-	<form class="example-form">
-	  <mat-form-field >
-	    <input [(ngModel)]="name" matInput placeholder="Name" name="name">
-	  </mat-form-field>
-	  <mat-form-field>
-	    <input [(ngModel)]="email"type="email" matInput placeholder="Email" name="email">
-	  </mat-form-field>
-	  <mat-form-field>
-	    <input [(ngModel)]="password" type="password" matInput placeholder="Password" name="pass">
-	  </mat-form-field>
-  	</form>
-  	<div>
-	  <button (click)="addGestor()" mat-raised-button color="primary">Añadir gestor</button>
-	  <button (click)="newGestor()" mat-raised-button color="primary">Cancelar</button>
-	</div>
-</mat-card>
-
-<mat-card class="mat-elevation-z8 funciones" *ngIf="modificarGestor">
-	<form class="example-form">
-	  <mat-form-field >
-	    <input [(ngModel)]="name" matInput placeholder="Name" name="name">
-	  </mat-form-field>
-  	</form>
-  	<div>
-	  <button  mat-raised-button color="primary">Renombrar</button>
-	  <button (click)="modifyGestor()" mat-raised-button color="primary">Cancelar</button>
-	</div>
-</mat-card>
-
-<mat-card class="example-container mat-elevation-z8 lista">
+<mat-card class="mat-elevation-z2 list-card">
 	<mat-progress-bar *ngIf="!gestoresList.length" mode="query"></mat-progress-bar>
+	
+	<form class="cabecera" *ngIf="gestoresList.length">
+	  <mat-form-field class="campo-busqueda">
+	    <input  [(ngModel)]="filter" matInput placeholder="Búsqueda por nombre o email" value="" name="search">
+	  </mat-form-field>
+	  <button (click)="newGestor()" mat-raised-button color="primary">AGREGAR GESTOR</button>
+	</form>
+	<mat-divider></mat-divider>
+
+	
 	<mat-list class="cabecera" *ngIf="gestoresList.length">
 		<mat-list-item role="listitem" >
 		  	<h3 class="name">Nombre</h3> 
@@ -40,18 +18,37 @@
 		 </mat-list-item>
 		 <mat-divider></mat-divider>
 	</mat-list>
-	<mat-list class="lista" role="list" *ngFor="let gestor of gestoresList">
-	  	<mat-list-item role="listitem" >
-		  	<h4 class="name">{{ gestor.nombre}}</h4> 
-		  	<h4 class="email">{{gestor.email}}</h4>
+	<mat-list class="list" role="list" >
+		
+		<mat-list-item class="funciones" role="listitem" *ngIf="nuevoGestor">
+		    <input class="name" [(ngModel)]="name" matInput placeholder="Name" name="name">
+		    <input class="email" [(ngModel)]="email"type="email" matInput placeholder="Email" name="email">
 		  	<span class="spacer"></span>
-		  	<button  mat-raised-button color="primary" (click)="modifyGestor(gestor.nombre)"><mat-icon mat-list-icon>edit</mat-icon></button>
-		  	<button  mat-raised-button color="warn" (click)="deleteGestor(gestor.uid)"><mat-icon mat-list-icon>delete</mat-icon></button>
+		  	<button [disabled]="!(email != '' && name != '')" (click)="addGestor()" mat-raised-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>
+		  	<button (click)="newGestor()" mat-raised-button color=""><mat-icon mat-list-icon>cancel</mat-icon></button>
+		  	<mat-divider></mat-divider>
 		</mat-list-item>
-	  	<mat-divider [inset]="true"></mat-divider>
+		
+		<mat-list-item class="funciones" role="listitem" *ngIf="modificarGestor">
+		    <input class="name" [(ngModel)]="name" matInput placeholder="Name" name="name">
+		    <input [disabled]="true" class="email" [(ngModel)]="email" matInput placeholder="Email" name="email">
+		  	<span class="spacer"></span>
+		  	<button [disabled]="name == ''" mat-raised-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>
+		  	<button (click)="modifyGestor()" mat-raised-button color=""><mat-icon mat-list-icon>cancel</mat-icon></button>
+		  	<mat-divider></mat-divider>
+		</mat-list-item>
+	
+	
+		<mat-list-item role="listitem" *ngFor="let gestor of (gestoresList | FilterGestor: filter)">
+		  	<p class="name">{{ gestor.nombre}}</p> 
+		  	<p class="email">{{gestor.email}}</p>
+		  	<span class="spacer"></span>
+		  	<button  mat-raised-button color="primary" (click)="modifyGestor(gestor.nombre, gestor.email)"><mat-icon mat-list-icon>edit</mat-icon></button>
+		  	<button  mat-raised-button color="warn" (click)="deleteGestor(gestor.uid)"><mat-icon mat-list-icon>delete</mat-icon></button>
+		  	<mat-divider [inset]="true"></mat-divider>
+		</mat-list-item>
 	</mat-list>
 </mat-card>
-
 
 
 

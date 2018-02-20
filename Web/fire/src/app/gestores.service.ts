@@ -9,18 +9,20 @@ import { Gestor } from './gestor';
 @Injectable()
 export class GestoresService {
 
+  array = [];
   constructor(private db: AngularFireDatabase, private loginService: LoginService) {}
 
   getList() {
     const self = this;
-    const array = [];
+    self.array = [];
     this.db.list('/gestores').valueChanges().subscribe(gestores => {
+      self.array.length = 0;
       gestores.forEach(action => {
         const obj: Gestor = JSON.parse(JSON.stringify(action));
-        array.push(obj);
+        self.array.push(obj);
       });
     });
-    return array;
+    return self.array;
   }
 
   addGestor(name: string, email: string, password: string) {
