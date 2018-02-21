@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "ipot-mobile-learning"
+    "default": "ipot-mobile-learning",
+    "ipot": "ipot-mobile-learning"
   }
 }
