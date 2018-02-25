@@ -9,6 +9,8 @@ import { Data } from '@angular/router';
 import { User } from 'firebase';
 import { Observable } from 'rxjs/';
 import { filter } from 'rxjs/operators';
+import { HttpResponse } from 'selenium-webdriver/http';
+import { LoginService } from '../login.service';
 
 /**
  * @title Snack-bar with a custom component
@@ -26,15 +28,20 @@ export class GestoresComponent implements OnInit {
   gestoresList: Gestor[];
   name: string;
   email: string;
-  password: string;
   filter: string;
-  
+  uid: string;
+  loading: boolean;
+  tooltipPosition: string;
+
   constructor(private gestoresService: GestoresService, public snackBar: MatSnackBar, public dialog: MatDialog) {
     this.nuevoGestor = false;
     this.modificarGestor = false;
     this.getList();
     this.name = '';
     this.email = '';
+    this.uid = '';
+    this.loading = false;
+    this.tooltipPosition = 'right';
    }
 
   newGestor() {
@@ -48,15 +55,18 @@ export class GestoresComponent implements OnInit {
     }
   }
 
-  modifyGestor(name: string, email: string) {
+  modifyGestor(uid: string, name: string, email: string) {
     if (this.modificarGestor) {
       this.modificarGestor = false;
       this.name = '';
+      this.email = '';
+      this.uid = '';
     } else {
       this.modificarGestor = true;
       this.nuevoGestor = false;
-      this.email = email;
       this.name = name;
+      this.email = email;
+      this.uid = uid;
     }
   }
 
@@ -65,12 +75,16 @@ export class GestoresComponent implements OnInit {
   }
 
   addGestor() {
-    this.gestoresService.addGestor(this.name, this.email, '124wqerQWE');
-    this.openSnackBar(this.name + ' añadido con éxtio!', '');
+    this.loading = true;
+    this.gestoresService.addGestor(this.name, this.email).subscribe(res => {
+      this.openSnackBar(this.name + ' añadido con éxito!', '');
+      }
+    );
+
     this.name = '';
     this.email = '';
-    this.password = '';
     this.newGestor();
+    this.loading = false;
     }
 
   deleteGestor(uid: string) {
@@ -83,14 +97,32 @@ export class GestoresComponent implements OnInit {
 
     dialog.afterClosed().subscribe(result => {
       if (result) {
-        this.gestoresService.deleteGestor(uid);
+        this.gestoresService.deleteGestor(uid).subscribe(resp => console.log(resp));
         this.openSnackBar('Eliminado con éxito!', 'OK');
       }
     });
   }
 
+  updateGestor() {
+    console.log('update ' + this.uid + ' nombre: ' + this.name);
+    this.gestoresService.modificarGestor(this.uid, this.name).then(result => {
+        this.openSnackBar('Modificado con éxito!', 'OK');
+        this.uid = '';
+        this.modifyGestor('', '', '');
+      });
+  }
+
 
   ngOnInit() {
+  }
+
+  isValidMailFormat() {
+    const EMAIL_REGEXP = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    return EMAIL_REGEXP.test(this.email);
+  }
+
+  itsMe(email: string) {
+    return this.gestoresService.istMe(email);
   }
 
   openSnackBar(message: string, action: string) {

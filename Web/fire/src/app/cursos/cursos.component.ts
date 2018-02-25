@@ -7,6 +7,7 @@ import { CursosService } from '../cursos.service';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Index } from '@firebase/database/dist/esm/src/core/snap/indexes';
 
 @Component({
   selector: 'app-cursos',
@@ -20,9 +21,11 @@ export class CursosComponent implements OnInit {
   modificarCurso: boolean;
   cursosList: Curso[];
   gestoresList: Gestor[];
+  gestoresListForSelect: Gestor[];
   filter: string;
   name: string;
   gestor: string;
+  oldGestor: string;
   id: number;
 
   constructor(private gestoresService: GestoresService,
@@ -34,6 +37,7 @@ export class CursosComponent implements OnInit {
     this.getList();
     this.name = '';
     this.gestor = '';
+    this.oldGestor = '';
     this.id = -2;
     this.getListGestores();
    }
@@ -46,6 +50,9 @@ export class CursosComponent implements OnInit {
       this.gestor = '';
       this.id = -3;
     } else {
+      this.name = '';
+      this.gestor = '';
+      this.id = -3;
       this.nuevoCurso = true;
       this.modificarCurso = false;
     }
@@ -54,12 +61,17 @@ export class CursosComponent implements OnInit {
   modifyCurso(id: number, name: string, gestor: string) {
     if (this.modificarCurso) {
       this.modificarCurso = false;
+      this.name = '';
+      this.oldGestor = this.gestor = '';
+      this.id = -4;
     } else {
       this.modificarCurso = true;
       this.nuevoCurso = false;
       this.name = name;
-      this.gestor = gestor;
+      this.oldGestor = this.gestor = gestor;
       this.id = id;
+
+      console.log('gestor :' + this.gestor);
     }
   }
 
@@ -73,22 +85,24 @@ export class CursosComponent implements OnInit {
   }
 
   getListGestores() {
-    this.gestoresList = this.gestoresService.getList();
+    this.gestoresListForSelect = this.gestoresList = this.gestoresService.getList();
   }
 
   addCurso() {
-    this.cursosService.addCurso(this.cursosList.length + 1, this.name, this.gestor);
+    this.cursosService.addCurso(this.name, this.gestor);
     this.openSnackBar(this.name + ' ha sido añadido con éxito!', 'OK');
     this.newCurso();
     }
 
   editCurso() {
-    this.cursosService.modifyCurso(this.id, this.name, this.gestor);
+    console.log('Gestor: ' + this.gestor);
+    console.log('OldGestor: ' + this.oldGestor);
+    this.cursosService.modifyCurso(this.id, this.name, this.gestor, this.oldGestor);
     this.modifyCurso(-4, '', '');
     this.openSnackBar(this.name + ' ha sido modificado con éxito!', 'OK');
   }
 
-  deleteCurso(id: number) {
+  deleteCurso(curso: Curso) {
     const dialog = this.dialog.open(DialogComponent, {
       data: {
         mensaje: '¿Está seguro de que desea eliminar el curso?',
@@ -98,12 +112,11 @@ export class CursosComponent implements OnInit {
 
     dialog.afterClosed().subscribe(result => {
       if (result) {
-        this.cursosService.deleteCurso(id);
+        this.cursosService.deleteCurso(curso);
         this.openSnackBar('Eliminado con éxito!', 'OK');
       }
     });
   }
-
 
   ngOnInit() {
   }

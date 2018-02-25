@@ -3,6 +3,7 @@
 	<h1>iPot Mobile Learning</h1>
 	<span class="spacer"></span>
 	<p class="admin" *ngIf="admin">Administrador</p>
+  <p class="admin" *ngIf="gestor">Gestor</p>
 	<span class="spacer"></span>
 	<a (click)="logout()" class="docs-button docs-navbar-hide-small mat-button mat-body-1"  mat-button="" tabindex="0" aria-disabled="false">
 		<span class="mat-button-wrapper">Log Out</span>
@@ -10,12 +11,13 @@
 	</nav>
 </mat-toolbar>
 
-<mat-tab-group class="mat-elevation-z2 mat-typography"> 
+<mat-tab-group class="mat-elevation-z2 mat-typography">
  		<mat-tab label="Gestores" *ngIf="admin === true"><app-gestores></app-gestores></mat-tab>
  		<mat-tab label="Cursos" *ngIf="admin === true"><app-cursos></app-cursos></mat-tab>
-<!--  		<mat-tab label="Alumnos" *ngIf="admin === false">Alumnos</mat-tab> -->
-<!--  		<mat-tab label="Modulos" *ngIf="admin === false">Módulos</mat-tab> -->
+    <mat-tab label="Alumnos" *ngIf="gestor === true"><app-alumnos></app-alumnos></mat-tab>
+    <!--<mat-tab label="Modulos" *ngIf="gestor === true">Módulos</mat-tab>-->
 </mat-tab-group>
+
 
 
 

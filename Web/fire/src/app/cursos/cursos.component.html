@@ -23,7 +23,7 @@
 		<mat-list-item class="funciones" role="listitem" *ngIf="nuevoCurso">
 		    <input class="name" [(ngModel)]="name" matInput placeholder="Nombre" name="name">
 		    <mat-select [(value)]="gestor" class="email" placeholder="Gestor"> 
-    			<mat-option  *ngFor="let gestor of gestoresList" [value]="gestor.uid">{{gestor.nombre}}</mat-option>
+    			<mat-option  *ngFor="let gestor of (gestoresListForSelect | FilterGestorNoAsignado: gestor)" [value]="gestor.uid">{{gestor.nombre}}</mat-option>
   			</mat-select>
 		  	<span class="spacer"></span>
 		  	<button [disabled]="!(gestor != '' && name != '')" (click)="addCurso()" mat-raised-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>
@@ -33,7 +33,9 @@
 		
 		<mat-list-item class="funciones" role="listitem" *ngIf="modificarCurso">
 		    <input class="name" [(ngModel)]="name" matInput placeholder="Name" name="name">
-		    <input class="email" [(ngModel)]="gestor" matInput placeholder="gestor" name="gestor">
+		    <mat-select [(value)]="gestor" class="email" placeholder="{{getGestorName(gestor)}}"> 
+    			<mat-option  *ngFor="let gestor of (gestoresListForSelect | FilterGestorNoAsignado: gestor)" [value]="gestor.uid">{{gestor.nombre}}</mat-option>
+  			</mat-select>
 		  	<span class="spacer"></span>
 		  	<button (click)="editCurso()" [disabled]="name == ''" mat-raised-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>
 		  	<button (click)="modifyCurso()" mat-raised-button color=""><mat-icon mat-list-icon>cancel</mat-icon></button>
@@ -46,7 +48,7 @@
 		  	<p class="email">{{getGestorName(curso.gestor)}}</p>
 		  	<span class="spacer"></span>
 		  	<button  mat-raised-button color="basic" (click)="modifyCurso(curso.id, curso.nombre, curso.gestor)"><mat-icon mat-list-icon>edit</mat-icon></button>
-		  	<button  mat-raised-button color="warn" (click)="deleteCurso(curso.id)"><mat-icon mat-list-icon>delete</mat-icon></button>
+		  	<button  mat-raised-button color="warn" (click)="deleteCurso(curso)"><mat-icon mat-list-icon>delete</mat-icon></button>
 		  	<mat-divider [inset]="true"></mat-divider>
 		</mat-list-item>
 	</mat-list>

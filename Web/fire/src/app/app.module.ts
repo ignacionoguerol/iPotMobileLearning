@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 // Firebase
 import { AngularFireModule } from 'angularfire2';
@@ -30,10 +31,14 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectModule } from '@angular/material/select';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 
 // Pipes
 import { FilterGestor } from './filterGestorPipe';
 import { FilterCurso } from './filterCursoPipe';
+import { FilterGestorNoAsignado } from './filterGestorNoAsignadoPipe';
 
 // Services
 import { LoginService } from './login.service';
@@ -41,6 +46,7 @@ import { GestoresService } from './gestores.service';
 import { DialogComponent } from './dialog/dialog.component';
 import { CursosComponent } from './cursos/cursos.component';
 import { CursosService } from './cursos.service';
+import { AlumnosComponent } from './alumnos/alumnos.component';
 
 @NgModule({
   declarations: [
@@ -50,11 +56,14 @@ import { CursosService } from './cursos.service';
     GestoresComponent,
     FilterGestor,
     FilterCurso,
+    FilterGestorNoAsignado,
     DialogComponent,
     CursosComponent,
+    AlumnosComponent
     ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
@@ -72,7 +81,9 @@ import { CursosService } from './cursos.service';
     MatTabsModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatSelectModule
+    MatSelectModule,
+    MatAutocompleteModule,
+    MatTooltipModule
   ],
   providers: [
     LoginService,

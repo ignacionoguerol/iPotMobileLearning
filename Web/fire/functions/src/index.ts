@@ -18,23 +18,34 @@ exports.addMessage = functions.https.onRequest((req, res) => {
       // Redirect with 303 SEE OTHER to the URL of the pushed object in the Firebase console.
       res.redirect(303, snapshot.ref);
     });
-  });
+  })
 
 exports.addGestor = functions.https.onRequest((req, res) => {
     const email = req.query.email;
     const name = req.query.name;
+
     const password = generator.generate({length: 20, numbers:true, symbols: true, strict: true });
-        admin.auth().createUser({
+    admin.auth().createUser({
         email: email,
         password:  password
     }).then(userRecord => {
         const data = {
             nombre: name,
             email: email,
-            uid: userRecord.uid
+            uid: userRecord.uid,
+            curso: ''
         };
         admin.database().ref('/gestores').child(data.uid).set(data).then(snapshot => {
-            res.send();
-          });
+            res.status(200).send();
+          }).catch(error => console.log("error: " + error));
     }).catch(error => console.log("error: " + error));
 }); 
+
+exports.deleteGestor = functions.https.onRequest((req, res) => {
+    const uid = req.query.uid;
+    admin.auth().deleteUser(uid).then(userRecord => {
+        admin.database().ref('/gestores').child(uid).remove().then(r => {
+            res.status(200).send();
+          }).catch(error => console.log("error: " + error))
+    }).catch(error => console.log("error: " + error));
+});

@@ -4,13 +4,15 @@ import { Observable } from 'rxjs/';
 import { LoginService } from './login.service';
 import { User } from 'firebase';
 import { Gestor } from './gestor';
-
+import { HttpClient } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
+import { HttpResponse } from 'selenium-webdriver/http';
 
 @Injectable()
 export class GestoresService {
 
   array = [];
-  constructor(private db: AngularFireDatabase, private loginService: LoginService) {
+  constructor(private db: AngularFireDatabase, private loginService: LoginService, private http: HttpClient) {
     this.loadList();
   }
 
@@ -31,31 +33,39 @@ export class GestoresService {
     return this.array;
   }
 
-  addGestor(name: string, email: string, password: string) {
-    const self = this;
-    this.loginService.emailSignUp(email, password).then(credential => {
-        const url = 'gestores/' + credential.uid;
-        const data = {
-          nombre: name,
-          email: email,
-          uid: credential.uid
-      };
-      this.db.object(url).update(data).then(res => console.log(res));
-    }).catch(error => console.log(error));
+  modificarGestor(uid: string, name: string) {
+    const data = {
+      'nombre' : name
+    };
+   return this.db.object('/gestores/' + uid).update(data);
   }
 
-  deleteGestor(uid: string) {
-    const self = this;
-    // this.loginService.deleteUser(uid).then(function() {
-      self.deleteGestorData(uid);
-    // }).catch(error => console.log(error));
+  addGestor(name: string, email: string): Observable<HttpResponse> {
+    console.log('añadiendo gestor ' + name);
+    const URL = 'https://us-central1-ipot-mobile-learning.cloudfunctions.net/addGestor';
+    const data = {
+      'email': email,
+      'name': name
+    };
+
+    const ob: Observable<HttpResponse> = this.http.get(URL + '?name=' + name + '&email=' + email);
+    console.log('devuelvo observable');
+    console.log(data);
+    console.log(ob);
+    return ob;
   }
 
-  deleteGestorData(uid: string) {
-    const url = 'gestores/' + uid;
-    this.db.object(url).remove();
+  deleteGestor(uid: string): Observable<HttpResponse> {
+    const URL = 'https://us-central1-ipot-mobile-learning.cloudfunctions.net/deleteGestor';
+    const data = {
+      'uid': 'uid'
+    };
+    const ob: Observable<HttpResponse> = this.http.get(URL + '?uid=' + uid);
+    console.log('devuelvo observable');
+    console.log(ob);
+    return ob;
   }
-  
+
   getGestorName(uid: string) {
      let nombre = uid;
      this.array.forEach(gestor => {
@@ -65,5 +75,10 @@ export class GestoresService {
     });
     return nombre;
   }
+
+  istMe(email: string) {
+    return email === this.loginService.gitUser().email;
+  }
+
 
 }

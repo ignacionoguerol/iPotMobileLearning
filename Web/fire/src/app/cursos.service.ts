@@ -1,6 +1,7 @@
 import { Curso } from './curso';
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
+import generateId from './generateId';
 
 @Injectable()
 export class CursosService {
@@ -24,30 +25,35 @@ export class CursosService {
     });
     return self.array;
   }
-  
+
   getList() {
     return this.array;
   }
 
-  modifyCurso(id: number, name: string, gestor: string) {
+  modifyCurso(id: number, name: string, gestor: string, oldGestor: string) {
     const data = {
       nombre: name,
       gestor: gestor
     };
-    this.db.object('/cursos/' + id).update(data).then(res => console.log(res));
+    this.db.object('/cursos/' + id).update(data).then(res => console.log('curso modificado'));
+    this.db.object('/gestores/' + gestor).update({curso: id}).then(res => console.log('nuevo gestor modificado'));
+    this.db.object('/gestores/' + oldGestor).update({curso: ''}).then(res => console.log('viejo gestor modificado'));
   }
 
-  addCurso(id: number, name: string, gestor: string) {
+  addCurso(name: string, gestor: string) {
     const data = {
       nombre: name,
       gestor: gestor,
-      id: id
+      id: generateId(20)
     };
-    this.db.object('/cursos/' + id).update(data).then(res => console.log(res));
+    console.log('id: ' + data.id);
+    this.db.object('/cursos/' + data.id).update(data).then(res => console.log('curso añadido'));
+    this.db.object('/gestores/' + gestor).update({curso: data.id}).then(res => console.log('gestor modificado'));
   }
 
-  deleteCurso(id: number) {
-    this.db.object('cursos/' + id).remove().then(res => console.log(res));
+  deleteCurso(curso: Curso) {
+    this.db.object('cursos/' + curso.id).remove().then(res => console.log('curso eliminado'));
+    this.db.object('gestores/' + curso.gestor).update({curso: ''}).then(res => console.log('gestor modificado'));
   }
 
 }
