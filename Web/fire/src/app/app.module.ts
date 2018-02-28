@@ -43,6 +43,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FilterGestor } from './filterGestorPipe';
 import { FilterCurso } from './filterCursoPipe';
 import { FilterGestorNoAsignado } from './filterGestorNoAsignadoPipe';
+import { FilterAlumnosGestor } from './filterAlumnosGestor';
+import { FilterAlumno } from './filterAlumno';
 
 // Services
 import { LoginService } from './login.service';
@@ -60,6 +62,8 @@ import { CursosService } from './cursos.service';
     FilterGestor,
     FilterCurso,
     FilterGestorNoAsignado,
+    FilterAlumnosGestor,
+    FilterAlumno,
     DialogComponent,
     CursosComponent,
     AlumnosComponent

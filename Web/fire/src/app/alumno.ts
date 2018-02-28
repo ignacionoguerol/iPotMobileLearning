@@ -5,5 +5,4 @@ export class Alumno {
   Grado: string;
   nick: string;
   puntos: number;
-
 }

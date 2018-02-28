@@ -12,6 +12,7 @@ import { HttpResponse } from 'selenium-webdriver/http';
 export class GestoresService {
 
   array = [];
+  gestor: Gestor;
   constructor(private db: AngularFireDatabase, private loginService: LoginService, private http: HttpClient) {
     this.loadList();
   }
@@ -27,6 +28,12 @@ export class GestoresService {
       });
     });
     return self.array;
+  }
+
+  loadGestor() {
+    const self = this;
+    const uid = this.loginService.gitUser().uid;
+    return this.db.object('/gestores/' + uid).valueChanges();
   }
 
   getList() {

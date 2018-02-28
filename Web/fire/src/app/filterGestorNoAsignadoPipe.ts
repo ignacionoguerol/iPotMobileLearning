@@ -6,8 +6,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class FilterGestorNoAsignado implements PipeTransform {
     transform(value: Gestor[], input: Gestor) {
-        console.log(value);
-        console.log(input);
         if (input) {
           return value.filter(function(element: Gestor) {
             return element.curso === '';

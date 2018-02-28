@@ -5,7 +5,7 @@
     <mat-form-field class="campo-busqueda">
       <input [(ngModel)]="filter" matInput placeholder="Búsqueda por nombre o email" value="" name="search">
     </mat-form-field>
-    <button (click)="newGestor()" mat-raised-button color="primary">AGREGAR ALUMNO</button>
+    <button (click)="newAlumno()" mat-raised-button color="primary">AGREGAR ALUMNO</button>
   </form>
   <mat-divider></mat-divider>
 
@@ -17,34 +17,36 @@
     </mat-list-item>
     <mat-divider></mat-divider>
   </mat-list>
-  <mat-list class="list" role="list" >
+  <mat-progress-bar *ngIf="!(gestor != undefined && alumnosList.length)" mode="query"></mat-progress-bar>
+  <mat-list *ngIf="gestor != undefined && alumnosList.length" class="list" role="list" >
 
-    <mat-list-item class="funciones" role="listitem" *ngIf="nuevoGestor">
-      <input class="name" [(ngModel)]="name" matInput placeholder="Name" name="name">
-      <input id="email" class="email" [(ngModel)]="email" type="email" matInput placeholder="Email" name="email">
+    <mat-list-item class="funciones" role="listitem" *ngIf="nuevoAlumno">
+      <input class="name" [(ngModel)]="alumno.Nombre" matInput placeholder="Name" name="name">
+      <input id="email" class="email" [(ngModel)]="alumno.Email" type="email" matInput placeholder="Email" name="email">
       <span class="spacer"></span>
-      <button [disabled]="!(email != '' && name != '' && isValidMailFormat())" (click)="addGestor()" mat-raised-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>
-      <button (click)="newGestor()" mat-raised-button color=""><mat-icon mat-list-icon>cancel</mat-icon></button>
+      <button [disabled]="!(alumno.Email != '' && alumno.Nombre != '' && isValidMailFormat())" (click)="addAlumno()" mat-raised-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>
+      <button (click)="newAlumno()" mat-raised-button color=""><mat-icon mat-list-icon>cancel</mat-icon></button>
       <mat-divider></mat-divider>
     </mat-list-item>
 
-    <mat-list-item class="funciones" role="listitem" *ngIf="modificarGestor">
-      <input class="name" [(ngModel)]="name" matInput placeholder="Name" name="name">
-      <input [disabled]="true" class="email" type="email" [(ngModel)]="email" matInput placeholder="Email" name="email">
+    <mat-list-item class="funciones" role="listitem" *ngIf="modificarAlumno">
+      <input class="name" [(ngModel)]="alumno.Nombre" matInput placeholder="Name" name="name">
+      <input [disabled]="true" class="email" type="email" [(ngModel)]="alumno.Email" matInput placeholder="Email" name="email">
       <span class="spacer"></span>
-      <button (click)="updateGestor()" [disabled]="name == ''" mat-raised-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>
-      <button (click)="modifyGestor()" mat-raised-button color=""><mat-icon mat-list-icon>cancel</mat-icon></button>
+      <button (click)="updateAlumno()" [disabled]="alumno.Nombre == ''" mat-raised-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>
+      <button (click)="modifyAlumno()" mat-raised-button color=""><mat-icon mat-list-icon>cancel</mat-icon></button>
       <mat-divider></mat-divider>
     </mat-list-item>
 
-    <mat-progress-bar *ngIf="loading" mode="query"></mat-progress-bar>
-    <mat-list-item role="listitem" *ngFor="let alumno of (alumnosList)">
+
+
+    <mat-list-item role="listitem" *ngFor="let alumno of (alumnosList | FilterAlumnosGestor: gestor.curso | FilterAlumno: filter)">
       <p class="name">{{alumno.Nombre}}</p>
       <p class="email">{{alumno.Email}}</p>
       <span class="spacer"></span>
-      <button  mat-raised-button color="basic" (click)="modifyGestor(gestor.uid, gestor.nombre, gestor.email)"><mat-icon mat-list-icon>edit</mat-icon></button>
+      <button  mat-raised-button color="basic" (click)="modifyAlumno(alumno.uid, alumno.Nombre, alumno.Email)"><mat-icon mat-list-icon>edit</mat-icon></button>
       <!--<div matTooltip="Curso asignado." [matTooltipPosition]="tooltipPosition" [matTooltipDisabled]="gestor.curso == ''" >-->
-        <button  [disabled]="" mat-raised-button color="warn" (click)="deleteGestor(gestor.uid)"><mat-icon mat-list-icon>delete</mat-icon></button>
+        <button  [disabled]="" mat-raised-button color="warn" (click)="deleteAlumno(alumno.uid)"><mat-icon mat-list-icon>delete</mat-icon></button>
       <!--</div>-->
       <mat-divider [inset]="true"></mat-divider>
     </mat-list-item>
