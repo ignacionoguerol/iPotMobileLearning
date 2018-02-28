@@ -1,6 +1,5 @@
 <mat-card class="mat-elevation-z2 list-card mat-typography">
 
-	
 	<form class="cabecera">
 	  <mat-form-field class="campo-busqueda">
 	    <input [(ngModel)]="filter" matInput placeholder="Búsqueda por nombre o email" value="" name="search">
@@ -12,13 +11,13 @@
 
 	<mat-list class="cabecera">
 		<mat-list-item role="listitem" >
-		  	<h3 class="name">Nombre</h3> 
+		  	<h3 class="name">Nombre</h3>
 		  	<h3 class="email">Email</h3>
 		 </mat-list-item>
 		 <mat-divider></mat-divider>
 	</mat-list>
 	<mat-list class="list" role="list" >
-		
+
 		<mat-list-item class="funciones" role="listitem" *ngIf="nuevoGestor">
 		    <input class="name" [(ngModel)]="name" matInput placeholder="Name" name="name">
 		    <input id="email" class="email" [(ngModel)]="email" type="email" matInput placeholder="Email" name="email">
@@ -27,7 +26,7 @@
 		  	<button (click)="newGestor()" mat-raised-button color=""><mat-icon mat-list-icon>cancel</mat-icon></button>
 		  	<mat-divider></mat-divider>
 		</mat-list-item>
-		
+
 		<mat-list-item class="funciones" role="listitem" *ngIf="modificarGestor">
 		    <input class="name" [(ngModel)]="name" matInput placeholder="Name" name="name">
 		    <input [disabled]="true" class="email" type="email" [(ngModel)]="email" matInput placeholder="Email" name="email">
@@ -36,16 +35,16 @@
 		  	<button (click)="modifyGestor()" mat-raised-button color=""><mat-icon mat-list-icon>cancel</mat-icon></button>
 		  	<mat-divider></mat-divider>
 		</mat-list-item>
-	
+
 		<mat-progress-bar *ngIf="loading" mode="query"></mat-progress-bar>
 		<mat-list-item role="listitem" *ngFor="let gestor of (gestoresList | FilterGestor: filter)">
-		  	<p class="name">{{gestor.nombre}}</p> 
+		  	<p class="name">{{gestor.nombre}}</p>
 		  	<p class="email">{{gestor.email}}</p>
 		  	<span class="spacer"></span>
 		  	<button  mat-raised-button color="basic" (click)="modifyGestor(gestor.uid, gestor.nombre, gestor.email)"><mat-icon mat-list-icon>edit</mat-icon></button>
 				<div matTooltip="Curso asignado." [matTooltipPosition]="tooltipPosition" [matTooltipDisabled]="gestor.curso == ''" >
 						<button  [disabled]="gestor.curso != '' || itsMe(gestor.email)" mat-raised-button color="warn" (click)="deleteGestor(gestor.uid)"><mat-icon mat-list-icon>delete</mat-icon></button>
-				</div>	
+				</div>
 				<mat-divider [inset]="true"></mat-divider>
 		</mat-list-item>
 	</mat-list>

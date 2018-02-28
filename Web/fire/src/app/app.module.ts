@@ -15,6 +15,10 @@ export const firebaseConfig = environment.firebaseConfig;
 // Components
 import { LoginComponent } from './login/login.component';
 import { GestoresComponent } from './gestores/gestores.component';
+import { AlumnosComponent } from './alumnos/alumnos.component';
+import { DialogComponent } from './dialog/dialog.component';
+import { CursosComponent } from './cursos/cursos.component';
+
 
 // Angular Material
 import { MatInputModule } from '@angular/material/input';
@@ -43,10 +47,9 @@ import { FilterGestorNoAsignado } from './filterGestorNoAsignadoPipe';
 // Services
 import { LoginService } from './login.service';
 import { GestoresService } from './gestores.service';
-import { DialogComponent } from './dialog/dialog.component';
-import { CursosComponent } from './cursos/cursos.component';
+import { AlumnosService } from './alumnos.service';
 import { CursosService } from './cursos.service';
-import { AlumnosComponent } from './alumnos/alumnos.component';
+
 
 @NgModule({
   declarations: [
@@ -88,7 +91,8 @@ import { AlumnosComponent } from './alumnos/alumnos.component';
   providers: [
     LoginService,
     GestoresService,
-    CursosService
+    CursosService,
+    AlumnosService
   ],
   bootstrap: [
     AppComponent

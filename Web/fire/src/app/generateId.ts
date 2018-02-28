@@ -17,7 +17,7 @@ interface ILib {
     symbols: [ '_', '-', '$', '!', '%', '?' ]
   };
 
-  const defaultKeys: Key[] = ['alpha', 'number'];
+  const defaultKeys: Key[] = ['number'];
 
   export default function generateId(index: number, customKeys?: Key[]): string {
     const keys: string[] = customKeys

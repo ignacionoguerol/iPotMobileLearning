@@ -16,6 +16,7 @@ exports.addMessage = functions.https.onRequest((req, res) => {
         res.redirect(303, snapshot.ref);
     });
 });
+//GESTORES
 exports.addGestor = functions.https.onRequest((req, res) => {
     const email = req.query.email;
     const name = req.query.name;
@@ -39,6 +40,36 @@ exports.deleteGestor = functions.https.onRequest((req, res) => {
     const uid = req.query.uid;
     admin.auth().deleteUser(uid).then(userRecord => {
         admin.database().ref('/gestores').child(uid).remove().then(r => {
+            res.status(200).send();
+        }).catch(error => console.log("error: " + error));
+    }).catch(error => console.log("error: " + error));
+});
+//ALUMNOS
+exports.addAlumno = functions.https.onRequest((req, res) => {
+    const email = req.query.email;
+    const name = req.query.name;
+    const curso = req.query.curso;
+    const password = generator.generate({ length: 20, numbers: true, symbols: true, strict: true });
+    admin.auth().createUser({
+        email: email,
+        password: password
+    }).then(userRecord => {
+        const data = {
+            Nombre: name,
+            Email: email,
+            Grado: +curso,
+            nick: name,
+            puntos: 0
+        };
+        admin.database().ref('/usuarios').child(userRecord.uid).set(data).then(snapshot => {
+            res.status(200).send();
+        }).catch(error => console.log("error: " + error));
+    }).catch(error => console.log("error: " + error));
+});
+exports.deleteAlumno = functions.https.onRequest((req, res) => {
+    const uid = req.query.uid;
+    admin.auth().deleteUser(uid).then(userRecord => {
+        admin.database().ref('/usuarios').child(uid).remove().then(r => {
             res.status(200).send();
         }).catch(error => console.log("error: " + error));
     }).catch(error => console.log("error: " + error));

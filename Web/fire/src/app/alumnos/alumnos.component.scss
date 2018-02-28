@@ -1,0 +1,67 @@
+mat-card{
+  margin: 4%;
+  padding: 0;
+}
+
+.list-card{
+  max-width: 1200px;
+  min-width: 600px;
+  width: auto;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+
+.list{
+  overflow-y: auto;
+  height: auto;
+  max-height: 800px;
+  margin-bottom: 0;
+}
+
+mat-list-item{
+  display: -ms-flexbox;
+  display: flex;
+  white-space:pre;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.name{
+  width: 40%;
+}
+.email{
+  width: 30%;
+}
+
+button{
+  margin: 5px;
+}
+
+.add-button{
+  margin: 30px !important;
+  float: right;
+  z-index: 1;
+}
+.cabecera{
+  background-color: #f5f5f5;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.cabecera h3{
+  margin-top: 1.5%;
+}
+
+.campo-busqueda{
+  margin-left: 30%;
+  margin-top: 1%;
+  margin-right: 10%;
+  width: 40% !important;
+}
+
+.funciones{
+  width: 100% !important;
+}
