@@ -15,6 +15,7 @@ export class AlumnosService {
 
   loadList() {
     const self = this;
+    self.array = [];
     this.db.list('/usuarios').valueChanges().subscribe(alumnos => {
       self.array.length = 0;
       alumnos.forEach(action => {
@@ -22,6 +23,7 @@ export class AlumnosService {
         self.array.push(obj);
       });
     });
+    return self.array;
   }
 
   getList() {

@@ -5,6 +5,9 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
+//CORS
+const cors = require('cors')({origin: true});
+
 // Password generator
 const generator = require('generate-password');
 
@@ -23,6 +26,9 @@ exports.addMessage = functions.https.onRequest((req, res) => {
 //GESTORES
 
 exports.addGestor = functions.https.onRequest((req, res) => {
+
+  cors(req, res, () => {console.log('cors')});
+
     const email = req.query.email;
     const name = req.query.name;
 
@@ -44,6 +50,8 @@ exports.addGestor = functions.https.onRequest((req, res) => {
 });
 
 exports.deleteGestor = functions.https.onRequest((req, res) => {
+  cors(req, res, () => {console.log('cors')});
+
     const uid = req.query.uid;
     admin.auth().deleteUser(uid).then(userRecord => {
         admin.database().ref('/gestores').child(uid).remove().then(r => {
@@ -55,6 +63,8 @@ exports.deleteGestor = functions.https.onRequest((req, res) => {
 //ALUMNOS
 
 exports.addAlumno = functions.https.onRequest((req, res) => {
+  cors(req, res, () => {console.log('cors')});
+
   const email = req.query.email;
   const name = req.query.name;
   const curso = req.query.curso;
@@ -79,6 +89,8 @@ exports.addAlumno = functions.https.onRequest((req, res) => {
 });
 
 exports.deleteAlumno = functions.https.onRequest((req, res) => {
+  cors(req, res, () => {console.log('cors')});
+
   const uid = req.query.uid;
   admin.auth().deleteUser(uid).then(userRecord => {
     admin.database().ref('/usuarios').child(uid).remove().then(r => {

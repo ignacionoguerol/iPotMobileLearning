@@ -3,6 +3,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'FilterAlumno',
+  pure: false
 })
 export class FilterAlumno implements PipeTransform {
   transform(value: Alumno[], input: string) {

@@ -25,10 +25,11 @@ export class AlumnosComponent implements OnInit {
   loading: boolean;
 
 
-  constructor(private alumnosService: AlumnosService, private gestoresService: GestoresService,  public snackBar: MatSnackBar, public dialog: MatDialog) {
-    this.getList();
+  constructor(private alumnosService: AlumnosService, private gestoresService: GestoresService,
+              public snackBar: MatSnackBar, public dialog: MatDialog) {
     this.nuevoAlumno = false;
     this.modificarAlumno = false;
+    this.getList();
     this.alumno = new Alumno();
     this.filter = '';
     this.loading = false;
@@ -45,6 +46,7 @@ export class AlumnosComponent implements OnInit {
   newAlumno() {
     if (this.nuevoAlumno) {
       this.nuevoAlumno = false;
+      this.getList();
     } else {
       this.nuevoAlumno = true;
       this.modificarAlumno = false;
@@ -88,6 +90,7 @@ export class AlumnosComponent implements OnInit {
         if (result) {
           this.alumnosService.deleteAlumno(uid).subscribe(resp => console.log(resp));
           this.openSnackBar('Eliminado con éxito', 'OK');
+          this.getList();
         }
       });
     } else {
