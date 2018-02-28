@@ -69,7 +69,8 @@ exports.addAlumno = functions.https.onRequest((req, res) => {
       Email: email,
       Grado: +curso,
       nick: name,
-      puntos: 0
+      puntos: 0,
+      uid: userRecord.uid
     };
     admin.database().ref('/usuarios').child(userRecord.uid).set(data).then(snapshot => {
       res.status(200).send();

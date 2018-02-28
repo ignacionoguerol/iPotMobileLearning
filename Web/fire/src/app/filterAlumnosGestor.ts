@@ -17,9 +17,9 @@ export class FilterAlumnosGestor implements PipeTransform {
     const self = this;
     if (input) {
       return value.filter(function (element: Alumno) {
-        return element.Grado === input;
+        return +element.Grado === +input;
       });
     }
-    return value;
+    return [];
   }
 }

@@ -4,6 +4,9 @@ import { GestoresService } from '../gestores.service';
 import { Alumno } from '../alumno';
 import {Gestor} from '../gestor';
 import {falseIfMissing} from 'protractor/built/util';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatDialog} from '@angular/material/dialog';
+import {DialogComponent} from '../dialog/dialog.component';
 
 @Component({
   selector: 'app-alumnos',
@@ -22,7 +25,7 @@ export class AlumnosComponent implements OnInit {
   loading: boolean;
 
 
-  constructor(private alumnosService: AlumnosService, private gestoresService: GestoresService) {
+  constructor(private alumnosService: AlumnosService, private gestoresService: GestoresService,  public snackBar: MatSnackBar, public dialog: MatDialog) {
     this.getList();
     this.nuevoAlumno = false;
     this.modificarAlumno = false;
@@ -61,11 +64,37 @@ export class AlumnosComponent implements OnInit {
     }
   }
 
-  addAlumno() {}
+  addAlumno() {
+    this.alumnosService.addAlumno(this.alumno.Email, this.alumno.Nombre, this.gestor.curso).subscribe(res =>{
+      this.openSnackBar('Alumno añadido correctamente!', 'OK');
+    });
+
+    this.newAlumno();
+  }
 
   updateAlumno() {}
 
-  deleteAlumno(uid: string) {}
+  deleteAlumno(uid: string) {
+    if (uid) {
+      console.log(uid);
+      const dialog = this.dialog.open(DialogComponent, {
+        data: {
+          mensaje: '¿Está seguro de que desea eliminar este alumno?',
+          accion: 'Confirmar'
+        }
+      });
+
+      dialog.afterClosed().subscribe(result => {
+        if (result) {
+          this.alumnosService.deleteAlumno(uid).subscribe(resp => console.log(resp));
+          this.openSnackBar('Eliminado con éxito', 'OK');
+        }
+      });
+    } else {
+      console.log('UID undefined');
+    }
+
+  }
 
   getGestorActual() {
     const self = this;
@@ -78,6 +107,12 @@ export class AlumnosComponent implements OnInit {
   isValidMailFormat() {
     const EMAIL_REGEXP = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
     return EMAIL_REGEXP.test(this.alumno.Email);
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000
+    });
   }
 
 }
