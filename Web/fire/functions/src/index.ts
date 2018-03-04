@@ -1,6 +1,5 @@
 // The Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
 const functions = require('firebase-functions');
-
 // The Firebase Admin SDK to access the Firebase Realtime Database.
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
@@ -97,5 +96,9 @@ exports.deleteAlumno = functions.https.onRequest((req, res) => {
       res.status(200).send();
     }).catch(error => console.log("error: " + error))
   }).catch(error => console.log("error: " + error));
+});
+
+exports.sendWelcomeEmail = functions.auth.user().onCreate(event =>{
+  console.log("Usuario Registrado: " + event.data.email);
 });
 
