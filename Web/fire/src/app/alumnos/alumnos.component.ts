@@ -3,7 +3,6 @@ import { AlumnosService } from '../alumnos.service';
 import { GestoresService } from '../gestores.service';
 import { Alumno } from '../alumno';
 import {Gestor} from '../gestor';
-import {falseIfMissing} from 'protractor/built/util';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
 import {DialogComponent} from '../dialog/dialog.component';
@@ -67,7 +66,7 @@ export class AlumnosComponent implements OnInit {
   }
 
   addAlumno() {
-    this.alumnosService.addAlumno(this.alumno.Email, this.alumno.Nombre, this.gestor.curso).subscribe(res =>{
+    this.alumnosService.addAlumno(this.alumno.Email, this.alumno.Nombre, this.gestor.curso).subscribe(() => {
       this.openSnackBar('Alumno añadido correctamente!', 'OK');
     });
 

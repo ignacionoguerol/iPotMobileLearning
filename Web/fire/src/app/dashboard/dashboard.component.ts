@@ -16,15 +16,14 @@ export class DashboardComponent implements OnInit {
   constructor(private loginService: LoginService, private router: Router, private afAuth: AngularFireAuth,
               private gestoresService: GestoresService) {
     this.admin = false;
-    this.gestor = true;
+    this.gestor = false;
     this.soyAdmin();
     this.soyGestor();
   }
 
-  ngOnInit(){
+  ngOnInit() {
 
   }
-
 
   logout() {
     const self = this;
@@ -42,13 +41,13 @@ export class DashboardComponent implements OnInit {
 
 
   soyGestor() {
-    const arrayGestores =  this.gestoresService.getList();
-    arrayGestores.forEach(gestor => {
-      if (gestor.uid === this.afAuth.auth.currentUser.uid) {
-        this.gestor = true;
+    const self = this;
+    this.gestoresService.loadGestor().subscribe(res => {
+      if (res) {
+        self.gestor = true;
       }
+      console.log('GESTOR = ' +  self.gestor);
     });
-    console.log('GESTOR = ' + this.gestor);
   }
 
 }
