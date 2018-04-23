@@ -3,6 +3,8 @@ const functions = require('firebase-functions');
 // The Firebase Admin SDK to access the Firebase Realtime Database.
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
+//CORS
+const cors = require('cors')({ origin: true });
 // Password generator
 const generator = require('generate-password');
 // Take the text parameter passed to this HTTP endpoint and insert it into the
@@ -18,6 +20,7 @@ exports.addMessage = functions.https.onRequest((req, res) => {
 });
 //GESTORES
 exports.addGestor = functions.https.onRequest((req, res) => {
+    cors(req, res, () => { console.log('cors'); });
     const email = req.query.email;
     const name = req.query.name;
     const password = generator.generate({ length: 20, numbers: true, symbols: true, strict: true });
@@ -37,6 +40,7 @@ exports.addGestor = functions.https.onRequest((req, res) => {
     }).catch(error => console.log("error: " + error));
 });
 exports.deleteGestor = functions.https.onRequest((req, res) => {
+    cors(req, res, () => { console.log('cors'); });
     const uid = req.query.uid;
     admin.auth().deleteUser(uid).then(userRecord => {
         admin.database().ref('/gestores').child(uid).remove().then(r => {
@@ -46,6 +50,7 @@ exports.deleteGestor = functions.https.onRequest((req, res) => {
 });
 //ALUMNOS
 exports.addAlumno = functions.https.onRequest((req, res) => {
+    cors(req, res, () => { console.log('cors'); });
     const email = req.query.email;
     const name = req.query.name;
     const curso = req.query.curso;
@@ -59,7 +64,8 @@ exports.addAlumno = functions.https.onRequest((req, res) => {
             Email: email,
             Grado: +curso,
             nick: name,
-            puntos: 0
+            puntos: 0,
+            uid: userRecord.uid
         };
         admin.database().ref('/usuarios').child(userRecord.uid).set(data).then(snapshot => {
             res.status(200).send();
@@ -67,11 +73,15 @@ exports.addAlumno = functions.https.onRequest((req, res) => {
     }).catch(error => console.log("error: " + error));
 });
 exports.deleteAlumno = functions.https.onRequest((req, res) => {
+    cors(req, res, () => { console.log('cors'); });
     const uid = req.query.uid;
     admin.auth().deleteUser(uid).then(userRecord => {
         admin.database().ref('/usuarios').child(uid).remove().then(r => {
             res.status(200).send();
         }).catch(error => console.log("error: " + error));
     }).catch(error => console.log("error: " + error));
+});
+exports.sendWelcomeEmail = functions.auth.user().onCreate(event => {
+    console.log("Usuario Registrado: " + event.data.email);
 });
 //# sourceMappingURL=index.js.map
