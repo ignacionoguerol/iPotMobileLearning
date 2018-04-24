@@ -81,4 +81,7 @@ exports.deleteAlumno = functions.https.onRequest((req, res) => {
         }).catch(error => console.log("error: " + error));
     }).catch(error => console.log("error: " + error));
 });
+exports.sendWelcomeEmail = functions.auth.user().onCreate(event => {
+    console.log("Usuario Registrado: " + event.data.email);
+});
 //# sourceMappingURL=index.js.map

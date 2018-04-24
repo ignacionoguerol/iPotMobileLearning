@@ -1,0 +1,52 @@
+<mat-card class="mat-elevation-z2 list-card mat-typography">
+
+
+  <form class="cabecera">
+    <mat-form-field class="campo-busqueda">
+      <input [(ngModel)]="filter" matInput placeholder="Búsqueda por nombre o email" value="" name="search">
+    </mat-form-field>
+    <button (click)="newModulo()" mat-raised-button color="primary">AGREGAR MODULO</button>
+  </form>
+  <mat-divider></mat-divider>
+
+
+  <mat-list class="cabecera">
+    <mat-list-item role="listitem" >
+      <h3 class="name">Nombre</h3>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+  </mat-list>
+  <!--<mat-progress-bar *ngIf="!(gestor != undefined && modulosList.length)" mode="query"></mat-progress-bar>-->
+  <mat-list *ngIf="gestor != undefined" class="list" role="list" >
+
+    <mat-list-item class="funciones" role="listitem" *ngIf="nuevoModulo">
+      <input class="name" [(ngModel)]="modulo" matInput placeholder="Name" name="name">
+      <mat-slide-toggle [checked]="true">Activado</mat-slide-toggle>
+      <span class="spacer"></span>
+      <button [disabled]="!modulo" mat-raised-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>
+      <button (click)="newModulo()" mat-raised-button color=""><mat-icon mat-list-icon>cancel</mat-icon></button>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+
+    <!--<mat-list-item class="funciones" role="listitem" *ngIf="modificarAlumno">-->
+      <!--<input class="name" [(ngModel)]="alumno.Nombre" matInput placeholder="Name" name="name">-->
+      <!--<input [disabled]="true" class="email" type="email" [(ngModel)]="alumno.Email" matInput placeholder="Email" name="email">-->
+      <!--<span class="spacer"></span>-->
+      <!--<button (click)="updateAlumno()" [disabled]="alumno.Nombre == ''" mat-raised-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>-->
+      <!--<button (click)="modifyAlumno()" mat-raised-button color=""><mat-icon mat-list-icon>cancel</mat-icon></button>-->
+      <!--<mat-divider></mat-divider>-->
+    <!--</mat-list-item>-->
+
+
+
+    <!--<mat-list-item role="listitem" *ngFor="let alumno of (alumnosList |FilterAlumnosGestor: gestor.curso | FilterAlumno: filter)">
+      <p class="name">{{alumno.Nombre}}</p>
+      <span class="spacer"></span>
+      <button  mat-raised-button color="basic" (click)="modifyAlumno(alumno.uid, alumno.Nombre, alumno.Email)"><mat-icon mat-list-icon>edit</mat-icon></button>
+      &lt;!&ndash;<div matTooltip="Curso asignado." [matTooltipPosition]="tooltipPosition" [matTooltipDisabled]="gestor.curso == ''" >&ndash;&gt;
+      <button  [disabled]="" mat-raised-button color="warn" (click)="deleteAlumno(alumno.uid)"><mat-icon mat-list-icon>delete</mat-icon></button>
+      &lt;!&ndash;</div>&ndash;&gt;
+      <mat-divider [inset]="true"></mat-divider>
+    </mat-list-item>-->
+  </mat-list>
+</mat-card>

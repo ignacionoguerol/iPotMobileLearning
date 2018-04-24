@@ -18,6 +18,7 @@ import { GestoresComponent } from './gestores/gestores.component';
 import { AlumnosComponent } from './alumnos/alumnos.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { CursosComponent } from './cursos/cursos.component';
+import { ModulosComponent } from './modulos/modulos.component';
 
 
 // Angular Material
@@ -37,7 +38,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 // Pipes
 import { FilterGestor } from './filterGestorPipe';
@@ -51,6 +52,7 @@ import { LoginService } from './login.service';
 import { GestoresService } from './gestores.service';
 import { AlumnosService } from './alumnos.service';
 import { CursosService } from './cursos.service';
+import { ModulosService } from './modulos.service';
 
 
 @NgModule({
@@ -66,7 +68,8 @@ import { CursosService } from './cursos.service';
     FilterAlumno,
     DialogComponent,
     CursosComponent,
-    AlumnosComponent
+    AlumnosComponent,
+    ModulosComponent
     ],
   imports: [
     BrowserModule,
@@ -90,19 +93,22 @@ import { CursosService } from './cursos.service';
     MatDialogModule,
     MatSelectModule,
     MatAutocompleteModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSlideToggleModule
   ],
   providers: [
     LoginService,
     GestoresService,
     CursosService,
-    AlumnosService
+    AlumnosService,
+    ModulosService
   ],
   bootstrap: [
     AppComponent
   ],
   entryComponents: [
     DialogComponent
-    ]
+    ],
+  exports: [ModulosComponent]
 })
 export class AppModule { }
