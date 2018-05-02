@@ -1,27 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import {Gestor} from '../gestor';
-import { GestoresService } from '../gestores.service';
 import { ModulosService } from '../modulos.service';
+import { GestoresService } from '../gestores.service';
+import {Gestor} from '../gestor';
 
 @Component({
-  selector: 'app-modulos',
-  templateUrl: './modulos.component.html',
-  styleUrls: ['./modulos.component.scss']
+  selector: 'app-contenidos',
+  templateUrl: './contenidos.component.html',
+  styleUrls: ['./contenidos.component.scss']
 })
-export class ModulosComponent implements OnInit {
+export class ContenidosComponent implements OnInit {
 
   filter: string;
-  modulosList: String[];
+  contenidosList: String[];
+  modalidades: String[];
   gestor: Gestor;
-  nuevoModulo: boolean;
-  modificarModulo: boolean;
+  modulosList: String[];
+  modalidad: String;
   modulo: String;
 
   constructor(private gestoresService: GestoresService, private modulosService: ModulosService) {
-    this.filter = '';
+    this.modalidades = ['Ahorcado', 'Jeroglifico', 'Parejas', 'Preguntas', 'Puzzles', 'Sopa de Letras'];
     this.modulosList = [];
     this.getGestorActual();
-
   }
 
   ngOnInit() {
@@ -35,17 +35,7 @@ export class ModulosComponent implements OnInit {
     });
   }
 
-  newModulo( ) {
-    if (this.nuevoModulo) {
-      this.nuevoModulo = false;
-    } else {
-      this.nuevoModulo = true;
-    }
-  }
-
   getList(curso: string) {
-    this.modulosService.loadList(curso);
-    this.modulosList = this.modulosService.getList()
+    this.modulosList = this.modulosService.getList();
   }
-
 }

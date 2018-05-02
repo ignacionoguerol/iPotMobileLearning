@@ -30,10 +30,11 @@ mat-list-item{
 }
 
 .name{
-  width: 60%;
+  width: 40%;
 }
 .email{
-  width: 10%;
+  margin-left: 10%;
+  width: 30%;
 }
 
 button{
@@ -62,6 +63,26 @@ button{
   width: 40% !important;
 }
 
+.select{
+  text-align: center;
+  margin-top: 1.5%;
+  margin-bottom: 1%;
+}
+
+.modalidad{
+  margin-left: 5%;
+  width: 20%;
+}
+
+.modulo{
+  margin-left: 5%;
+  width: 65%;
+}
+
 .funciones{
-  width: 100% !important;
+
+}
+
+.titulo{
+  text-align: center;
 }

@@ -40,6 +40,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
+
 // Pipes
 import { FilterGestor } from './filterGestorPipe';
 import { FilterCurso } from './filterCursoPipe';
@@ -53,6 +54,7 @@ import { GestoresService } from './gestores.service';
 import { AlumnosService } from './alumnos.service';
 import { CursosService } from './cursos.service';
 import { ModulosService } from './modulos.service';
+import { ContenidosComponent } from './contenidos/contenidos.component';
 
 
 @NgModule({
@@ -69,7 +71,8 @@ import { ModulosService } from './modulos.service';
     DialogComponent,
     CursosComponent,
     AlumnosComponent,
-    ModulosComponent
+    ModulosComponent,
+    ContenidosComponent
     ],
   imports: [
     BrowserModule,
@@ -95,7 +98,7 @@ import { ModulosService } from './modulos.service';
     MatAutocompleteModule,
     MatTooltipModule,
     MatSlideToggleModule
-  ],
+   ],
   providers: [
     LoginService,
     GestoresService,

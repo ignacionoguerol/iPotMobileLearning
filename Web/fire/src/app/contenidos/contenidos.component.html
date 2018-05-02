@@ -1,0 +1,45 @@
+<mat-card class="mat-elevation-z2 list-card mat-typography">
+
+  <!--<mat-progress-bar *ngIf="!contenidosList.length" mode="query"></mat-progress-bar>-->
+
+  <p *ngIf="!(modalidad != '' && modulo != '')">{{modalidad}} de {{modulo}}</p>
+  <form class="cabecera">
+
+    <mat-form-field class="campo-busqueda">
+      <input [(ngModel)]="filter" matInput placeholder="Búsqueda por curso o gestor" value="" name="search">
+    </mat-form-field>
+    <button mat-raised-button color="primary">AGREGAR ELEMENTO</button>
+  </form>
+  <mat-divider></mat-divider>
+
+  <mat-list class="cabecera">
+    <mat-select class="select modalidad" placeholder="Modalidad" [(ngModel)]="modalidad" name="first">
+      <mat-option *ngFor="let modalidad of modalidades" [value]="modalidad">
+        {{ modalidad }}
+      </mat-option>
+    </mat-select>
+
+    <mat-select class="select modulo" placeholder="Modulos" [(ngModel)]="modulo" name="second">
+      <mat-option *ngFor="let modulo of modulosList" [value]="modulo.name">
+        {{ modulo.name }}
+      </mat-option>
+    </mat-select>
+
+    <mat-divider></mat-divider>
+  </mat-list>
+
+  <mat-list class="list" role="list" >
+
+    <!--<mat-list-item role="listitem" *ngFor="let curso of (cursosList | FilterCurso: filter)">
+      <p class="name">{{curso.nombre}}</p>
+      <p class="email">{{getGestorName(curso.gestor)}}</p>
+      <span class="spacer"></span>
+      <button  mat-raised-button color="basic" (click)="modifyCurso(curso.id, curso.nombre, curso.gestor)"><mat-icon mat-list-icon>edit</mat-icon></button>
+      <button  mat-raised-button color="warn" (click)="deleteCurso(curso)"><mat-icon mat-list-icon>delete</mat-icon></button>
+      <mat-divider [inset]="true"></mat-divider>
+    </mat-list-item>-->
+  </mat-list>
+</mat-card>
+
+
+
