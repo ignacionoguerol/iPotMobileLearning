@@ -38,8 +38,6 @@
       <mat-divider></mat-divider>
     </mat-list-item>
 
-
-
     <mat-list-item role="listitem" *ngFor="let alumno of (alumnosList |FilterAlumnosGestor: gestor.curso | FilterAlumno: filter)">
       <p class="name">{{alumno.Nombre}}</p>
       <p class="email">{{alumno.Email}}</p>

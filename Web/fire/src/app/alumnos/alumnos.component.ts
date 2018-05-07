@@ -73,11 +73,15 @@ export class AlumnosComponent implements OnInit {
     this.newAlumno();
   }
 
-  updateAlumno() {}
+  updateAlumno() {
+    this.alumnosService.modifyAlumno(this.alumno).then(ret => {
+      this.openSnackBar('Alumno modificado correctamente!', 'OK');
+    });
+    this.modifyAlumno('', '', '');
+  }
 
   deleteAlumno(uid: string) {
     if (uid) {
-      console.log(uid);
       const dialog = this.dialog.open(DialogComponent, {
         data: {
           mensaje: '¿Está seguro de que desea eliminar este alumno?',
@@ -87,22 +91,20 @@ export class AlumnosComponent implements OnInit {
 
       dialog.afterClosed().subscribe(result => {
         if (result) {
-          this.alumnosService.deleteAlumno(uid).subscribe(resp => console.log(resp));
-          this.openSnackBar('Eliminado con éxito', 'OK');
-          this.getList();
+          this.alumnosService.deleteAlumno(uid).subscribe(resp => {
+            this.openSnackBar('Eliminado con éxito', 'OK');
+            this.getList();
+          });
+
         }
       });
-    } else {
-      console.log('UID undefined');
     }
-
   }
 
   getGestorActual() {
     const self = this;
     this.gestoresService.loadGestor().subscribe( g => {
       self.gestor = JSON.parse(JSON.stringify(g));
-      console.log(self.gestor);
     });
   }
 
