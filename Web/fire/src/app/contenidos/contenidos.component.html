@@ -2,15 +2,6 @@
 
   <!--<mat-progress-bar *ngIf="!contenidosList.length" mode="query"></mat-progress-bar>-->
 
-  <p *ngIf="!(modalidad != '' && modulo != '')">{{modalidad}} de {{modulo}}</p>
-  <form class="cabecera">
-
-    <mat-form-field class="campo-busqueda">
-      <input [(ngModel)]="filter" matInput placeholder="Búsqueda por curso o gestor" value="" name="search">
-    </mat-form-field>
-    <button mat-raised-button color="primary">AGREGAR ELEMENTO</button>
-  </form>
-  <mat-divider></mat-divider>
 
   <mat-list class="cabecera">
     <mat-select class="select modalidad" placeholder="Modalidad" [(ngModel)]="modalidad" name="first">
@@ -25,19 +16,40 @@
       </mat-option>
     </mat-select>
 
+    <button mat-raised-button color="primary" (click)="getContenidos()" [disabled]="modulo == '' || modalidad == ''">CONFIRMAR</button>
+
     <mat-divider></mat-divider>
+
+    <form class="cabecera">
+
+      <mat-form-field class="campo-busqueda">
+        <input [(ngModel)]="filter" matInput placeholder="Búsqueda por curso o gestor" value="" name="search">
+      </mat-form-field>
+      <button mat-raised-button color="primary">AGREGAR ELEMENTO</button>
+    </form>
+
+    <mat-divider></mat-divider>
+
+
   </mat-list>
 
   <mat-list class="list" role="list" >
 
-    <!--<mat-list-item role="listitem" *ngFor="let curso of (cursosList | FilterCurso: filter)">
-      <p class="name">{{curso.nombre}}</p>
-      <p class="email">{{getGestorName(curso.gestor)}}</p>
-      <span class="spacer"></span>
-      <button  mat-raised-button color="basic" (click)="modifyCurso(curso.id, curso.nombre, curso.gestor)"><mat-icon mat-list-icon>edit</mat-icon></button>
-      <button  mat-raised-button color="warn" (click)="deleteCurso(curso)"><mat-icon mat-list-icon>delete</mat-icon></button>
+    <mat-list-item role="listitem" *ngFor="let contenido of contenidosList">
+
+      <p *ngIf="modalidad == 'Ahorcado'" class="name">{{contenido.Palabra}}</p>
+      <p *ngIf="modalidad == 'Ahorcado'" class="name">{{contenido.Pista}}</p>
+
+      <p *ngIf="modalidad == 'Jeroglifico'" class="name">{{contenido.pista}}</p>
+      <p *ngIf="modalidad == 'Jeroglifico'" class="name">{{contenido.respuesta}}</p>
+      <a href="contenido.url" *ngIf="modalidad == 'Jeroglifico'" class="name">{{contenido.url}}</a>
+
+      <p *ngIf="modalidad == 'Preguntas'" class="name">{{contenido.pregunta}}</p>
+      <p *ngIf="modalidad == 'Preguntas'" class="name">{{contenido.respuestas}}</p>
+      <p *ngIf="modalidad == 'Preguntas'" class="name">{{contenido.correcta}}</p>
+
       <mat-divider [inset]="true"></mat-divider>
-    </mat-list-item>-->
+    </mat-list-item>
   </mat-list>
 </mat-card>
 

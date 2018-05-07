@@ -35,9 +35,9 @@ export class CursosService {
       nombre: name,
       gestor: gestor
     };
-    this.db.object('/cursos/' + id).update(data).then(res => console.log('curso modificado'));
-    this.db.object('/gestores/' + gestor).update({curso: id}).then(res => console.log('nuevo gestor modificado'));
-    this.db.object('/gestores/' + oldGestor).update({curso: ''}).then(res => console.log('viejo gestor modificado'));
+    this.db.object('/cursos/' + id).update(data).then();
+    this.db.object('/gestores/' + gestor).update({curso: id}).then();
+    this.db.object('/gestores/' + oldGestor).update({curso: ''}).then();
   }
 
   addCurso(name: string, gestor: string) {
@@ -47,13 +47,17 @@ export class CursosService {
       id: generateId(20)
     };
     console.log('id: ' + data.id);
-    this.db.object('/cursos/' + data.id).update(data).then(res => console.log('curso añadido'));
-    this.db.object('/gestores/' + gestor).update({curso: data.id}).then(res => console.log('gestor modificado'));
+    this.db.object('/cursos/' + data.id).update(data).then();
+    this.db.object('/gestores/' + gestor).update({curso: data.id}).then();
   }
 
   deleteCurso(curso: Curso) {
-    this.db.object('cursos/' + curso.id).remove().then(res => console.log('curso eliminado'));
-    this.db.object('gestores/' + curso.gestor).update({curso: ''}).then(res => console.log('gestor modificado'));
+    this.db.object('cursos/' + curso.id).remove().then();
+    this.db.object('gestores/' + curso.gestor).update({curso: ''}).then();
+  }
+
+  getCurso (id: String) {
+    return this.db.object('cursos/' + id).valueChanges();
   }
 
 }

@@ -9,9 +9,9 @@
   </form>
   <mat-divider></mat-divider>
 
-
   <mat-list class="cabecera">
     <mat-list-item role="listitem" >
+      <h3 class="id">ID</h3>
       <h3 class="name">Nombre</h3>
       <h3 class="email">Activado</h3>
     </mat-list-item>
@@ -21,17 +21,31 @@
   <mat-list *ngIf="gestor != undefined" class="list" role="list" >
 
     <mat-list-item class="funciones" role="listitem" *ngIf="nuevoModulo">
-      <input class="name" [(ngModel)]="modulo" matInput placeholder="Name" name="name">
-      <mat-slide-toggle [checked]="true"></mat-slide-toggle>
+      <input class="id" [(ngModel)]="modulo.id" matInput placeholder="id" name="id">
+      <input class="name" [(ngModel)]="modulo.name" matInput placeholder="Name" name="name">
+      <mat-slide-toggle class="email" [checked]="true" [(ngModel)]="modulo.enabled"></mat-slide-toggle>
       <span class="spacer"></span>
-      <button [disabled]="!modulo" mat-raised-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>
+      <button (click)="addModulo()" [disabled]="!modulo" mat-raised-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>
       <button (click)="newModulo()" mat-raised-button color=""><mat-icon mat-list-icon>cancel</mat-icon></button>
       <mat-divider></mat-divider>
     </mat-list-item>
 
+    <mat-list-item class="funciones" role="listitem" *ngIf="modificarModulo">
+      <input class="id" [(ngModel)]="modulo.id" matInput placeholder="id" name="id">
+      <input class="name" [(ngModel)]="modulo.name" matInput placeholder="Name" name="name">
+      <mat-slide-toggle class="email" [checked]="true" [(ngModel)]="modulo.enabled"></mat-slide-toggle>
+      <span class="spacer"></span>
+      <button  (click)="updateModulo()" [disabled]="!modulo" mat-raised-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>
+      <button (click)="modifyModulo()" mat-raised-button color=""><mat-icon mat-list-icon>cancel</mat-icon></button>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+
     <mat-list-item role="listitem" *ngFor="let modulo of modulosList">
+      <p class="id">{{modulo.id}}</p>
       <p class="name">{{modulo.name}}</p>
       <mat-slide-toggle class="email" [checked]=modulo.enabled></mat-slide-toggle>
+      <button  (click)="modifyModulo(modulo.name, modulo.id, modulo.enabled)" mat-raised-button color="basic" ><mat-icon mat-list-icon>edit</mat-icon></button>
+      <button  (click)="deleteModulo(modulo.id)" [disabled]="" mat-raised-button color="warn"><mat-icon mat-list-icon>delete</mat-icon></button>
       <mat-divider></mat-divider>
     </mat-list-item>
 

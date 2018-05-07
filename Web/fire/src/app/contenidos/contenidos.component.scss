@@ -30,7 +30,10 @@ mat-list-item{
 }
 
 .name{
-  width: 40%;
+  overflow: hidden;
+  width: 30%;
+  margin: 2%;
+  text-overflow: hidden;
 }
 .email{
   margin-left: 10%;
@@ -76,7 +79,8 @@ button{
 
 .modulo{
   margin-left: 5%;
-  width: 65%;
+  width: 50%;
+  margin-right: 5%;
 }
 
 .funciones{

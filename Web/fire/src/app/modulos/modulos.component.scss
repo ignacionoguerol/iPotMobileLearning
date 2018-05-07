@@ -31,9 +31,10 @@ mat-list-item{
 
 .name{
   width: 60%;
+  margin-left: 2%;
 }
 .email{
-  width: 10%;
+  width: 20%;
 }
 
 button{
@@ -64,4 +65,8 @@ button{
 
 .funciones{
   width: 100% !important;
+}
+
+.id{
+  width: 3%;
 }

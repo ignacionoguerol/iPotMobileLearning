@@ -1,3 +1,5 @@
+import 'hammerjs';
+
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
@@ -55,6 +57,7 @@ import { AlumnosService } from './alumnos.service';
 import { CursosService } from './cursos.service';
 import { ModulosService } from './modulos.service';
 import { ContenidosComponent } from './contenidos/contenidos.component';
+import { ContenidosService } from './contenidos.service';
 
 
 @NgModule({
@@ -104,7 +107,8 @@ import { ContenidosComponent } from './contenidos/contenidos.component';
     GestoresService,
     CursosService,
     AlumnosService,
-    ModulosService
+    ModulosService,
+    ContenidosService
   ],
   bootstrap: [
     AppComponent
