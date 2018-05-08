@@ -1,43 +1,68 @@
 mat-card{
-  margin: 4%;
-  padding: 0;
+  margin-top: 2%;
+  margin-left: 2%;
+  margin-right: 2%;
 }
 
 .list-card{
-  max-width: 1200px;
-  min-width: 600px;
-  width: auto;
-  margin-left: auto !important;
-  margin-right: auto !important;
+padding: 0;
 }
 
-
 .list{
-  overflow-y: auto;
-  height: auto;
-  max-height: 800px;
-  margin-bottom: 0;
+  overflow: hidden !important;
 }
 
 mat-list-item{
-  display: -ms-flexbox;
-  display: flex;
-  white-space:pre;
+  padding: 0;
 }
 
 .spacer {
   flex: 1 1 auto;
 }
 
-.name{
-  overflow: hidden;
-  width: 30%;
-  margin: 2%;
-  text-overflow: hidden;
+.id{
+  margin-top: 1%;
+  width: 4%;
 }
-.email{
+.ahorcado-palabra{
+  margin-top: 1%;
+  width: 48%;
+}
+.ahorcado-pista{
+  margin-top: 1%;
   margin-left: 10%;
+  width: 48%;
+}
+
+.jeroglifico-pista{
+  margin-top: 1%;
+  width: 40%;
+}
+.jeroglifico-respuesta{
+  margin-top: 1%;
+  width: 40%;
+}
+
+.jeroglifico-img{
+  height: 100%;
+}
+
+.jeroglifico-img-titulo{
+  margin-top: 1%;
+}
+
+.parejas-pista{
+  margin-top: 1%;
   width: 30%;
+}
+
+.parejas-elements{
+  margin-top: 1%;
+  width: 10%;
+}
+
+.separador{
+  width: 5%;
 }
 
 button{
@@ -56,20 +81,23 @@ button{
 }
 
 .cabecera h3{
-  margin-top: 1.5%;
+  margin-top: 0.5%;
 }
 
 .campo-busqueda{
   margin-left: 30%;
-  margin-top: 1%;
   margin-right: 10%;
   width: 40% !important;
 }
 
 .select{
   text-align: center;
-  margin-top: 1.5%;
-  margin-bottom: 1%;
+  background-color: #f5f5f5;
+}
+
+.titulo{
+  background-color: #f5f5f5;
+  text-align: left !important;
 }
 
 .modalidad{
@@ -83,10 +111,6 @@ button{
   margin-right: 5%;
 }
 
-.funciones{
-
-}
-
 .titulo{
-  text-align: center;
+  background-color: #f5f5f5;
 }

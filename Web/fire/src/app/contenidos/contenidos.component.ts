@@ -61,6 +61,7 @@ export class ContenidosComponent implements OnInit {
       contenidos.forEach( contenido => {
         this.contenidosList.push(JSON.parse(JSON.stringify(contenido)));
       });
+      console.log(this.contenidosList);
     });
   }
 }

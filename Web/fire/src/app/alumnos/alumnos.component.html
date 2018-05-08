@@ -5,10 +5,9 @@
     <mat-form-field class="campo-busqueda">
       <input [(ngModel)]="filter" matInput placeholder="Búsqueda por nombre o email" value="" name="search">
     </mat-form-field>
-    <button (click)="newAlumno()" mat-raised-button color="primary">AGREGAR ALUMNO</button>
+    <button (click)="newAlumno()" mat-button color="basic">AGREGAR ALUMNO</button>
   </form>
   <mat-divider></mat-divider>
-
 
   <mat-list class="cabecera">
     <mat-list-item role="listitem" >
@@ -24,8 +23,8 @@
       <input class="name" [(ngModel)]="alumno.Nombre" matInput placeholder="Name" name="name">
       <input id="email" class="email" [(ngModel)]="alumno.Email" type="email" matInput placeholder="Email" name="email">
       <span class="spacer"></span>
-      <button [disabled]="!(alumno.Email != '' && alumno.Nombre != '' && isValidMailFormat())" (click)="addAlumno()" mat-raised-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>
-      <button (click)="newAlumno()" mat-raised-button color=""><mat-icon mat-list-icon>cancel</mat-icon></button>
+      <button [disabled]="!(alumno.Email != '' && alumno.Nombre != '' && isValidMailFormat())" (click)="addAlumno()" mat-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>
+      <button (click)="newAlumno()" mat-button color=""><mat-icon mat-list-icon>cancel</mat-icon></button>
       <mat-divider></mat-divider>
     </mat-list-item>
 
@@ -33,8 +32,8 @@
       <input class="name" [(ngModel)]="alumno.Nombre" matInput placeholder="Name" name="name">
       <input [disabled]="true" class="email" type="email" [(ngModel)]="alumno.Email" matInput placeholder="Email" name="email">
       <span class="spacer"></span>
-      <button (click)="updateAlumno()" [disabled]="alumno.Nombre == ''" mat-raised-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>
-      <button (click)="modifyAlumno()" mat-raised-button color=""><mat-icon mat-list-icon>cancel</mat-icon></button>
+      <button (click)="updateAlumno()" [disabled]="alumno.Nombre == ''" mat-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>
+      <button (click)="modifyAlumno()" mat-button color=""><mat-icon mat-list-icon>cancel</mat-icon></button>
       <mat-divider></mat-divider>
     </mat-list-item>
 
@@ -42,9 +41,9 @@
       <p class="name">{{alumno.Nombre}}</p>
       <p class="email">{{alumno.Email}}</p>
       <span class="spacer"></span>
-      <button  mat-raised-button color="basic" (click)="modifyAlumno(alumno.uid, alumno.Nombre, alumno.Email)"><mat-icon mat-list-icon>edit</mat-icon></button>
+      <button  mat-button color="basic" (click)="modifyAlumno(alumno.uid, alumno.Nombre, alumno.Email)"><mat-icon mat-list-icon>edit</mat-icon></button>
       <!--<div matTooltip="Curso asignado." [matTooltipPosition]="tooltipPosition" [matTooltipDisabled]="gestor.curso == ''" >-->
-        <button  [disabled]="" mat-raised-button color="warn" (click)="deleteAlumno(alumno.uid)"><mat-icon mat-list-icon>delete</mat-icon></button>
+        <button  [disabled]="" mat-button color="warn" (click)="deleteAlumno(alumno.uid)"><mat-icon mat-list-icon>delete</mat-icon></button>
       <!--</div>-->
       <mat-divider [inset]="true"></mat-divider>
     </mat-list-item>

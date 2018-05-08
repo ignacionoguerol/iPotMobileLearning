@@ -1,48 +1,74 @@
-<mat-card class="mat-elevation-z2 list-card mat-typography">
+<mat-card class="list-card mat-typography">
 
   <!--<mat-progress-bar *ngIf="!contenidosList.length" mode="query"></mat-progress-bar>-->
 
-
-  <mat-list class="cabecera">
-    <mat-select class="select modalidad" placeholder="Modalidad" [(ngModel)]="modalidad" name="first">
+  <mat-list class="select">
+    <mat-select class="modalidad" placeholder="Modalidad" [(ngModel)]="modalidad" name="first">
       <mat-option *ngFor="let modalidad of modalidades" [value]="modalidad">
         {{ modalidad }}
       </mat-option>
     </mat-select>
 
-    <mat-select class="select modulo" placeholder="Modulos" [(ngModel)]="modulo" name="second">
+    <mat-select class="modulo" placeholder="Modulos" [(ngModel)]="modulo" name="second">
       <mat-option *ngFor="let modulo of modulosList" [value]="modulo.name">
         {{ modulo.name }}
       </mat-option>
     </mat-select>
 
-    <button mat-raised-button color="primary" (click)="getContenidos()" [disabled]="modulo == '' || modalidad == ''">CONFIRMAR</button>
+    <button mat-button color="primary" (click)="getContenidos()" [disabled]="modulo == '' || modalidad == ''">CONFIRMAR</button>
 
     <mat-divider></mat-divider>
 
-    <form class="cabecera">
+   <!-- <form class="cabecera">
 
       <mat-form-field class="campo-busqueda">
         <input [(ngModel)]="filter" matInput placeholder="Búsqueda por curso o gestor" value="" name="search">
       </mat-form-field>
-      <button mat-raised-button color="primary">AGREGAR ELEMENTO</button>
+      <button mat-button color="basic">AGREGAR ELEMENTO</button>
     </form>
 
+    <mat-divider></mat-divider>-->
+  </mat-list>
+
+  <mat-list *ngIf="modalidad" class="titulo">
+    <mat-list-item role="listitem" >
+      <h3 class="id">ID</h3>
+
+      <h3 *ngIf="modalidad == 'Ahorcado'" class="ahorcado-palabra">Palabra</h3>
+      <h3 *ngIf="modalidad == 'Ahorcado'" class="ahorcado-pista">Pista</h3>
+
+      <h3 *ngIf="modalidad == 'Jeroglifico'" class="jeroglifico-pista">Pista</h3>
+      <h3 *ngIf="modalidad == 'Jeroglifico'" class="jeroglifico-respuesta">Respuesta</h3>
+      <h3 *ngIf="modalidad == 'Jeroglifico'" class="jeroglifico-img-titulo">Imagen</h3>
+
+      <h3 *ngIf="modalidad == 'Parejas'" class="parejas-pista">Pista</h3>
+      <h3 *ngIf="modalidad == 'Parejas'" class="parejas-pista">Columna I</h3>
+      <div *ngIf="modalidad == 'Parejas'" class="separador"></div>
+      <h3 *ngIf="modalidad == 'Parejas'" class="parejas-pista">Columna R</h3>
+
+
+    </mat-list-item>
     <mat-divider></mat-divider>
-
-
   </mat-list>
 
   <mat-list class="list" role="list" >
 
     <mat-list-item role="listitem" *ngFor="let contenido of contenidosList">
 
-      <p *ngIf="modalidad == 'Ahorcado'" class="name">{{contenido.Palabra}}</p>
-      <p *ngIf="modalidad == 'Ahorcado'" class="name">{{contenido.Pista}}</p>
+      <p class="id">{{contenido.num}}</p>
 
-      <p *ngIf="modalidad == 'Jeroglifico'" class="name">{{contenido.pista}}</p>
-      <p *ngIf="modalidad == 'Jeroglifico'" class="name">{{contenido.respuesta}}</p>
-      <a href="contenido.url" *ngIf="modalidad == 'Jeroglifico'" class="name">{{contenido.url}}</a>
+      <p *ngIf="modalidad == 'Ahorcado'" class="ahorcado-palabra">{{contenido.Palabra}}</p>
+      <p *ngIf="modalidad == 'Ahorcado'" class="ahorcado-palabra">{{contenido.Pista}}</p>
+
+      <p *ngIf="modalidad == 'Jeroglifico'" class="jeroglifico-pista">{{contenido.pista}}</p>
+      <p *ngIf="modalidad == 'Jeroglifico'" class="jeroglifico-respuesta">{{contenido.respuesta}}</p>
+      <img *ngIf="modalidad == 'Jeroglifico'" class="jeroglifico-img" [src]="contenido.url">
+
+      <p *ngIf="modalidad == 'Parejas'" class="parejas-pista">{{contenido.pista}}</p>
+      <p [hidden]="modalidad != 'Parejas'" *ngFor="let item of contenido.i | slice:1"  class="parejas-elements">{{item.orden}} - {{item.palabra}}</p>
+      <div *ngIf="modalidad == 'Parejas'" class="separador"></div>
+      <p [hidden]="modalidad != 'Parejas'" *ngFor="let item of contenido.r | slice:1"  class="parejas-elements">{{item.orden}} - {{item.palabra}}</p>
+
 
       <p *ngIf="modalidad == 'Preguntas'" class="name">{{contenido.pregunta}}</p>
       <p *ngIf="modalidad == 'Preguntas'" class="name">{{contenido.respuestas}}</p>

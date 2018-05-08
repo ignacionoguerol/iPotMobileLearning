@@ -5,7 +5,7 @@
     <mat-form-field class="campo-busqueda">
       <input [(ngModel)]="filter" matInput placeholder="Búsqueda por nombre o email" value="" name="search">
     </mat-form-field>
-    <button (click)="newModulo()" mat-raised-button color="primary">AGREGAR MODULO</button>
+    <button (click)="newModulo()" mat-button color="basic">AGREGAR MODULO</button>
   </form>
   <mat-divider></mat-divider>
 
@@ -25,8 +25,8 @@
       <input class="name" [(ngModel)]="modulo.name" matInput placeholder="Name" name="name">
       <mat-slide-toggle class="email" [checked]="true" [(ngModel)]="modulo.enabled"></mat-slide-toggle>
       <span class="spacer"></span>
-      <button (click)="addModulo()" [disabled]="!modulo" mat-raised-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>
-      <button (click)="newModulo()" mat-raised-button color=""><mat-icon mat-list-icon>cancel</mat-icon></button>
+      <button (click)="addModulo()" [disabled]="!modulo" mat-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>
+      <button (click)="newModulo()" mat-button color=""><mat-icon mat-list-icon>cancel</mat-icon></button>
       <mat-divider></mat-divider>
     </mat-list-item>
 
@@ -35,17 +35,17 @@
       <input class="name" [(ngModel)]="modulo.name" matInput placeholder="Name" name="name">
       <mat-slide-toggle class="email" [checked]="true" [(ngModel)]="modulo.enabled"></mat-slide-toggle>
       <span class="spacer"></span>
-      <button  (click)="updateModulo()" [disabled]="!modulo" mat-raised-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>
-      <button (click)="modifyModulo()" mat-raised-button color=""><mat-icon mat-list-icon>cancel</mat-icon></button>
+      <button  (click)="updateModulo()" [disabled]="!modulo" mat-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>
+      <button (click)="modifyModulo()" mat-button color=""><mat-icon mat-list-icon>cancel</mat-icon></button>
       <mat-divider></mat-divider>
     </mat-list-item>
 
     <mat-list-item role="listitem" *ngFor="let modulo of modulosList">
       <p class="id">{{modulo.id}}</p>
       <p class="name">{{modulo.name}}</p>
-      <mat-slide-toggle class="email" [checked]=modulo.enabled></mat-slide-toggle>
-      <button  (click)="modifyModulo(modulo.name, modulo.id, modulo.enabled)" mat-raised-button color="basic" ><mat-icon mat-list-icon>edit</mat-icon></button>
-      <button  (click)="deleteModulo(modulo.id)" [disabled]="" mat-raised-button color="warn"><mat-icon mat-list-icon>delete</mat-icon></button>
+      <mat-slide-toggle class="email" [disabled]="true" [checked]=modulo.enabled></mat-slide-toggle>
+      <button  (click)="modifyModulo(modulo.name, modulo.id, modulo.enabled)" mat-button color="basic" ><mat-icon mat-list-icon>edit</mat-icon></button>
+      <button  (click)="deleteModulo(modulo.id)" [disabled]="" mat-button color="warn"><mat-icon mat-list-icon>delete</mat-icon></button>
       <mat-divider></mat-divider>
     </mat-list-item>
 
