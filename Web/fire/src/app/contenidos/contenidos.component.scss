@@ -61,6 +61,43 @@ mat-list-item{
   width: 10%;
 }
 
+.pregunta-pregunta{
+  margin-top: 2%;
+  width: 40%;
+  margin-right: 2%;
+  margin-bottom: 2%;
+}
+
+.pregunta-correcta{
+  margin-top: 1%;
+  width: 10%;
+}
+
+.puzzle-tema{
+  margin-top: 1%;
+  width: 30%;
+}
+
+.puzzle-palabra{
+  margin-top: 1%;
+  width: 15%;
+}
+
+.sopa-pregunta{
+  margin-top: 1%;
+  width: 20%;
+}
+
+.sopa-letras{
+  margin-top: 1%;
+  width: 50%;
+}
+
+.sopa-palabras{
+  margin-top: 1%;
+  width: 20%;
+}
+
 .separador{
   width: 5%;
 }
@@ -107,10 +144,48 @@ button{
 
 .modulo{
   margin-left: 5%;
-  width: 50%;
+  width: 40%;
   margin-right: 5%;
 }
 
 .titulo{
   background-color: #f5f5f5;
+}
+
+.aniadir{
+  margin-left: 2.5%;
+  margin-bottom: 0.5%;
+}
+
+.confirmar{
+  margin-right: 5%;
+}
+
+.newElement{
+  margin-left: 25%;
+  margin-right: auto;
+  width: 50%;
+  position:absolute;
+  top: 10%;
+}
+
+.newElement h3{
+  width: 100%;
+  text-align: center;
+}
+
+.newElement mat-form-field{
+  width: 70%;
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
+.uploadButton{
+  width: 70%;
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
+.newElement button{
+  margin-left: 10%;
 }

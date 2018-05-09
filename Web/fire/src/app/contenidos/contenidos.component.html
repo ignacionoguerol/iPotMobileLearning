@@ -3,19 +3,23 @@
   <!--<mat-progress-bar *ngIf="!contenidosList.length" mode="query"></mat-progress-bar>-->
 
   <mat-list class="select">
-    <mat-select class="modalidad" placeholder="Modalidad" [(ngModel)]="modalidad" name="first">
+    <mat-select [disabled]="add" class="modalidad" placeholder="Modalidad" [(ngModel)]="modalidad" name="first">
       <mat-option *ngFor="let modalidad of modalidades" [value]="modalidad">
         {{ modalidad }}
       </mat-option>
     </mat-select>
 
-    <mat-select class="modulo" placeholder="Modulos" [(ngModel)]="modulo" name="second">
+    <mat-select [disabled]="add" class="modulo" placeholder="Modulos" [(ngModel)]="modulo" name="second">
       <mat-option *ngFor="let modulo of modulosList" [value]="modulo.name">
         {{ modulo.name }}
       </mat-option>
     </mat-select>
 
-    <button mat-button color="primary" (click)="getContenidos()" [disabled]="modulo == '' || modalidad == ''">CONFIRMAR</button>
+    <button mat-button color="primary" class="confirmar" (click)="getContenidos()" [disabled]="modulo == '' || modalidad == '' || add">CONFIRMAR</button>
+
+    <button mat-raised-button (click)="addElement()" class="aniadir" color="primary" [disabled]="modulo == '' || modalidad == ''">
+      <mat-icon>add</mat-icon>
+    </button>
 
     <mat-divider></mat-divider>
 
@@ -46,13 +50,22 @@
       <div *ngIf="modalidad == 'Parejas'" class="separador"></div>
       <h3 *ngIf="modalidad == 'Parejas'" class="parejas-pista">Columna R</h3>
 
+      <h3 *ngIf="modalidad == 'Preguntas'" class="pregunta-pregunta">Preguntas</h3>
+      <h3 *ngIf="modalidad == 'Preguntas'" class="pregunta-pregunta">Respuestas</h3>
+      <h3 *ngIf="modalidad == 'Preguntas'" class="pregunta-correcta">Correcta</h3>
+
+      <h3 *ngIf="modalidad == 'Puzzles'" class="puzzle-tema">Preguntas</h3>
+      <h3 *ngIf="modalidad == 'Puzzles'" class="puzzle-palabra">Respuestas</h3>
+
+      <h3 *ngIf="modalidad == 'Sopa'" class="sopa-pregunta">Pista</h3>
+      <h3 *ngIf="modalidad == 'Sopa'" class="sopa-letras">Letras</h3>
+      <h3 *ngIf="modalidad == 'Sopa'" class="sopa-palabras">Palabras</h3>
 
     </mat-list-item>
     <mat-divider></mat-divider>
   </mat-list>
 
-  <mat-list class="list" role="list" >
-
+  <mat-list dense class="list" role="list" >
     <mat-list-item role="listitem" *ngFor="let contenido of contenidosList">
 
       <p class="id">{{contenido.num}}</p>
@@ -69,15 +82,60 @@
       <div *ngIf="modalidad == 'Parejas'" class="separador"></div>
       <p [hidden]="modalidad != 'Parejas'" *ngFor="let item of contenido.r | slice:1"  class="parejas-elements">{{item.orden}} - {{item.palabra}}</p>
 
+      <p *ngIf="modalidad == 'Preguntas'" class="pregunta-pregunta">{{contenido.pregunta}}</p>
+      <p *ngIf="modalidad == 'Preguntas'" class="pregunta-pregunta">{{contenido.respuestas}}</p>
+      <p *ngIf="modalidad == 'Preguntas'" class="pregunta-correcta">{{contenido.correcta}}</p>
+      <ng-container *ngIf="modalidad == 'Puzzles'">
+        <p *ngFor="let item of contenido.palabras"  class="puzzle-palabra">{{item.orden}} - {{item.id}}</p>
+      </ng-container>
+      <p *ngIf="modalidad == 'Puzzles'" class="puzzle-tema">{{contenido.tema}}</p>
 
-      <p *ngIf="modalidad == 'Preguntas'" class="name">{{contenido.pregunta}}</p>
-      <p *ngIf="modalidad == 'Preguntas'" class="name">{{contenido.respuestas}}</p>
-      <p *ngIf="modalidad == 'Preguntas'" class="name">{{contenido.correcta}}</p>
+      <p *ngIf="modalidad == 'Sopa'" class="sopa-pregunta">{{contenido.pregunta}}</p>
+      <p *ngIf="modalidad == 'Sopa'" class="sopa-letras">{{contenido.letras}}</p>
+      <p *ngIf="modalidad == 'Sopa'" class="sopa-palabras">{{contenido.palabras}}</p>
 
       <mat-divider [inset]="true"></mat-divider>
     </mat-list-item>
   </mat-list>
 </mat-card>
+
+<mat-card class="newElement" *ngIf="add">
+  <h3>Añadir {{modalidad}} - {{modulo}}</h3>
+  <form >
+    <ng-container *ngIf="modalidad == 'Ahorcado'">
+      <mat-form-field><input matInput [(ngModel)]="ahorcado.num" placeholder="ID" name="num"></mat-form-field>
+      <mat-form-field ><input matInput [(ngModel)]="ahorcado.Palabra" placeholder="Palabra" name="palabra"></mat-form-field>
+      <mat-form-field ><input matInput [(ngModel)]="ahorcado.Pista" placeholder="Pista" name="pista"></mat-form-field>
+      <button mat-button color="warn" (click)="addElement()" class="" [disabled]="modulo == '' || modalidad == ''">CANCELAR</button>
+      <button mat-button color="primary" (click)="aniadirElemento()"
+              [disabled]="ahorcado.Palabra == '' || ahorcado.Pista == '' || ahorcado.num == ''">CONFIRMAR</button>
+    </ng-container>
+
+    <ng-container *ngIf="modalidad == 'Jeroglifico'">
+      <mat-form-field><input matInput [(ngModel)]="jeroglifico.num" placeholder="ID" name="num"></mat-form-field>
+      <mat-form-field ><input matInput [(ngModel)]="jeroglifico.pista" placeholder="Pista" name="palabra"></mat-form-field>
+      <mat-form-field ><input matInput [(ngModel)]="jeroglifico.tema" placeholder="Tema" name="tema"></mat-form-field>
+      <mat-form-field ><input matInput [(ngModel)]="jeroglifico.respuesta" placeholder="Respuesta" name="respuesta"></mat-form-field>
+
+      <div *ngIf="currentUpload">
+        <progress class="progress is-success" min=1 max=100 value="{{ currentUpload?.progress }}"></progress>
+        Progress: {{currentUpload?.name}} | {{currentUpload?.progress}}% Complete
+      </div>
+      <div class="box">
+        <label><input type="file" class="uploadButton" (change)="detectFiles($event)"></label>
+      </div>
+
+      <button mat-button color="warn" (click)="addElement()" class="" [disabled]="modulo == '' || modalidad == ''">CANCELAR</button>
+      <button mat-button color="primary" (click)="aniadirElemento()"
+              [disabled]="jeroglifico.num == '' || jeroglifico.pista == '' || jeroglifico.tema == '' || jeroglifico.respuesta == ''
+              || jeroglifico.url == ''">CONFIRMAR</button>
+
+    </ng-container>
+
+  </form>
+</mat-card>
+
+
 
 
 

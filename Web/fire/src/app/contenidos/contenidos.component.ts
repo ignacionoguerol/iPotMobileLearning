@@ -5,6 +5,8 @@ import { ContenidosService } from '../contenidos.service';
 import { CursosService } from '../cursos.service';
 import { Gestor } from '../gestor';
 import { Curso } from '../curso';
+import { Ahorcado } from '../modalidades/ahorcado';
+import { Jeroglifico } from '../modalidades/jeroglifico';
 
 @Component({
   selector: 'app-contenidos',
@@ -21,6 +23,10 @@ export class ContenidosComponent implements OnInit {
   modalidad: String;
   modulo: String;
   curso: Curso;
+  add: boolean;
+  ahorcado: Ahorcado;
+  jeroglifico: Jeroglifico;
+  selectedFiles: FileList | null;
 
   constructor(private gestoresService: GestoresService, private modulosService: ModulosService,
               private contenidosService: ContenidosService, private cursosService: CursosService) {
@@ -30,9 +36,30 @@ export class ContenidosComponent implements OnInit {
     this.modalidad = '';
     this.modulo = '';
     this.contenidosList = [];
+    this.add = false;
+    this.clear();
   }
 
   ngOnInit() {
+  }
+
+  addElement() {
+    if (this.add) {
+      this.add = false;
+      this.clear();
+    } else {
+      this.add = true;
+    }
+  }
+
+  aniadirElemento() {
+    switch (this.modalidad) {
+      case 'Ahorcado': {
+        this.contenidosService.add(this.curso.nombre, this.modalidad, this.modulo, this.ahorcado).then(ret => {
+          this.clear();
+        });
+      }
+    }
   }
 
   getGestorActual() {
@@ -56,12 +83,21 @@ export class ContenidosComponent implements OnInit {
   }
 
   getContenidos() {
-    this.contenidosList = [];
     this.contenidosService.loadList(this.curso.nombre, this.modalidad, this.modulo).subscribe(contenidos => {
+      this.contenidosList = [];
       contenidos.forEach( contenido => {
         this.contenidosList.push(JSON.parse(JSON.stringify(contenido)));
       });
       console.log(this.contenidosList);
     });
+  }
+
+  clear() {
+    this.ahorcado = new Ahorcado();
+    this.jeroglifico = new Jeroglifico();
+  }
+
+  detectFiles($event: Event) {
+    this.selectedFiles = ($event.target as HTMLInputElement).files;
   }
 }
