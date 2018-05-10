@@ -7,6 +7,8 @@ import { Gestor } from '../gestor';
 import { Curso } from '../curso';
 import { Ahorcado } from '../modalidades/ahorcado';
 import { Jeroglifico } from '../modalidades/jeroglifico';
+import { Observable } from 'rxjs/Observable';
+import {AngularFireUploadTask} from 'angularfire2/storage';
 
 @Component({
   selector: 'app-contenidos',
@@ -27,6 +29,9 @@ export class ContenidosComponent implements OnInit {
   ahorcado: Ahorcado;
   jeroglifico: Jeroglifico;
   selectedFiles: FileList | null;
+  task: AngularFireUploadTask;
+  uploadProgress: Observable<number>;
+  downloadURL: Observable<string>;
 
   constructor(private gestoresService: GestoresService, private modulosService: ModulosService,
               private contenidosService: ContenidosService, private cursosService: CursosService) {
@@ -58,6 +63,13 @@ export class ContenidosComponent implements OnInit {
         this.contenidosService.add(this.curso.nombre, this.modalidad, this.modulo, this.ahorcado).then(ret => {
           this.clear();
         });
+        break;
+      }
+      case 'Jeroglifico': {
+        this.contenidosService.add(this.curso.nombre, this.modalidad, this.modulo, this.jeroglifico).then(ret => {
+          this.clear();
+        });
+        break;
       }
     }
   }
@@ -99,5 +111,13 @@ export class ContenidosComponent implements OnInit {
 
   detectFiles($event: Event) {
     this.selectedFiles = ($event.target as HTMLInputElement).files;
+  }
+
+  upload(event) {
+    this.task = this.contenidosService.upload(event, 'Jeroglificos' + this.curso.nombre + '/' + this.modulo + '/' + event.target.files[0].name);
+    this.uploadProgress = this.task.percentageChanges();
+    this.task.then(uploaded => {
+      this.jeroglifico.url = uploaded.downloadURL;
+    });
   }
 }

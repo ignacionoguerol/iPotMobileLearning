@@ -5,11 +5,11 @@ mat-card{
 }
 
 .list-card{
-padding: 0;
+  padding: 0;
 }
 
 .list{
-  overflow: hidden !important;
+  overflow: auto;
 }
 
 mat-list-item{
@@ -175,6 +175,23 @@ button{
 }
 
 .newElement mat-form-field{
+  width: 70%;
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
+.newElement mat-progress-bar{
+  width: 70%;
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
+.newElement input{
+  width: 70%;
+  margin-left: 15%;
+  margin-right: 15%;
+}
+.newElement div{
   width: 70%;
   margin-left: 15%;
   margin-right: 15%;

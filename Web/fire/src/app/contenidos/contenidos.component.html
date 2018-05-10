@@ -117,13 +117,9 @@
       <mat-form-field ><input matInput [(ngModel)]="jeroglifico.tema" placeholder="Tema" name="tema"></mat-form-field>
       <mat-form-field ><input matInput [(ngModel)]="jeroglifico.respuesta" placeholder="Respuesta" name="respuesta"></mat-form-field>
 
-      <div *ngIf="currentUpload">
-        <progress class="progress is-success" min=1 max=100 value="{{ currentUpload?.progress }}"></progress>
-        Progress: {{currentUpload?.name}} | {{currentUpload?.progress}}% Complete
-      </div>
-      <div class="box">
-        <label><input type="file" class="uploadButton" (change)="detectFiles($event)"></label>
-      </div>
+      <input type="file" (change)="upload($event)" accept=".png,.jpg" />
+      <mat-progress-bar mode="determinate" [value]="uploadProgress | async"></mat-progress-bar>
+      <!--<div *ngIf="downloadURL | async; let downloadSrc" class="alert alert-info" role="alert"><a [href]="downloadSrc">{{downloadSrc}}</a></div>-->
 
       <button mat-button color="warn" (click)="addElement()" class="" [disabled]="modulo == '' || modalidad == ''">CANCELAR</button>
       <button mat-button color="primary" (click)="aniadirElemento()"
