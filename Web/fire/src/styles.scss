@@ -2,6 +2,15 @@
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
 body{
-	overflow: hidden; 
+	overflow: hidden;
 	background-color: #ECEFF1;
+  min-height: 100%;
+}
+
+app-root{
+  min-height: 100%;
+}
+
+.mat-tab-body-wrapper {
+  flex-grow: 1;
 }

@@ -99,16 +99,21 @@
   </mat-list>
 </mat-card>
 
-<mat-card class="newElement" *ngIf="add">
-  <h3>Añadir {{modalidad}} - {{modulo}}</h3>
+<mat-card class="newElement mat-elevation-z12" *ngIf="add">
+
+  <mat-toolbar class="mat-typography" color="primary" >
+    <h3>Añadir {{modalidad}} - {{modulo}}</h3>
+  </mat-toolbar>
   <form >
     <ng-container *ngIf="modalidad == 'Ahorcado'">
       <mat-form-field><input matInput [(ngModel)]="ahorcado.num" placeholder="ID" name="num"></mat-form-field>
       <mat-form-field ><input matInput [(ngModel)]="ahorcado.Palabra" placeholder="Palabra" name="palabra"></mat-form-field>
       <mat-form-field ><input matInput [(ngModel)]="ahorcado.Pista" placeholder="Pista" name="pista"></mat-form-field>
-      <button mat-button color="warn" (click)="addElement()" class="" [disabled]="modulo == '' || modalidad == ''">CANCELAR</button>
-      <button mat-button color="primary" (click)="aniadirElemento()"
-              [disabled]="ahorcado.Palabra == '' || ahorcado.Pista == '' || ahorcado.num == ''">CONFIRMAR</button>
+      <div class="buttons">
+        <button mat-button color="primary" (click)="aniadirElemento()"
+                [disabled]="ahorcado.Palabra == '' || ahorcado.Pista == '' || ahorcado.num == ''">CONFIRMAR</button>
+        <button mat-button color="warn" (click)="addElement()" class="" [disabled]="modulo == '' || modalidad == ''">CANCELAR</button>
+      </div>
     </ng-container>
 
     <ng-container *ngIf="modalidad == 'Jeroglifico'">
@@ -116,22 +121,89 @@
       <mat-form-field ><input matInput [(ngModel)]="jeroglifico.pista" placeholder="Pista" name="palabra"></mat-form-field>
       <mat-form-field ><input matInput [(ngModel)]="jeroglifico.tema" placeholder="Tema" name="tema"></mat-form-field>
       <mat-form-field ><input matInput [(ngModel)]="jeroglifico.respuesta" placeholder="Respuesta" name="respuesta"></mat-form-field>
-
-      <input type="file" (change)="upload($event)" accept=".png,.jpg" />
+      <input (change)="upload($event)" type="file" accept=".png,.jpg" name="myfile" id="input"/>
       <mat-progress-bar mode="determinate" [value]="uploadProgress | async"></mat-progress-bar>
       <!--<div *ngIf="downloadURL | async; let downloadSrc" class="alert alert-info" role="alert"><a [href]="downloadSrc">{{downloadSrc}}</a></div>-->
 
-      <button mat-button color="warn" (click)="addElement()" class="" [disabled]="modulo == '' || modalidad == ''">CANCELAR</button>
-      <button mat-button color="primary" (click)="aniadirElemento()"
-              [disabled]="jeroglifico.num == '' || jeroglifico.pista == '' || jeroglifico.tema == '' || jeroglifico.respuesta == ''
-              || jeroglifico.url == ''">CONFIRMAR</button>
+      <div class="buttons">
+        <button mat-button color="primary" (click)="aniadirElemento()"
+                [disabled]="jeroglifico.num == '' || jeroglifico.pista == '' || jeroglifico.tema == '' || jeroglifico.respuesta == ''
+                || jeroglifico.url == ''">CONFIRMAR</button>
+        <button mat-button color="warn" (click)="addElement()" class="cancel" [disabled]="modulo == '' || modalidad == ''">CANCELAR</button>
+      </div>
+    </ng-container>
 
+    <ng-container *ngIf="modalidad == 'Parejas'">
+      <mat-form-field><input matInput [(ngModel)]="parejas.num" placeholder="ID" name="num"></mat-form-field>
+      <mat-form-field ><input matInput [(ngModel)]="parejas.pista" placeholder="Palabra" name="pista"></mat-form-field>
+
+      <div class="parejas-parejas">
+        <div class="parejas-col">
+          <div>
+            <mat-form-field class="id"><input matInput maxlength="1" [(ngModel)]="parejas.i[1].orden" placeholder="Pareja" name="num1"></mat-form-field>
+            <mat-form-field class="palabra"><input matInput [(ngModel)]="parejas.i[1].palabra" placeholder="Palabra" name="palabra1"></mat-form-field>
+
+            <mat-form-field class="id"><input matInput maxlength="1" [(ngModel)]="parejas.i[2].orden" placeholder="Pareja" name="num2"></mat-form-field>
+            <mat-form-field class="palabra"><input matInput [(ngModel)]="parejas.i[2].palabra" placeholder="Palabra" name="palabra2"></mat-form-field>
+
+            <mat-form-field class="id"><input matInput maxlength="1" [(ngModel)]="parejas.i[3].orden" placeholder="Pareja" name="num3"></mat-form-field>
+            <mat-form-field class="palabra"><input matInput [(ngModel)]="parejas.i[3].palabra" placeholder="Palabra" name="palabr3"></mat-form-field>
+          </div>
+        </div>
+
+        <div class="parejas-col">
+          <div>
+            <div>
+              <mat-form-field class="id"><input matInput maxlength="1" [(ngModel)]="parejas.r[1].orden" placeholder="Pareja" name="numr1"></mat-form-field>
+              <mat-form-field class="palabra"><input matInput [(ngModel)]="parejas.r[1].palabra" placeholder="Palabra" name="palabrar1"></mat-form-field>
+
+              <mat-form-field class="id"><input matInput maxlength="1" [(ngModel)]="parejas.r[2].orden" placeholder="Pareja" name="numr2"></mat-form-field>
+              <mat-form-field class="palabra"><input matInput [(ngModel)]="parejas.r[2].palabra" placeholder="Palabra" name="palabrar2"></mat-form-field>
+
+              <mat-form-field class="id"><input matInput maxlength="1" [(ngModel)]="parejas.r[3].orden" placeholder="Pareja" name="numr3"></mat-form-field>
+              <mat-form-field class="palabra"><input matInput [(ngModel)]="parejas.r[3].palabra" placeholder="Palabra" name="palabrar3"></mat-form-field>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button mat-button color="primary" (click)="aniadirElemento()"
+                [disabled]="parejas.num == '' || parejas.pista == ''
+                || parejas.i[1].orden == null || parejas.i[1].palabra == '' || parejas.i[2].orden == null
+                  || parejas.i[2].palabra == '' || parejas.i[3].orden == null || parejas.i[3].palabra == ''
+                || parejas.r[1].orden == null || parejas.r[1].palabra == '' || parejas.r[2].orden == null
+                  || parejas.r[2].palabra == '' || parejas.r[3].orden == null || parejas.r[3].palabra == ''">CONFIRMAR</button>
+        <button mat-button color="warn" (click)="addElement()" class="" [disabled]="modulo == '' || modalidad == ''">CANCELAR</button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="modalidad == 'Preguntas'">
+      <mat-form-field><input matInput [(ngModel)]="pregunta.num" placeholder="ID" name="num"></mat-form-field>
+      <mat-form-field ><input matInput [(ngModel)]="pregunta.pregunta" placeholder="Pregunta" name="palabra"></mat-form-field>
+      <mat-form-field ><input matInput [(ngModel)]="pregunta.correcta" placeholder="Correcta" name="correcta"></mat-form-field>
+      <mat-form-field class="pregunta-respuesta"><input matInput class="pregunta-respuesta" [(ngModel)]="respuesta" placeholder="Respuesta" name="resp"> </mat-form-field>
+      <button mat-icon-button (click)="addRespuesta()" class="pregunta-add"><mat-icon>add</mat-icon></button>
+
+      <table *ngIf="pregunta.respuestas.length > 1" mat-table class="pregunta-resTable">
+        <th mat-header-cell > Respuestas</th>
+          <tr *ngFor="let res of pregunta.respuestas | slice:1; let i = index" mat-cell>
+            <td>{{i+1}}</td>
+            <td>{{res}}</td>
+          </tr>
+      </table>
+
+      <div class="buttons">
+        <button mat-button color="primary" (click)="aniadirElemento()"
+                [disabled]="pregunta.num == '' || pregunta.pregunta == ''
+                || pregunta.correcta == '' || pregunta.respuestas.length < 2">CONFIRMAR</button>
+        <button mat-button color="warn" (click)="addElement()" class="cancel" [disabled]="modulo == '' || modalidad == ''">CANCELAR</button>
+      </div>
     </ng-container>
 
   </form>
 </mat-card>
-
-
 
 
 

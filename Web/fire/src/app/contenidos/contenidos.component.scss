@@ -162,11 +162,12 @@ button{
 }
 
 .newElement{
-  margin-left: 25%;
+  margin-left: 30%;
   margin-right: auto;
-  width: 50%;
+  width: 40%;
   position:absolute;
   top: 10%;
+  padding: 0;
 }
 
 .newElement h3{
@@ -175,34 +176,105 @@ button{
 }
 
 .newElement mat-form-field{
-  width: 70%;
-  margin-left: 15%;
-  margin-right: 15%;
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 
 .newElement mat-progress-bar{
-  width: 70%;
-  margin-left: 15%;
-  margin-right: 15%;
+  width: 40%;
+  margin-top: 1%;
+  margin-left: 0;
 }
 
 .newElement input{
-  width: 70%;
-  margin-left: 15%;
-  margin-right: 15%;
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 .newElement div{
-  width: 70%;
-  margin-left: 15%;
-  margin-right: 15%;
-}
-
-.uploadButton{
-  width: 70%;
-  margin-left: 15%;
-  margin-right: 15%;
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 
 .newElement button{
   margin-left: 10%;
 }
+
+.newElement input{
+  width: 40%;
+  margin-left: 10%;
+  margin-right: 0%;
+  float: left;
+}
+
+mat-toolbar{
+  margin: 0;
+  height: 50px;
+}
+
+.buttons{
+  width: 60%;
+  margin-left: 40%;
+  float: left;
+}
+
+.buttons button{
+  float: right;
+
+}
+
+.parejas-parejas{
+  width: 100%;
+}
+
+.parejas-col{
+  width: 48% !important;
+  margin-left: 1% !important;
+  margin-right: 1% !important;
+  float: left;
+}
+.parejas-col div{
+  width: 100%;
+  padding: 0;
+}
+
+.parejas-col .id{
+  width: 20% !important;
+  margin: 0 !important;
+  float: left;
+}
+
+.parejas-col .palabra{
+  margin-left: 5%!important;
+  width: 55% !important;
+  margin-right: 5% !important;
+  float: left;
+}
+
+.parejas-col input{
+  width: 100%;
+}
+
+.pregunta-respuesta{
+  width: 60% !important;
+  margin-right: 0;
+  float: left !important;
+}
+
+.pregunta-add{
+  float: left !important;
+  margin-left: 5% !important;
+}
+
+.pregunta-resTable{
+  width: 40% !important;
+  margin-left: 30% !important;
+}
+
+
+
+
+
+

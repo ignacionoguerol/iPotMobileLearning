@@ -9,6 +9,8 @@ import { Ahorcado } from '../modalidades/ahorcado';
 import { Jeroglifico } from '../modalidades/jeroglifico';
 import { Observable } from 'rxjs/Observable';
 import {AngularFireUploadTask} from 'angularfire2/storage';
+import { Parejas } from '../modalidades/parejas';
+import { Pregunta } from '../modalidades/pregunta';
 
 @Component({
   selector: 'app-contenidos',
@@ -26,12 +28,15 @@ export class ContenidosComponent implements OnInit {
   modulo: String;
   curso: Curso;
   add: boolean;
+  respuesta: string;
   ahorcado: Ahorcado;
   jeroglifico: Jeroglifico;
+  parejas: Parejas;
+  pregunta: Pregunta;
+
   selectedFiles: FileList | null;
   task: AngularFireUploadTask;
   uploadProgress: Observable<number>;
-  downloadURL: Observable<string>;
 
   constructor(private gestoresService: GestoresService, private modulosService: ModulosService,
               private contenidosService: ContenidosService, private cursosService: CursosService) {
@@ -43,6 +48,7 @@ export class ContenidosComponent implements OnInit {
     this.contenidosList = [];
     this.add = false;
     this.clear();
+    this.respuesta = '';
   }
 
   ngOnInit() {
@@ -68,9 +74,30 @@ export class ContenidosComponent implements OnInit {
       case 'Jeroglifico': {
         this.contenidosService.add(this.curso.nombre, this.modalidad, this.modulo, this.jeroglifico).then(ret => {
           this.clear();
+          this.uploadProgress = null;
+          // document.getElementById('input').value = '';
         });
         break;
       }
+      case 'Parejas': {
+        this.contenidosService.add(this.curso.nombre, this.modalidad, this.modulo, this.parejas).then(ret => {
+          this.clear();
+        });
+        break;
+      }
+      case 'Preguntas': {
+        this.contenidosService.add(this.curso.nombre, this.modalidad, this.modulo, this.pregunta).then(ret => {
+          this.clear();
+        });
+        break;
+      }
+    }
+  }
+
+  addRespuesta() {
+    if (this.respuesta.length > 0) {
+      this.pregunta.respuestas.push(this.respuesta);
+      this.respuesta = '';
     }
   }
 
@@ -107,6 +134,8 @@ export class ContenidosComponent implements OnInit {
   clear() {
     this.ahorcado = new Ahorcado();
     this.jeroglifico = new Jeroglifico();
+    this.parejas = new Parejas();
+    this.pregunta = new Pregunta();
   }
 
   detectFiles($event: Event) {
@@ -114,7 +143,8 @@ export class ContenidosComponent implements OnInit {
   }
 
   upload(event) {
-    this.task = this.contenidosService.upload(event, 'Jeroglificos' + this.curso.nombre + '/' + this.modulo + '/' + event.target.files[0].name);
+    this.task = this.contenidosService.upload(event, 'Jeroglificos' + this.curso.nombre
+      + '/' + this.modulo + '/' + event.target.files[0].name);
     this.uploadProgress = this.task.percentageChanges();
     this.task.then(uploaded => {
       this.jeroglifico.url = uploaded.downloadURL;
