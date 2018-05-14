@@ -54,8 +54,8 @@
       <h3 *ngIf="modalidad == 'Preguntas'" class="pregunta-pregunta">Respuestas</h3>
       <h3 *ngIf="modalidad == 'Preguntas'" class="pregunta-correcta">Correcta</h3>
 
-      <h3 *ngIf="modalidad == 'Puzzles'" class="puzzle-tema">Preguntas</h3>
-      <h3 *ngIf="modalidad == 'Puzzles'" class="puzzle-palabra">Respuestas</h3>
+      <h3 *ngIf="modalidad == 'Puzzles'" class="puzzle-tema">Tema</h3>
+      <h3 *ngIf="modalidad == 'Puzzles'" class="puzzle-palabra">Palabras</h3>
 
       <h3 *ngIf="modalidad == 'Sopa'" class="sopa-pregunta">Pista</h3>
       <h3 *ngIf="modalidad == 'Sopa'" class="sopa-letras">Letras</h3>
@@ -85,10 +85,11 @@
       <p *ngIf="modalidad == 'Preguntas'" class="pregunta-pregunta">{{contenido.pregunta}}</p>
       <p *ngIf="modalidad == 'Preguntas'" class="pregunta-pregunta">{{contenido.respuestas}}</p>
       <p *ngIf="modalidad == 'Preguntas'" class="pregunta-correcta">{{contenido.correcta}}</p>
+
+      <p *ngIf="modalidad == 'Puzzles'" class="puzzle-tema">{{contenido.tema}}</p>
       <ng-container *ngIf="modalidad == 'Puzzles'">
         <p *ngFor="let item of contenido.palabras"  class="puzzle-palabra">{{item.orden}} - {{item.id}}</p>
       </ng-container>
-      <p *ngIf="modalidad == 'Puzzles'" class="puzzle-tema">{{contenido.tema}}</p>
 
       <p *ngIf="modalidad == 'Sopa'" class="sopa-pregunta">{{contenido.pregunta}}</p>
       <p *ngIf="modalidad == 'Sopa'" class="sopa-letras">{{contenido.letras}}</p>
@@ -102,7 +103,7 @@
 <mat-card class="newElement mat-elevation-z12" *ngIf="add">
 
   <mat-toolbar class="mat-typography" color="primary" >
-    <h3>Añadir {{modalidad}} - {{modulo}}</h3>
+    <p>Añadir {{modalidad}} - {{modulo}}</p>
   </mat-toolbar>
   <form >
     <ng-container *ngIf="modalidad == 'Ahorcado'">
@@ -184,13 +185,12 @@
       <mat-form-field ><input matInput [(ngModel)]="pregunta.pregunta" placeholder="Pregunta" name="palabra"></mat-form-field>
       <mat-form-field ><input matInput [(ngModel)]="pregunta.correcta" placeholder="Correcta" name="correcta"></mat-form-field>
       <mat-form-field class="pregunta-respuesta"><input matInput class="pregunta-respuesta" [(ngModel)]="respuesta" placeholder="Respuesta" name="resp"> </mat-form-field>
-      <button mat-icon-button (click)="addRespuesta()" class="pregunta-add"><mat-icon>add</mat-icon></button>
+      <button mat-icon-button [disabled]="respuesta == ''" (click)="addRespuesta()" class="pregunta-add"><mat-icon>add</mat-icon></button>
 
       <table *ngIf="pregunta.respuestas.length > 1" mat-table class="pregunta-resTable">
-        <th mat-header-cell > Respuestas</th>
-          <tr *ngFor="let res of pregunta.respuestas | slice:1; let i = index" mat-cell>
-            <td>{{i+1}}</td>
-            <td>{{res}}</td>
+        <th> Respuestaw</th>
+          <tr *ngFor="let res of pregunta.respuestas | slice:1" mat-cell>
+            <td class="res">{{res}}</td>
           </tr>
       </table>
 
@@ -198,6 +198,28 @@
         <button mat-button color="primary" (click)="aniadirElemento()"
                 [disabled]="pregunta.num == '' || pregunta.pregunta == ''
                 || pregunta.correcta == '' || pregunta.respuestas.length < 2">CONFIRMAR</button>
+        <button mat-button color="warn" (click)="addElement()" class="cancel" [disabled]="modulo == '' || modalidad == ''">CANCELAR</button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="modalidad == 'Puzzles'">
+      <mat-form-field><input matInput [(ngModel)]="puzzle.num" placeholder="ID" name="num"></mat-form-field>
+      <mat-form-field ><input matInput [(ngModel)]="puzzle.tema" placeholder="Tema" name="palabra"></mat-form-field>
+      <mat-form-field class="puzzle-orden"><input matInput  [disabled]="puzzle.palabras.length > 3" [(ngModel)]="palabra.orden" placeholder="Orden" name="ord"></mat-form-field>
+      <mat-form-field class="puzzle-id"><input matInput  [disabled]="puzzle.palabras.length > 3" [(ngModel)]="palabra.id" placeholder="Palabra" name="id"></mat-form-field>
+      <button mat-icon-button [disabled]="palabra.orden == '' || palabra.id == '' || puzzle.palabras.length > 3" (click)="addRespuesta()" class="pregunta-add"><mat-icon>add</mat-icon></button>
+
+      <table *ngIf="puzzle.palabras.length > 0" mat-table class="pregunta-resTable">
+        <th> Respuestas</th>
+        <tr *ngFor="let res of puzzle.palabras" mat-cell>
+          <td class="res">{{res.orden}} - {{res.id}}</td>
+        </tr>
+      </table>
+
+      <div class="buttons">
+        <button mat-button color="primary" (click)="aniadirElemento()"
+                [disabled]="puzzle.num == '' || puzzle.tema == ''
+                || puzzle.palabras.length < 2">CONFIRMAR</button>
         <button mat-button color="warn" (click)="addElement()" class="cancel" [disabled]="modulo == '' || modalidad == ''">CANCELAR</button>
       </div>
     </ng-container>

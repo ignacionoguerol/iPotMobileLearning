@@ -210,8 +210,18 @@ button{
 }
 
 mat-toolbar{
-  margin: 0;
+  margin: 0 0 2% 0;
   height: 50px;
+  width: 100%;
+  overflow: hidden;
+  padding: 1% 4% 1% 4%
+
+}
+
+mat-toolbar p{
+  width: 100%;
+  overflow: hidden;
+  margin: 0;
 }
 
 .buttons{
@@ -271,8 +281,26 @@ mat-toolbar{
 .pregunta-resTable{
   width: 40% !important;
   margin-left: 30% !important;
+  text-align: center;
 }
 
+.pregunta-resTable th tr td{
+  width: 100%;
+  text-align: center;
+}
+
+.puzzle-orden{
+  float: left !important;
+  width: 10% !important;
+  margin-right: 0;
+}
+
+.puzzle-id{
+  float: left !important;
+  width: 40% !important;
+  margin-left: 1%!important;
+  margin-right: 0;
+}
 
 
 

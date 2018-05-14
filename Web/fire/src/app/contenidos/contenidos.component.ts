@@ -8,9 +8,11 @@ import { Curso } from '../curso';
 import { Ahorcado } from '../modalidades/ahorcado';
 import { Jeroglifico } from '../modalidades/jeroglifico';
 import { Observable } from 'rxjs/Observable';
-import {AngularFireUploadTask} from 'angularfire2/storage';
+import { AngularFireUploadTask } from 'angularfire2/storage';
 import { Parejas } from '../modalidades/parejas';
 import { Pregunta } from '../modalidades/pregunta';
+import { Puzzle } from '../modalidades/Puzzle';
+import { Palabra } from '../modalidades/palabra';
 
 @Component({
   selector: 'app-contenidos',
@@ -29,10 +31,12 @@ export class ContenidosComponent implements OnInit {
   curso: Curso;
   add: boolean;
   respuesta: string;
+  palabra: Palabra;
   ahorcado: Ahorcado;
   jeroglifico: Jeroglifico;
   parejas: Parejas;
   pregunta: Pregunta;
+  puzzle: Puzzle;
 
   selectedFiles: FileList | null;
   task: AngularFireUploadTask;
@@ -49,6 +53,7 @@ export class ContenidosComponent implements OnInit {
     this.add = false;
     this.clear();
     this.respuesta = '';
+    this.palabra = new Palabra();
   }
 
   ngOnInit() {
@@ -91,14 +96,34 @@ export class ContenidosComponent implements OnInit {
         });
         break;
       }
+      case 'Puzzles': {
+        this.contenidosService.add(this.curso.nombre, this.modalidad, this.modulo, this.puzzle).then(ret => {
+          this.clear();
+        });
+        break;
+      }
     }
   }
 
   addRespuesta() {
-    if (this.respuesta.length > 0) {
-      this.pregunta.respuestas.push(this.respuesta);
-      this.respuesta = '';
-    }
+
+      switch (this.modalidad) {
+        case 'Preguntas': {
+          if (this.respuesta.length > 0) {
+            this.pregunta.respuestas.push(this.respuesta);
+            this.respuesta = '';
+          }
+          break;
+        }
+        case 'Puzzles': {
+          if (this.palabra.orden !== '' && this.palabra.id !== '') {
+            this.puzzle.palabras.push(this.palabra);
+            this.palabra = new Palabra();
+          }
+          break;
+        }
+      }
+
   }
 
   getGestorActual() {
@@ -136,6 +161,7 @@ export class ContenidosComponent implements OnInit {
     this.jeroglifico = new Jeroglifico();
     this.parejas = new Parejas();
     this.pregunta = new Pregunta();
+    this.puzzle = new Puzzle();
   }
 
   detectFiles($event: Event) {
