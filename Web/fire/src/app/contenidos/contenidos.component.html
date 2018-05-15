@@ -3,8 +3,8 @@
   <!--<mat-progress-bar *ngIf="!contenidosList.length" mode="query"></mat-progress-bar>-->
 
   <mat-list class="select">
-    <mat-select [disabled]="add" class="modalidad" placeholder="Modalidad" [(ngModel)]="modalidad" name="first">
-      <mat-option *ngFor="let modalidad of modalidades" [value]="modalidad">
+    <mat-select (valueChange)="cambiarModalidad()" [disabled]="add" class="modalidad" placeholder="Modalidad" [(ngModel)]="modalidad" name="first">
+      <mat-option  *ngFor="let modalidad of modalidades" [value]="modalidad">
         {{ modalidad }}
       </mat-option>
     </mat-select>
@@ -95,6 +95,8 @@
       <p *ngIf="modalidad == 'Sopa'" class="sopa-letras">{{contenido.letras}}</p>
       <p *ngIf="modalidad == 'Sopa'" class="sopa-palabras">{{contenido.palabras}}</p>
 
+      <button  class="delete" [disabled]="" (click)="delete(contenido.num)" mat-icon-button color="warn"><mat-icon mat-list-icon>delete</mat-icon></button>
+
       <mat-divider [inset]="true"></mat-divider>
     </mat-list-item>
   </mat-list>
@@ -122,7 +124,7 @@
       <mat-form-field ><input matInput [(ngModel)]="jeroglifico.pista" placeholder="Pista" name="palabra"></mat-form-field>
       <mat-form-field ><input matInput [(ngModel)]="jeroglifico.tema" placeholder="Tema" name="tema"></mat-form-field>
       <mat-form-field ><input matInput [(ngModel)]="jeroglifico.respuesta" placeholder="Respuesta" name="respuesta"></mat-form-field>
-      <input (change)="upload($event)" type="file" accept=".png,.jpg" name="myfile" id="input"/>
+      <input class="progress" (change)="upload($event)" type="file" accept=".png,.jpg" name="myfile" id="input"/>
       <mat-progress-bar mode="determinate" [value]="uploadProgress | async"></mat-progress-bar>
       <!--<div *ngIf="downloadURL | async; let downloadSrc" class="alert alert-info" role="alert"><a [href]="downloadSrc">{{downloadSrc}}</a></div>-->
 
@@ -220,6 +222,27 @@
         <button mat-button color="primary" (click)="aniadirElemento()"
                 [disabled]="puzzle.num == '' || puzzle.tema == ''
                 || puzzle.palabras.length < 2">CONFIRMAR</button>
+        <button mat-button color="warn" (click)="addElement()" class="cancel" [disabled]="modulo == '' || modalidad == ''">CANCELAR</button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="modalidad == 'Sopa'">
+      <mat-form-field><input matInput [(ngModel)]="sopa.num" placeholder="ID" name="num"></mat-form-field>
+      <mat-form-field ><input matInput [(ngModel)]="sopa.pregunta" placeholder="Pregunta" name="palabra"></mat-form-field>
+      <mat-form-field ><input matInput [(ngModel)]="sopa.letras" placeholder="Letras" name="letras"></mat-form-field>
+      <mat-form-field class="pregunta-respuesta"><input matInput [disabled]="sopa.palabras.length > 5" class="pregunta-respuesta" [(ngModel)]="respuesta" placeholder="Palabra" name="resp"> </mat-form-field>
+      <button mat-icon-button [disabled]="respuesta == ''" [disabled]="sopa.palabras.length > 5" (click)="addRespuesta()" class="pregunta-add"><mat-icon>add</mat-icon></button>
+
+      <table *ngIf="sopa.palabras.length > 0" mat-table class="pregunta-resTable">
+        <th> Palabras</th>
+        <tr *ngFor="let p of sopa.palabras" mat-cell>
+          <td class="res">{{p}}</td>
+        </tr>
+      </table>
+
+      <div class="buttons">
+        <button mat-button color="primary" (click)="aniadirElemento()"
+                [disabled]="sopa.num == '' || sopa.pregunta == '' || sopa.letras == '' || sopa.palabras.length != 6">CONFIRMAR</button>
         <button mat-button color="warn" (click)="addElement()" class="cancel" [disabled]="modulo == '' || modalidad == ''">CANCELAR</button>
       </div>
     </ng-container>

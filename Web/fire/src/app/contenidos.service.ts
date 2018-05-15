@@ -28,4 +28,8 @@ export class ContenidosService {
     return this.ref.put(event.target.files[0]);
   }
 
+  delete(curso: string, modalidad: String, modulo: String, id: String) {
+    return this.db.object('/' + modalidad + curso + '/' + modulo + '/' + id).remove();
+  }
+
 }

@@ -86,16 +86,24 @@ mat-list-item{
 .sopa-pregunta{
   margin-top: 1%;
   width: 20%;
+  text-overflow: hidden !important;
+  overflow: hidden;
 }
 
 .sopa-letras{
   margin-top: 1%;
   width: 50%;
+  margin-left: 1%;
+  text-overflow:hidden !important;
+  overflow: hidden;
 }
 
 .sopa-palabras{
   margin-top: 1%;
+  margin-left: 1%;
   width: 20%;
+  text-overflow: hidden !important;
+  overflow: hidden;
 }
 
 .separador{
@@ -162,9 +170,9 @@ button{
 }
 
 .newElement{
-  margin-left: 30%;
+  margin-left: 20%;
   margin-right: auto;
-  width: 40%;
+  width: 60%;
   position:absolute;
   top: 10%;
   padding: 0;
@@ -302,7 +310,17 @@ mat-toolbar p{
   margin-right: 0;
 }
 
+input{
+  width: 100% !important;
+}
 
+.progress{
+  width: 40% !important;
+}
 
-
+.delete{
+  position: absolute;
+  right: 1%;
+  margin: 0;
+}
 

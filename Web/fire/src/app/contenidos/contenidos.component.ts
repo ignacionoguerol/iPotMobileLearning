@@ -13,6 +13,10 @@ import { Parejas } from '../modalidades/parejas';
 import { Pregunta } from '../modalidades/pregunta';
 import { Puzzle } from '../modalidades/Puzzle';
 import { Palabra } from '../modalidades/palabra';
+import {Sopa} from '../modalidades/sopa';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatDialog} from '@angular/material/dialog';
+import {DialogComponent} from '../dialog/dialog.component';
 
 @Component({
   selector: 'app-contenidos',
@@ -37,13 +41,15 @@ export class ContenidosComponent implements OnInit {
   parejas: Parejas;
   pregunta: Pregunta;
   puzzle: Puzzle;
+  sopa: Sopa;
 
   selectedFiles: FileList | null;
   task: AngularFireUploadTask;
   uploadProgress: Observable<number>;
 
   constructor(private gestoresService: GestoresService, private modulosService: ModulosService,
-              private contenidosService: ContenidosService, private cursosService: CursosService) {
+              private contenidosService: ContenidosService, private cursosService: CursosService,
+              public snackBar: MatSnackBar, public dialog: MatDialog) {
     this.modalidades = ['Ahorcado', 'Jeroglifico', 'Parejas', 'Preguntas', 'Puzzles', 'Sopa'];
     this.modulosList = [];
     this.getGestorActual();
@@ -102,6 +108,12 @@ export class ContenidosComponent implements OnInit {
         });
         break;
       }
+      case 'Sopa': {
+        this.contenidosService.add(this.curso.nombre, this.modalidad, this.modulo, this.sopa).then(ret => {
+          this.clear();
+        });
+        break;
+      }
     }
   }
 
@@ -121,6 +133,12 @@ export class ContenidosComponent implements OnInit {
             this.palabra = new Palabra();
           }
           break;
+        }
+        case 'Sopa': {
+          if (this.respuesta.length > 0) {
+            this.sopa.palabras.push(this.respuesta);
+            this.respuesta = '';
+          }
         }
       }
 
@@ -162,6 +180,11 @@ export class ContenidosComponent implements OnInit {
     this.parejas = new Parejas();
     this.pregunta = new Pregunta();
     this.puzzle = new Puzzle();
+    this.sopa = new Sopa();
+  }
+
+  cambiarModalidad() {
+    this.contenidosList = [];
   }
 
   detectFiles($event: Event) {
@@ -174,6 +197,30 @@ export class ContenidosComponent implements OnInit {
     this.uploadProgress = this.task.percentageChanges();
     this.task.then(uploaded => {
       this.jeroglifico.url = uploaded.downloadURL;
+    });
+  }
+
+  delete(id: String) {
+    const dialog = this.dialog.open(DialogComponent, {
+      data: {
+        mensaje: '¿Está seguro de que desea eliminar el elemento ' + id + '?',
+        accion: 'Confirmar'
+      }
+    });
+
+    dialog.afterClosed().subscribe(result => {
+      if (result) {
+        this.contenidosService.delete(this.curso.nombre, this.modalidad, this.modulo, id).then(resp => {
+          this.openSnackBar('Eliminado con éxito', 'OK');
+        });
+
+      }
+    });
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000
     });
   }
 }
