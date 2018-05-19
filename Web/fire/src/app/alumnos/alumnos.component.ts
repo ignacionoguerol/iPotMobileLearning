@@ -6,6 +6,7 @@ import {Gestor} from '../gestor';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
 import {DialogComponent} from '../dialog/dialog.component';
+import {LoginService} from '../login.service';
 
 @Component({
   selector: 'app-alumnos',
@@ -25,7 +26,7 @@ export class AlumnosComponent implements OnInit {
 
 
   constructor(private alumnosService: AlumnosService, private gestoresService: GestoresService,
-              public snackBar: MatSnackBar, public dialog: MatDialog) {
+              public snackBar: MatSnackBar, public dialog: MatDialog, private loginService: LoginService) {
     this.nuevoAlumno = false;
     this.modificarAlumno = false;
     this.getList();
@@ -66,10 +67,13 @@ export class AlumnosComponent implements OnInit {
   }
 
   addAlumno() {
+    this.loading = true;
     this.alumnosService.addAlumno(this.alumno.Email, this.alumno.Nombre, this.gestor.curso).subscribe(() => {
-      this.openSnackBar('Alumno añadido correctamente!', 'OK');
+      this.loginService.resetPassword(this.alumno.Email).then(res => {
+        this.openSnackBar('Alumno añadido correctamente!', 'OK');
+        this.loading = false;
+      });
     });
-
     this.newAlumno();
   }
 
@@ -91,9 +95,11 @@ export class AlumnosComponent implements OnInit {
 
       dialog.afterClosed().subscribe(result => {
         if (result) {
+          this.loading = true;
           this.alumnosService.deleteAlumno(uid).subscribe(resp => {
             this.openSnackBar('Eliminado con éxito', 'OK');
             this.getList();
+            this.loading = false;
           });
 
         }

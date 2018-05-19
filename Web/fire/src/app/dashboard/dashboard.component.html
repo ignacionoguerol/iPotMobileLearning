@@ -3,13 +3,30 @@
 	<h1>iPot Mobile Learning</h1>
 	<span class="spacer"></span>
 	<p class="admin" *ngIf="admin">Administrador</p>
-  <p class="admin" *ngIf="gestor">Gestor</p>
+  <button (click)="click()" mat-button="" class="admin" *ngIf="gestor && gest.nombre != ''
+  && curso.nombre != ''">{{gest.nombre}} | {{curso.nombre}}</button>
 	<span class="spacer"></span>
-	<a (click)="logout()" class="docs-button docs-navbar-hide-small mat-button mat-body-1"  mat-button="" tabindex="0" aria-disabled="false">
+	<a (click)="logout()" class="docs-button docs-navbar-hide-small mat-button mat-body-1"  mat-button tabindex="0" aria-disabled="false">
 		<span class="mat-button-wrapper">Log Out</span>
 	</a>
 	</nav>
 </mat-toolbar>
+
+<mat-card class="newElement mat-elevation-z12" *ngIf="config">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title>{{gest.nombre}}</mat-card-title>
+    <mat-card-subtitle>{{gest.email}}</mat-card-subtitle>
+    <mat-card-subtitle>{{curso.nombre}}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-actions>
+    <button mat-icon-button class="close" (click)="click()" mat-button>
+      <mat-icon>close</mat-icon>
+    </button>
+    <button [disabled]="!gest.email" (click)="resetPassword()" mat-button>RESET PASSWORD</button>
+  </mat-card-actions>
+</mat-card>
 
 <mat-tab-group class="mat-elevation-z4 mat-typography">
  		<mat-tab label="Gestores" *ngIf="admin === true"><app-gestores></app-gestores></mat-tab>

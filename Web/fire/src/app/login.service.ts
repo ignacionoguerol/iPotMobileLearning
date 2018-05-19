@@ -29,8 +29,8 @@ export class LoginService {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password);
   }
 
-  emailSignUp(email: string, password: string) {
-    return this.afAuth.auth.createUserWithEmailAndPassword(email, password);
+  resetPassword(email: string) {
+    return this.afAuth.auth.sendPasswordResetEmail(email);
   }
 
   deleteUser(uid: string) {

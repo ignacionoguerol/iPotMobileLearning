@@ -87,5 +87,4 @@ export class GestoresService {
     return email === this.loginService.gitUser().email;
   }
 
-
 }

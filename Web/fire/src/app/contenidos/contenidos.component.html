@@ -124,9 +124,9 @@
       <mat-form-field ><input matInput [(ngModel)]="jeroglifico.pista" placeholder="Pista" name="palabra"></mat-form-field>
       <mat-form-field ><input matInput [(ngModel)]="jeroglifico.tema" placeholder="Tema" name="tema"></mat-form-field>
       <mat-form-field ><input matInput [(ngModel)]="jeroglifico.respuesta" placeholder="Respuesta" name="respuesta"></mat-form-field>
-      <input class="progress" (change)="upload($event)" type="file" accept=".png,.jpg" name="myfile" id="input"/>
-      <mat-progress-bar mode="determinate" [value]="uploadProgress | async"></mat-progress-bar>
-      <!--<div *ngIf="downloadURL | async; let downloadSrc" class="alert alert-info" role="alert"><a [href]="downloadSrc">{{downloadSrc}}</a></div>-->
+      <input  *ngIf="jeroglifico.url.length === 0" class="progress" (change)="upload($event)" type="file" accept=".png,.jpg" name="myfile" id="input"/>
+      <mat-progress-bar *ngIf="jeroglifico.url.length === 0" mode="determinate" [value]="uploadProgress | async"></mat-progress-bar>
+      <img *ngIf="jeroglifico.url.length !== 0" class="jeroglifico-img-uploaded" [src]="jeroglifico.url">
 
       <div class="buttons">
         <button mat-button color="primary" (click)="aniadirElemento()"

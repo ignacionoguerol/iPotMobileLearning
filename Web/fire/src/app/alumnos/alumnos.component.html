@@ -16,7 +16,7 @@
     </mat-list-item>
     <mat-divider></mat-divider>
   </mat-list>
-  <mat-progress-bar *ngIf="!(gestor != undefined && alumnosList.length)" mode="query"></mat-progress-bar>
+  <mat-progress-bar *ngIf="gestor == undefined || alumnosList.length == 0 || loading" mode="query"></mat-progress-bar>
   <mat-list *ngIf="gestor != undefined && alumnosList.length" class="list" role="list" >
 
     <mat-list-item class="funciones" role="listitem" *ngIf="nuevoAlumno">

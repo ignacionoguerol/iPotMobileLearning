@@ -36,8 +36,12 @@ export class CursosService {
       gestor: gestor
     };
     this.db.object('/cursos/' + id).update(data).then();
-    this.db.object('/gestores/' + gestor).update({curso: id}).then();
-    this.db.object('/gestores/' + oldGestor).update({curso: ''}).then();
+    if (gestor !== '') {
+      this.db.object('/gestores/' + gestor).update({curso: id}).then();
+    }
+    if (oldGestor !== '') {
+      this.db.object('/gestores/' + oldGestor).update({curso: ''}).then();
+    }
   }
 
   addCurso(name: string, gestor: string) {

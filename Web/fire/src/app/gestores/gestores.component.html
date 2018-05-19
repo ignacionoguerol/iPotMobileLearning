@@ -16,8 +16,8 @@
 		 </mat-list-item>
 		 <mat-divider></mat-divider>
 	</mat-list>
+  <mat-progress-bar *ngIf="loading" mode="query"></mat-progress-bar>
 	<mat-list class="list" role="list" >
-
 		<mat-list-item class="funciones" role="listitem" *ngIf="nuevoGestor">
 		    <input class="name" [(ngModel)]="name" matInput placeholder="Name" name="name">
 		    <input id="email" class="email" [(ngModel)]="email" type="email" matInput placeholder="Email" name="email">
@@ -36,7 +36,6 @@
 		  	<mat-divider></mat-divider>
 		</mat-list-item>
 
-		<mat-progress-bar *ngIf="loading" mode="query"></mat-progress-bar>
 		<mat-list-item role="listitem" *ngFor="let gestor of (gestoresList | FilterGestor: filter)">
 		  	<p class="name">{{gestor.nombre}}</p>
 		  	<p class="email">{{gestor.email}}</p>

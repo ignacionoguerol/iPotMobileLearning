@@ -11,6 +11,7 @@ import { Observable } from 'rxjs/';
 import { filter } from 'rxjs/operators';
 import { HttpResponse } from 'selenium-webdriver/http';
 import { LoginService } from '../login.service';
+import {createSelf} from '@angular/compiler/src/core';
 
 /**
  * @title Snack-bar with a custom component
@@ -33,7 +34,8 @@ export class GestoresComponent implements OnInit {
   loading: boolean;
   tooltipPosition: string;
 
-  constructor(private gestoresService: GestoresService, public snackBar: MatSnackBar, public dialog: MatDialog) {
+  constructor(private gestoresService: GestoresService, public snackBar: MatSnackBar, public dialog: MatDialog,
+              private loginService: LoginService) {
     this.nuevoGestor = false;
     this.modificarGestor = false;
     this.getList();
@@ -76,18 +78,22 @@ export class GestoresComponent implements OnInit {
 
   addGestor() {
     this.loading = true;
+    const self = this;
     this.gestoresService.addGestor(this.name, this.email).subscribe(res => {
-      this.openSnackBar(this.name + ' añadido con éxito!', '');
+      this.loginService.resetPassword(this.email).then(res => {
+        this.openSnackBar(this.name + ' añadido con éxito!', 'OK');
+        self.loading = false;
+        this.name = '';
+        this.email = '';
+      });
+
       }
     );
-
-    this.name = '';
-    this.email = '';
     this.newGestor();
-    this.loading = false;
     }
 
   deleteGestor(uid: string) {
+    const self = this;
     const dialog = this.dialog.open(DialogComponent, {
       data: {
         mensaje: '¿Está seguro de que desea eliminar el gestor?',
@@ -97,8 +103,10 @@ export class GestoresComponent implements OnInit {
 
     dialog.afterClosed().subscribe(result => {
       if (result) {
+        self.loading = true;
         this.gestoresService.deleteGestor(uid).subscribe(resp => console.log(resp));
         this.openSnackBar('Eliminado con éxito!', 'OK');
+        self.loading = false;
       }
     });
   }

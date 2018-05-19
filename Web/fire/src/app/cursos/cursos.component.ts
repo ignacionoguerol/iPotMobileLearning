@@ -39,6 +39,7 @@ export class CursosComponent implements OnInit {
     this.gestor = '';
     this.oldGestor = '';
     this.id = -2;
+    this.gestoresListForSelect = [];
     this.getListGestores();
    }
 
@@ -85,7 +86,13 @@ export class CursosComponent implements OnInit {
   }
 
   getListGestores() {
-    this.gestoresListForSelect = this.gestoresList = this.gestoresService.getList();
+    const g = new Gestor();
+    const self = this;
+    this.gestoresListForSelect.push(g);
+    this.gestoresList = this.gestoresService.getList();
+    this.gestoresList.forEach(gestor => {
+      self.gestoresListForSelect.push(gestor);
+    });
   }
 
   addCurso() {

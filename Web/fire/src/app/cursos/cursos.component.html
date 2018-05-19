@@ -23,7 +23,7 @@
 		<mat-list-item class="funciones" role="listitem" *ngIf="nuevoCurso">
 		    <input class="name" [(ngModel)]="name" matInput placeholder="Nombre" name="name">
 		    <mat-select [(value)]="gestor" class="email" placeholder="Gestor">
-    			<mat-option  *ngFor="let gestor of (gestoresListForSelect | FilterGestorNoAsignado: gestor)" [value]="gestor.uid">{{gestor.nombre}}</mat-option>
+    			<mat-option  *ngFor="let gestor of gestoresListForSelect" [class.hide]="gestor.curso != ''" [value]="gestor.uid">{{gestor.nombre}}</mat-option>
   			</mat-select>
 		  	<span class="spacer"></span>
 		  	<button [disabled]="!(gestor != '' && name != '')" (click)="addCurso()" mat-raised-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>
@@ -34,7 +34,7 @@
 		<mat-list-item class="funciones" role="listitem" *ngIf="modificarCurso">
 		    <input class="name" [(ngModel)]="name" matInput placeholder="Name" name="name">
 		    <mat-select [(value)]="gestor" class="email" placeholder="{{getGestorName(gestor)}}">
-    			<mat-option  *ngFor="let gestor of (gestoresListForSelect | FilterGestorNoAsignado: gestor)" [value]="gestor.uid">{{gestor.nombre}}</mat-option>
+    			<mat-option  *ngFor="let gestor of gestoresListForSelect" [class.hide]="gestor.curso.length != 0" [value]="gestor.uid">{{gestor.nombre}}</mat-option>
   			</mat-select>
 		  	<span class="spacer"></span>
 		  	<button (click)="editCurso()" [disabled]="name == ''" mat-raised-button color="primary"><mat-icon mat-list-icon>done</mat-icon></button>

@@ -4,11 +4,11 @@ export class Gestor {
   uid: string;
   curso: string;
 
-  constructor(action: Gestor) {
-    this.nombre = action.nombre;
-    this.email = action.email;
-    this.uid = action.uid;
-    this.curso = action.curso;
+  constructor() {
+    this.nombre = '';
+    this.email = '';
+    this.uid = '';
+    this.curso = '';
   }
 
 }
