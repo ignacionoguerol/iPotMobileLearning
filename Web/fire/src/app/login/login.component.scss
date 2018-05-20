@@ -1,11 +1,3 @@
-.example-form {
-  	width: 75%;
-  	margin-left: 12.5%;
-}
-
-.example-full-width {
-  	width: 100%;
-}
 
 .card{
 	margin-top:10%;
@@ -15,7 +7,7 @@
 
 mat-chip{
 	margin-bottom: 25px !important;
-	width: 9%; 
+	width: 9%;
 	text-align: center;
 }
 
@@ -26,13 +18,14 @@ img{
 
 * { box-sizing:border-box; }
 
-body {
-	font-family: Helvetica;
-	background: #eee;
+html, body {
+	background: white;
   -webkit-font-smoothing: antialiased;
+  overflow: visible !important;
+  padding: 0;
 }
 
-div { 
+div {
 	text-align:center;
 	margin-top: 4em;
 }
@@ -43,18 +36,17 @@ h1 { color: #636363; }
 
 h3 { color: #4a89dc; }
 
-form {
+mat-card {
 	width: 380px;
-	margin: 4em auto;
-	padding: 3em 2em 2em 2em;
+  height: 400px;
+	margin: 10% auto;
+	padding: 0.5em 2em 2em 2em;
 	background: #fafafa;
-	border: 1px solid #ebebeb;
-	box-shadow: rgba(0,0,0,0.14902) 0px 1px 1px 0px,rgba(0,0,0,0.09804) 0px 1px 2px 0px;
 }
 
-.group { 
-	position: relative; 
-	margin-bottom: 45px; 
+.group {
+	position: relative;
+	margin-bottom: 45px;
 }
 
 input {
@@ -76,7 +68,7 @@ input:focus { outline: none; }
 /* Label */
 
 label {
-	color: #999; 
+	color: #999;
 	font-size: 18px;
 	font-weight: normal;
 	position: absolute;
@@ -107,11 +99,11 @@ input:focus ~ label, input.used ~ label {
 
 .bar:before, .bar:after {
 	content: '';
-	height: 2px; 
+	height: 2px;
 	width: 0;
-	bottom: 1px; 
+	bottom: 1px;
 	position: absolute;
-	background: #4a89dc; 
+	background: #4a89dc;
 	transition: all 0.2s ease;
 }
 
@@ -129,9 +121,9 @@ input:focus ~ .bar:before, input:focus ~ .bar:after { width: 50%; }
 
 .highlight {
 	position: absolute;
-	height: 60%; 
-	width: 100px; 
-	top: 25%; 
+	height: 60%;
+	width: 100px;
+	top: 25%;
 	left: 0;
 	pointer-events: none;
 	opacity: 0.5;
@@ -235,4 +227,38 @@ input:focus ~ .highlight {
     padding-bottom: 200%;
     opacity: 0;
   }
+}
+
+mat-toolbar{
+  margin: 0;
+}
+
+.first-row{
+  margin: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  background-color: white;
+  min-height: 100%;
+}
+
+.first-row .left{
+  float:left;
+  margin-left: 5%;
+  width: 42.5%;
+  margin-right: 5%;
+}
+.first-row .right{
+  float:left;
+  width: 42.5%;
+  margin-right: 5%;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.first-row .button {
+  float: right;
 }

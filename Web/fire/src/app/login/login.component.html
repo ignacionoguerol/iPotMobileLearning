@@ -1,40 +1,47 @@
-<!-- <mat-card class="card"> -->
-<!-- 	<form class="example-form"> -->
-	
+<div class="first-row">
+  <mat-toolbar color="primary">
+    <button *ngIf="entrar" class=".button" mat-button (click)="click()">
+      <mat-icon>undo</mat-icon>
+    </button>
+    <span class="example-spacer"></span>
+    <button *ngIf="!entrar" class=".button" mat-button (click)="click()">LogIn</button>
+  </mat-toolbar>
+  <div *ngIf="!entrar">
+    <img src="../../assets/iPot.png">
+    <h3>By Ignacio Noguerol Sicilia</h3>
+  </div>
+  <div class="left" *ngIf="!entrar">
+    <a href="https://itunes.apple.com/es/app/ipot/id1291766873?mt=8">
+      <img src="../../assets/app-store-badge.svg">
+    </a>
+  </div>
 
-	
-<!-- 	<mat-form-field class="example-full-width"> -->
-<!-- 	    <input [(ngModel)]="email" matInput type="email" placeholder="User" name="user"> -->
-<!-- 	  </mat-form-field> -->
-	
-<!-- 	  <mat-form-field class="example-full-width"> -->
-<!-- 	    <input [(ngModel)]="pass" matInput type="password" placeholder="Password" name="password"> -->
-<!-- 	  </mat-form-field> -->
-<!-- 	  <button [disabled]="!(email != '' && pass != '')" (click)="login()" mat-raised-button color="primary">Log In</button> -->
-<!-- 	</form> -->
-<!-- </mat-card> -->
+  <div class="right" *ngIf="!entrar">
+    <a href="https://play.google.com/store/apps/details?id=com.ipot.ipotMobileLearning">
+      <img  src="../../assets/google-play-badge.svg">
+    </a>
+  </div>
 
-<div>
-  <img src="../../assets/iPot.png">
-  <h3>By Ignacio Noguerol Sicilia</h3>
+  <mat-card mat-elevation-z12 *ngIf="entrar" class="entrar">
+    <form *ngIf="entrar">
+      <mat-chip-list *ngIf="errorMessage" class="mat-chip-list-stacked">
+        <mat-chip *ngFor="let chip of availableColors" selected="true" [color]="chip.color">
+          {{errorMessage}}
+        </mat-chip>
+      </mat-chip-list>
+      <div class="group">
+        <input [(ngModel)]="email" type="email" placeholder="email" name="user"><span class="highlight"></span><span class="bar"></span>
+      </div>
+      <div class="group">
+        <input [(ngModel)]="pass" type="password" placeholder="password" name="password"><span class="highlight"></span><span class="bar"></span>
+      </div>
+      <button [disabled]="!(email != '' && pass != '')" (click)="login()" type="button" class="button buttonBlue">Log In
+        <div class="ripples buttonRipples"><span class="ripplesCircle"></span></div>
+      </button>
+    </form>
+  </mat-card>
 </div>
-<form>
-
-	<mat-chip-list *ngIf="errorMessage" class="mat-chip-list-stacked">
-  		<mat-chip *ngFor="let chip of availableColors" selected="true" [color]="chip.color">
-    		{{errorMessage}}
-  		</mat-chip>
-	</mat-chip-list>
-  <div class="group">
-    <input [(ngModel)]="email" type="email" placeholder="email" name="user"><span class="highlight"></span><span class="bar"></span>
-  </div>
-  <div class="group">
-    <input [(ngModel)]="pass" type="password" placeholder="password" name="password"><span class="highlight"></span><span class="bar"></span>
-  </div>
-  <button [disabled]="!(email != '' && pass != '')" (click)="login()" type="button" class="button buttonBlue">Log In
-    <div class="ripples buttonRipples"><span class="ripplesCircle"></span></div>
-  </button>
 
 
-</form>
+
 

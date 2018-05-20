@@ -54,20 +54,20 @@ export class DashboardComponent implements OnInit {
     this.gestoresService.loadGestor().subscribe(res => {
       if (res) {
         self.gestor = true;
-        this.gestoresService.loadGestor().subscribe(res => {
-          const json = JSON.parse(JSON.stringify(res));
-          this.gest.curso = json.curso;
-          this.gest.email = json.email;
-          this.gest.nombre = json.nombre;
-          this.gest.uid = json.uid;
+        const json = JSON.parse(JSON.stringify(res));
+        this.gest.curso = json.curso;
+        this.gest.email = json.email;
+        this.gest.nombre = json.nombre;
+        this.gest.uid = json.uid;
 
-          this.cursosService.getCurso(this.gest.curso).subscribe(res => {
-            const json = JSON.parse(JSON.stringify(res));
-            this.curso.nombre = json.nombre;
-            this.curso.gestor = json.gestor;
-            this.curso.id = json.id;
-          });
+        this.cursosService.getCurso(this.gest.curso).subscribe(res => {
+          const json = JSON.parse(JSON.stringify(res));
+          this.curso.nombre = json.nombre;
+          this.curso.gestor = json.gestor;
+          this.curso.id = json.id;
         });
+    } else {
+        //this.soyUsuario();
       }
     });
   }
@@ -89,6 +89,14 @@ export class DashboardComponent implements OnInit {
     this.snackBar.open(message, action, {
       duration: 2000
     });
+  }
+
+  soyUsuario() {
+      console.log(this.admin);
+      console.log(this.gestor);
+      if (!this.admin && !this.gestor) {
+        this.router.navigateByUrl('/login');
+      }
   }
 
 }

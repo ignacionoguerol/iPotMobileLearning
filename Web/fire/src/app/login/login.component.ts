@@ -16,11 +16,14 @@ export class LoginComponent implements OnInit {
   pass = '';
   error: Promise<void | Error>;
   errorMessage;
+  entrar: boolean;
 
   color: string;
   availableColors = [{ name: 'Warn', color: 'warn' }];
 
-  constructor(private loginService: LoginService,  private router: Router) {}
+  constructor(private loginService: LoginService,  private router: Router) {
+    this.entrar = false;
+  }
 
   ngOnInit() {
   }
@@ -35,6 +38,17 @@ export class LoginComponent implements OnInit {
       self.errorMessage = error.message;
     });
   }
+
+  click() {
+    if (this.entrar) {
+      this.entrar = false;
+    } else {
+      this.entrar = true;
+    }
+  }
+
+
+
 
 
 }
