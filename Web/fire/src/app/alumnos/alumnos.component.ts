@@ -68,12 +68,18 @@ export class AlumnosComponent implements OnInit {
 
   addAlumno() {
     this.loading = true;
-    this.alumnosService.addAlumno(this.alumno.Email, this.alumno.Nombre, this.gestor.curso).subscribe(() => {
+    this.alumnosService.addAlumno(this.alumno.Email, this.alumno.Nombre, this.gestor.curso).subscribe(data => {
       this.loginService.resetPassword(this.alumno.Email).then(res => {
         this.openSnackBar('Alumno añadido correctamente!', 'OK');
         this.loading = false;
       });
-    });
+    },
+      err => {
+        console.log(err);
+        this.openSnackBar('Error! Email ya registrado.', 'OK');
+        this.loading = false;
+      }
+      );
     this.newAlumno();
   }
 

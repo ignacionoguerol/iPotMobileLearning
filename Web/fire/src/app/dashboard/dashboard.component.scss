@@ -66,9 +66,11 @@ mat-tab-group{
   left: 0;
   right: 0;
   background-color: white;
-  min-height: 100%;
+  height: auto;
+  overflow-y: auto;
 }
 
 mat-tab-body{
-  min-height: 100% !important;
+  height: auto;
+  margin-bottom: 5%;
 }

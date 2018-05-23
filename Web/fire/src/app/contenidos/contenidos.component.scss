@@ -9,7 +9,7 @@ mat-card{
 }
 
 .list{
-  overflow: auto;
+  overflow: hidden;
 }
 
 mat-list-item{
@@ -311,12 +311,11 @@ mat-toolbar p{
 }
 
 input{
-  width: 100% !important;
+  width: 35%;
+  margin-right: 5%;
+  height: auto;
 }
 
-.progress{
-  width: 40% !important;
-}
 
 .delete{
   position: absolute;

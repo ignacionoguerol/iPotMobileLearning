@@ -1,9 +1,10 @@
 <mat-card class="mat-elevation-z2 list-card mat-typography">
 
 
+
   <form class="cabecera">
     <mat-form-field class="campo-busqueda">
-      <input [(ngModel)]="filter" matInput placeholder="Búsqueda por nombre o email" value="" name="search">
+      <input [(ngModel)]="filter" matInput placeholder="Búsqueda por nombre" value="" name="search">
     </mat-form-field>
     <button (click)="newModulo()" mat-button color="basic">AGREGAR MODULO</button>
   </form>
@@ -40,7 +41,7 @@
       <mat-divider></mat-divider>
     </mat-list-item>
 
-    <mat-list-item role="listitem" *ngFor="let modulo of modulosList">
+    <mat-list-item role="listitem" *ngFor="let modulo of modulosList | FilterModulo: filter">
       <p class="id">{{modulo.id}}</p>
       <p class="name">{{modulo.name}}</p>
       <mat-slide-toggle class="email" [disabled]="true" [checked]=modulo.enabled></mat-slide-toggle>

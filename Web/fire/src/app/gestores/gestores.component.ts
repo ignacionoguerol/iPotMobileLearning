@@ -87,6 +87,11 @@ export class GestoresComponent implements OnInit {
         this.email = '';
       });
 
+      },
+      err => {
+        console.log(err);
+        this.openSnackBar('Error! Email ya registrado.', 'OK');
+        this.loading = false;
       }
     );
     this.newGestor();

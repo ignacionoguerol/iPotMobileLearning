@@ -45,7 +45,10 @@ exports.addGestor = functions.https.onRequest((req, res) => {
         admin.database().ref('/gestores').child(data.uid).set(data).then(snapshot => {
             res.status(200).send();
           }).catch(error => console.log("error: " + error));
-    }).catch(error => console.log("error: " + error));
+    }).catch(error => {
+      console.log("error: " + error)
+      res.status(500).send();
+    });
 });
 
 exports.deleteGestor = functions.https.onRequest((req, res) => {
@@ -84,7 +87,10 @@ exports.addAlumno = functions.https.onRequest((req, res) => {
     admin.database().ref('/usuarios').child(userRecord.uid).set(data).then(snapshot => {
       res.status(200).send();
     }).catch(error => console.log("error: " + error));
-  }).catch(error => console.log("error: " + error));
+  }).catch(error => {
+    console.log("error: " + error);
+    res.status(500).send();
+  });
 });
 
 exports.deleteAlumno = functions.https.onRequest((req, res) => {
@@ -100,5 +106,6 @@ exports.deleteAlumno = functions.https.onRequest((req, res) => {
 
 exports.sendWelcomeEmail = functions.auth.user().onCreate(event =>{
   console.log("Usuario Registrado: " + event.data.email);
+  //admin.auth().sendPasswordResetEmail(event.data.email);
 });
 

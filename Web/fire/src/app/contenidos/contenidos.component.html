@@ -1,6 +1,5 @@
 <mat-card class="list-card mat-typography">
 
-  <!--<mat-progress-bar *ngIf="!contenidosList.length" mode="query"></mat-progress-bar>-->
 
   <mat-list class="select">
     <mat-select (valueChange)="cambiarModalidad()" [disabled]="add" class="modalidad" placeholder="Modalidad" [(ngModel)]="modalidad" name="first">
@@ -124,7 +123,7 @@
       <mat-form-field ><input matInput [(ngModel)]="jeroglifico.pista" placeholder="Pista" name="palabra"></mat-form-field>
       <mat-form-field ><input matInput [(ngModel)]="jeroglifico.tema" placeholder="Tema" name="tema"></mat-form-field>
       <mat-form-field ><input matInput [(ngModel)]="jeroglifico.respuesta" placeholder="Respuesta" name="respuesta"></mat-form-field>
-      <input  *ngIf="jeroglifico.url.length === 0" class="progress" (change)="upload($event)" type="file" accept=".png,.jpg" name="myfile" id="input"/>
+      <input  *ngIf="jeroglifico.url.length === 0" (change)="upload($event)" type="file" accept=".png,.jpg" name="myfile" id="input"/>
       <mat-progress-bar *ngIf="jeroglifico.url.length === 0" mode="determinate" [value]="uploadProgress | async"></mat-progress-bar>
       <img *ngIf="jeroglifico.url.length !== 0" class="jeroglifico-img-uploaded" [src]="jeroglifico.url">
 

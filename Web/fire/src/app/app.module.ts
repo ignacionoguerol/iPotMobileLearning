@@ -51,6 +51,7 @@ import { FilterCurso } from './filterCursoPipe';
 import { FilterGestorNoAsignado } from './filterGestorNoAsignadoPipe';
 import { FilterAlumnosGestor } from './filterAlumnosGestor';
 import { FilterAlumno } from './filterAlumno';
+import { FilterModuloPipe } from './filter-modulo.pipe';
 
 // Services
 import { LoginService } from './login.service';
@@ -60,6 +61,7 @@ import { CursosService } from './cursos.service';
 import { ModulosService } from './modulos.service';
 import { ContenidosComponent } from './contenidos/contenidos.component';
 import { ContenidosService } from './contenidos.service';
+
 
 
 @NgModule({
@@ -77,7 +79,8 @@ import { ContenidosService } from './contenidos.service';
     CursosComponent,
     AlumnosComponent,
     ModulosComponent,
-    ContenidosComponent
+    ContenidosComponent,
+    FilterModuloPipe
     ],
   imports: [
     BrowserModule,
